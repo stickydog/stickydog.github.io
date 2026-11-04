@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>学习笔记 · Study Notes</title>
+<style>
+  :root {
+    --bg: #faf9f6; --fg: #1d1d1f; --muted: #6b6b70; --line: #e4e2dc;
+    --card: #ffffff; --accent: #1f4e79;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #121314; --fg: #e8e6e1; --muted: #9a9a9f; --line: #2a2b2e;
+            --card: #1a1b1d; --accent: #7fb0e0; }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--fg);
+    font-family: "Noto Sans SC", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+    line-height: 1.6;
+  }
+  main { max-width: 760px; margin: 0 auto; padding: 56px 16px 80px; }
+  h1 { font-family: "Noto Serif SC", "Songti SC", serif; font-size: 2rem; margin: 0 0 4px; }
+  .sub { color: var(--muted); margin: 0 0 40px; }
+  h2 { font-size: 0.85rem; letter-spacing: .08em; text-transform: uppercase;
+       color: var(--muted); border-bottom: 1px solid var(--line);
+       padding-bottom: 6px; margin: 36px 0 12px; }
+  ul { list-style: none; padding: 0; margin: 0; }
+  li a {
+    display: block; padding: 14px 16px; margin-bottom: 8px;
+    background: var(--card); border: 1px solid var(--line); border-radius: 8px;
+    color: var(--fg); text-decoration: none;
+  }
+  li a:hover { border-color: var(--accent); }
+  li .t { font-weight: 600; }
+  li .d { display: block; color: var(--muted); font-size: .9rem; }
+  .empty { color: var(--muted); font-size: .9rem; padding: 4px 0; }
+  footer { margin-top: 56px; color: var(--muted); font-size: .8rem; }
+</style>
+</head>
+<body>
+<main>
+  <h1>学习笔记</h1>
+  <p class="sub">Aerospace Engineering · Study Notes</p>
+
+  <h2>Aerodynamics 空气动力学</h2>
+  <ul>
+    <li><a href="aerodynamics/course-notes.html">
+      <span class="t">空气动力学课程笔记</span>
+      <span class="d">势流基础 · 二维翼型理论 · 黏性效应与失速 · 有限翼展机翼 · 可压缩流 · 复习附录</span>
+    </a></li>
+  </ul>
+
+  <h2>Structure and Material 结构与材料</h2>
+  <p class="empty">（待添加）</p>
+
+  <footer>Last updated 2026-11</footer>
+</main>
+</body>
+</html>
