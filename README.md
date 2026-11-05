@@ -20,6 +20,9 @@ aerodynamics/            每门课一个文件夹
   homework/              作业与习题
 structure-material/
   index.html
+flight-dynamics/
+  index.html
+  course-notes.html
 ```
 
 ## 添加资料
