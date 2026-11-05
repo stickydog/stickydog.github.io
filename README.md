@@ -23,6 +23,11 @@ aerodynamics/            每门课一个文件夹
   notebooks/             交互演示：.ipynb 原件 + 导出的 .html 网页版
 structure-material/
   index.html
+  course-notes.html
+  handwritten/           手写笔记（GoodNotes 导出 PDF）
+  tutorials/             Tutorial 带解答版（PDF）
+  homework/              课后作业解答 + HSB 屈曲图表（PDF）
+  exam/                  模拟考试解答（PDF）
 flight-dynamics/
   index.html
   course-notes.html

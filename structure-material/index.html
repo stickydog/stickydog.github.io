@@ -12,7 +12,7 @@
 <main>
   <p class="crumb"><a href="../">← 首页</a></p>
   <h1>Structure and Material 结构与材料</h1>
-  <p class="sub">课程笔记、手写笔记与作业</p>
+  <p class="sub">课程笔记 · 手写笔记 · Tutorial 解答 · 课后作业 · 模拟考试</p>
 
   <section>
     <h2>课程笔记 Lecture Notes</h2>
@@ -26,12 +26,84 @@
 
   <section>
     <h2>手写笔记 Handwritten</h2>
-    <p class="empty">（待添加，放在 handwritten/ 文件夹）</p>
+    <ul class="items">
+      <li><a href="handwritten/structure-material-handwritten-notes.pdf">
+        <span class="t">GoodNotes 手写笔记</span><span class="tag">46 页 · 66 MB</span>
+        <span class="d">课件截图 + 手写推导：应力与应变、本构关系、杆梁板、金属与复合材料、稳定性、FEM 与结构动力学。课程笔记网页就是以它为主线整理的</span>
+      </a></li>
+    </ul>
   </section>
 
   <section>
-    <h2>作业与习题 Homework</h2>
-    <p class="empty">（待添加，放在 homework/ 文件夹）</p>
+    <h2>习题解答 Tutorials</h2>
+    <p class="note">课堂 Tutorial 的带解答版本（PDF）</p>
+    <ul class="items">
+      <li><a href="tutorials/tutorial-01-repetition.pdf">
+        <span class="t">Tutorial 01 · 基础回顾</span><span class="tag">Lecture 01 · 13 页</span>
+        <span class="d">矢量运算、叉积与模；旋转矩阵变换；解线性方程组并用 Python 验证；刚性梁的支反力</span>
+      </a></li>
+      <li><a href="tutorials/tutorial-02-elasticity.pdf">
+        <span class="t">Tutorial 02 · 弹性力学基础</span><span class="tag">Lecture 02 · 8 页</span>
+        <span class="d">由位移场求工程应变与平面应力；刚体转动 90° 时小应变与 Green–Lagrange 应变的对比；矩形板的应变与边缘位移；自由与受约束横向膨胀</span>
+      </a></li>
+      <li><a href="tutorials/tutorial-03-structural-design-elements.pdf">
+        <span class="t">Tutorial 03 · 结构设计元件</span><span class="tag">Lecture 03 · 5 页</span>
+        <span class="d">拉伸刚度相同的铝板与钢板：厚度比、质量比、弯曲刚度比；铝梁的最大正应力、von Mises 校核与计入剪切变形的挠度</span>
+      </a></li>
+      <li><a href="tutorials/tutorial-04-composites.pdf">
+        <span class="t">Tutorial 04 · 复合材料</span><span class="tag">Lecture 04 · 19 页</span>
+        <span class="d">[0/90]<sub>s</sub> 层合板的 CLT 本构关系；elamX2 建模；不同载荷下该看哪种刚度、铺层如何影响 E<sub>x</sub>；E<sub>x</sub> 极坐标图；与铝参考件对比</span>
+      </a></li>
+      <li><a href="tutorials/tutorial-06-fem.pdf">
+        <span class="t">Tutorial 06 · 有限元与动力学</span><span class="tag">Lecture 06–07 · 13 页</span>
+        <span class="d">钛 + GFRP 两杆桁架：重力下的挠度、支反力与杆应力；给定位移反求载荷；集中 / 一致质量矩阵下的固有频率、振型、质量归一化与模态坐标</span>
+      </a></li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>课后作业 Home Exercises</h2>
+    <p class="note">作业解答（PDF）</p>
+    <ul class="items">
+      <li><a href="homework/home-01-elasticity-solution.pdf">
+        <span class="t">Home 01 · Lagrange 方程</span><span class="tag">5 页</span>
+        <span class="d">用 Lagrange 方程推导弹性摆和弹性机翼段的运动方程</span>
+      </a></li>
+      <li><a href="homework/home-02-fatigue-solution.pdf">
+        <span class="t">Home 02 · 疲劳</span><span class="tag">2 页</span>
+        <span class="d">由 S–N 曲线和 Miner 准则计算两级载荷下的累积损伤，以及循环次数需要减少多少</span>
+      </a></li>
+      <li><a href="homework/home-03-composites-solution.pdf">
+        <span class="t">Home 03 · 复合材料</span><span class="tag">3 页</span>
+        <span class="d">C-AS4/EP 单向层的柔度矩阵与刚度矩阵 [Q]；[0/45]<sub>s</sub> 层合板中 45° 层的转换刚度 [Q̄]；与 elamX2 结果对照</span>
+      </a></li>
+      <li><div class="card">
+        <span class="t">Home 04 · 屈曲</span><span class="tag">10 页</span>
+        <span class="d">机身铝蒙皮板（500 × 200 × 2 mm）受单向压缩：查 HSB 屈曲图求屈曲因子与安全系数</span>
+        <div class="links">
+          <a href="homework/home-04-buckling-solution.pdf">解答 PDF</a>
+          <a href="homework/hsb-45111-01-buckling-diagrams.pdf" class="alt">HSB 45111-01 屈曲图表（20 页）</a>
+        </div>
+      </div></li>
+      <li><a href="homework/home-05-fem-solution.pdf">
+        <span class="t">Home 05 · 有限元</span><span class="tag">7 页</span>
+        <span class="d">梁 + 杆组合结构的两种工况：给定力求节点位移、杆应力、支反力与梁最大应力；给定端部位移反求载荷向量</span>
+      </a></li>
+      <li><a href="homework/home-06-structural-dynamics-solution.pdf">
+        <span class="t">Home 06 · 结构动力学</span><span class="tag">9 页</span>
+        <span class="d">卫星天线桁架（三根弹簧 + 集中质量）：用 Lagrange 法建立运动方程，求固有频率、振型、质量归一化模态矩阵与模态坐标方程</span>
+      </a></li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>模拟考试 Trial Exam</h2>
+    <ul class="items">
+      <li><a href="exam/trial-exam-2026-solution.pdf">
+        <span class="t">2026 模拟考试（含解答）</span><span class="tag">18 页</span>
+        <span class="d">六大主题的复习框架 + 考题解答：材料选择、局部与整体屈曲、弹性屈曲只取决于刚度等</span>
+      </a></li>
+    </ul>
   </section>
 </main>
 </body>
