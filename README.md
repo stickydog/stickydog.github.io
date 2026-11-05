@@ -17,12 +17,16 @@ aerodynamics/            每门课一个文件夹
   index.html             该课程的资料目录
   course-notes.html      课程笔记
   handwritten/           手写笔记扫描（PDF）
-  homework/              作业与习题
+  tutorials/             Tutorial 习题解答（PDF）
+  code/                  MATLAB 编程作业（填空版 / 答案版，my-work/ 为自己的作答）
+  lab/                   风洞实验说明、数据与代码（my-work/ 为自己的脚本）
+  notebooks/             交互演示：.ipynb 原件 + 导出的 .html 网页版
 structure-material/
   index.html
 flight-dynamics/
   index.html
   course-notes.html
+  homework/
 ```
 
 ## 添加资料
@@ -34,5 +38,6 @@ flight-dynamics/
 ## 命名约定
 
 - 文件名只用小写英文、数字和连字符，例如 `week05-boundary-layer.pdf`；不要用空格和中文。
+- 例外：MATLAB 代码和它读取的数据文件保留原名（函数名必须与文件名一致，脚本里也按原名读取数据）。
 - 页面之间一律用相对路径链接（例如 `../index.html`）。
 - 单个文件不超过 100 MB；仓库总体建议保持在 1 GB 以内。

@@ -41,3 +41,17 @@ ul.items a:hover { border-color: var(--accent); }
 footer { margin-top: 56px; padding-top: 16px; border-top: 1px solid var(--line);
          color: var(--muted); font-size: .8rem; }
 footer a { color: var(--muted); }
+
+/* Cards with several files (title + description + a row of file links) */
+ul.items .card {
+  padding: 14px 16px; margin-bottom: 8px;
+  background: var(--card); border: 1px solid var(--line); border-radius: 8px;
+}
+.links { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.links a {
+  font-size: .8rem; color: var(--accent); text-decoration: none;
+  border: 1px solid var(--line); border-radius: 4px; padding: 1px 8px;
+}
+.links a:hover { border-color: var(--accent); }
+.links a.alt { color: var(--muted); }
+.note { color: var(--muted); font-size: .85rem; margin: 0 0 10px; }
