@@ -18,7 +18,7 @@
     <h2>课程笔记 Lecture Notes</h2>
     <ul class="items">
       <li><a href="course-notes.html">
-        <span class="t">空气动力学课程笔记</span><span class="tag">Lecture 1–15</span>
+        <span class="t">空气动力学课程笔记</span><span class="tag">第 1–15 章</span>
         <span class="d">势流基础 · 二维翼型理论 · 黏性效应与失速 · 有限翼展机翼 · 可压缩流 · 复习附录</span>
       </a></li>
     </ul>
@@ -69,7 +69,7 @@
         </div>
       </div></li>
       <li><div class="card">
-        <span class="t">XFOIL 练习</span><span class="tag">NACA 0021 / 4421</span>
+        <span class="t">XFOIL 练习 XFOIL Exercise</span><span class="tag">NACA 0021 / 4421</span>
         <span class="d">无粘 → 黏性（Re = 5.8×10⁶）→ 有弯度翼型；答案脚本把 XFOIL、涡面元法和风洞压力孔数据画在一起对比</span>
         <div class="links">
           <a href="code/xfoil-commands.pdf">操作指南 PDF</a>
@@ -83,7 +83,7 @@
     <h2>风洞实验 Airfoil Lab <a href="lab/aerodynamics-lab-files.zip">数据与代码打包 ↓</a></h2>
     <ul class="items">
       <li><div class="card">
-        <span class="t">NACA 0021 压力孔实验</span><span class="tag">8 页</span>
+        <span class="t">NACA 0021 压力孔实验 Pressure Tap Experiment</span><span class="tag">8 页</span>
         <span class="d">高压风洞（约 230 atm）+ 32 个压力孔 + 天平。任务：计算三组数据的 Re；画 α = 0 时上下表面压力分布；用天平与压力积分两种方法得到 lift / drag 曲线并比较</span>
         <div class="links">
           <a href="lab/aerodynamics-lab.pdf">实验说明 PDF</a>
@@ -91,7 +91,7 @@
         </div>
       </div></li>
       <li><div class="card">
-        <span class="t">实验数据与课程代码</span>
+        <span class="t">实验数据与课程代码 Data and Course Code</span>
         <span class="d">数据列：α、速度、密度、升力、阻力、32 个压力孔读数。<code>airfoil_normals.m</code> 给出压力孔坐标与法向量（需与 <code>NACA0021_taps.mat</code> 放在同一文件夹）</span>
         <div class="links">
           <a href="lab/data_Re1.txt">data_Re1.txt</a>
@@ -103,7 +103,7 @@
         </div>
       </div></li>
       <li><div class="card">
-        <span class="t">我的脚本</span>
+        <span class="t">我的脚本 My Scripts</span>
         <span class="d">计算 Reynolds number；画 α = 0 的 C<sub>p</sub> 分布</span>
         <div class="links">
           <a href="lab/my-work/Renoyd.m">Renoyd.m</a>
@@ -118,24 +118,24 @@
     <p class="note">网页版可直接查看图和动画；想拖动、点击交互，请下载 .ipynb 在本地 Jupyter 中运行</p>
     <ul class="items">
       <li><div class="card">
-        <span class="t">01 · Streamlines, pathlines, streaklines</span>
-        <span class="d">流线 / 迹线 / 脉线：定常流中三者重合，非定常流中各不相同（含动画）</span>
+        <span class="t">Notebook 1 · 流线、迹线与脉线</span>
+        <span class="d">Streamlines, pathlines, streaklines：定常流中三者重合，非定常流中各不相同（含动画）</span>
         <div class="links">
           <a href="notebooks/01-streamlines-pathlines-streaklines.html">网页版</a>
           <a href="notebooks/01-streamlines-pathlines-streaklines.ipynb" class="alt">.ipynb</a>
         </div>
       </div></li>
       <li><div class="card">
-        <span class="t">02 · Vorticity and circulation</span>
-        <span class="d">Rankine 涡：orbiting is not spinning；Stokes 定理；自己画围线计算 Γ</span>
+        <span class="t">Notebook 2 · 涡量与环量</span>
+        <span class="d">Vorticity and circulation：Rankine 涡，orbiting is not spinning；Stokes 定理；自己画围线计算 Γ</span>
         <div class="links">
           <a href="notebooks/02-vorticity-and-circulation.html">网页版</a>
           <a href="notebooks/02-vorticity-and-circulation.ipynb" class="alt">.ipynb</a>
         </div>
       </div></li>
       <li><div class="card">
-        <span class="t">03 · Potential flow elements</span>
-        <span class="d">交互式势流叠加：鼠标放置 source、sink、vortex、doublet 与均匀流，实时看流线。纯交互工具：网页版只有说明和代码，需下载后在 Jupyter 或 MATLAB 中运行</span>
+        <span class="t">Notebook 3 · 势流基本元素</span>
+        <span class="d">Potential flow elements：交互式势流叠加，鼠标放置 source、sink、vortex、doublet 与均匀流，实时看流线。纯交互工具：网页版只有说明和代码，需下载后在 Jupyter 或 MATLAB 中运行</span>
         <div class="links">
           <a href="notebooks/03-potential-flow-elements.html">网页版</a>
           <a href="notebooks/03-potential-flow-elements.ipynb" class="alt">.ipynb</a>

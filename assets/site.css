@@ -15,7 +15,12 @@ body {
   line-height: 1.6;
 }
 main { max-width: 760px; margin: 0 auto; padding: 48px 16px 80px; }
-.crumb { font-size: .85rem; margin: 0 0 24px; }
+.crumb {
+  /* 返回首页：滚动时始终固定在页面顶部 */
+  position: sticky; top: 0; z-index: 10;
+  font-size: .85rem; margin: -12px 0 24px; padding: 12px 0 8px;
+  background: var(--bg);
+}
 .crumb a { color: var(--muted); text-decoration: none; }
 .crumb a:hover { color: var(--accent); }
 h1 { font-family: Georgia, "Noto Serif SC", "Songti SC", "SimSun", serif; font-size: 2rem; margin: 0 0 4px; line-height: 1.3; }
