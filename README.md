@@ -32,6 +32,12 @@ flight-dynamics/
   index.html
   course-notes.html
   homework/
+mechanics/               Engineering Mechanics I（工程力学 / 静力学）
+  index.html
+  course-notes.html
+  lectures/              课件 Lecture 1–17（缺 9、12–14）
+  exercises/             Central Exercise 幻灯片（W5 起带手写解答）
+  exam/                  Test Exam（无解答）
 ```
 
 ## 添加资料
