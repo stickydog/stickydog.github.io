@@ -54,6 +54,7 @@ ul.items .card {
 }
 .links { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
 .links a {
+  display: inline-block;
   font-size: .8rem; color: var(--accent); text-decoration: none;
   border: 1px solid var(--line); border-radius: 4px; padding: 1px 8px;
 }
