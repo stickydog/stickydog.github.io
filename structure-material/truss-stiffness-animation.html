@@ -200,9 +200,9 @@ ol.deriv li.enter{animation:rowIn .5s ease}
 <body>
 <div class="wrap">
   <header>
-    <nav class="crumb" aria-label="导航"><a href="../">← 首页</a><a href="index.html">结构与材料</a><a href="course-notes.html#ch14-6">笔记 §14.6 块矩阵与组装</a><a href="exercises.html#l7-3">习题 Lecture 7 例 3</a></nav>
+    <nav class="crumb" aria-label="导航"><a href="../">← 首页</a><a href="index.html">结构与材料</a><a href="course-notes.html#ch14-6">笔记 §14.6 块矩阵与组装</a><a href="exercises.html#l7-3">习题 Lecture 7 例 3</a><a href="exercises.html#l7-5">习题 Lecture 7 例 5（固有频率）</a></nav>
     <h1>桁架刚度法动画演示</h1>
-    <p>例题：铝制桁架，E = 70 GPa，A = 50 mm²，L = 1 m，F = 850 N。按章节一步步看单元矩阵怎么来、怎么组装、怎么求解，最后看变形。</p>
+    <p>例题：铝制桁架，E = 70 GPa，A = 50 mm²，L = 1 m，F = 850 N。按章节一步步看单元矩阵怎么来、怎么组装、怎么求解，再由位移求杆力，最后组装质量矩阵、求固有频率和振型（ρ = 2.7 t/m³）。</p>
   </header>
 
   <nav class="chapters" id="chapters" aria-label="章节"></nav>
@@ -338,11 +338,12 @@ ol.deriv li.enter{animation:rowIn .5s ease}
   const SUB={"ₓ":"x","ᵧ":"y","₀":"0","₁":"1","₂":"2","₃":"3","₄":"4","₅":"5","₆":"6","₇":"7","₈":"8","₉":"9","ₑ":"e"};
   function prettyText(t,svg){
     t=t.replace(/[₀-₉ₑₓᵧ]+/g,m=>"\u0001"+[...m].map(c=>SUB[c]).join("")+"\u0002");
-    t=t.replace(/_(ff|fs|sf|ss|pp|pq|ii|ij|ji|jj|i|j|e|f|s|x|y)(?![A-Za-z])/g,"\u0005$1\u0006");
+    t=t.replace(/_(ff|fs|sf|ss|pp|pq|ii|ij|ji|jj|i|j|e|f|s|x|y|c|l)(?![A-Za-z])/g,"\u0005$1\u0006");
     if(!svg) t=t.replace(/√(\d+|[A-Za-z])/g,"\u0003$1\u0004");
     t=t.replace(/(?<![A-Za-z\u0001\u0005])(EA|FL|cs|[A-Za-zδ])(?![A-Za-z])/g,(m,v,off,str)=>{
       const pre=str.slice(Math.max(0,off-3),off);
-      if(/^[Nm]$/.test(v)&&/[\d⁰-⁹]\s$/.test(pre))return v;
+      if(/^[Nmt]$/.test(v)&&/[\d⁰-⁹]\s$/.test(pre))return v;
+      if(v==="t"&&str[off+1]==="/")return v;
       if(v==="m"&&/N\/$/.test(pre))return v;
       return "<i>"+v+"</i>";
     });
@@ -454,6 +455,18 @@ ol.deriv li.enter{animation:rowIn .5s ease}
   const stateChip=n=>Math.abs(n)<1e-6?`<span class="state" style="background:var(--muted)">零力</span>`:n>0?`<span class="state" style="background:var(--tension)">受拉</span>`:`<span class="state" style="background:var(--compress)">受压</span>`;
   const barDelta=b=>{const du=U[b.j][0]-U[b.i][0], dv=U[b.j][1]-U[b.i][1]; return {du,dv,D:b.c*du+b.s*dv};};
   const Le=b=>Math.hypot(P[b.j][0]-P[b.i][0],P[b.j][1]-P[b.i][1]);
+
+
+  // ---------- dynamics data ----------
+  const MODES={c:{name:"一致质量",f:[337.1,1112.4,1873.6],w:[2118.4,6989.6,11772.5],L:[0.0577,0.6281,1.7819],v:[[0.2385,-0.5978,-1.0],[0.9505,1.0,-0.3148],[0.3791,-0.5425,1.0]]},
+               l:{name:"集中质量",f:[170.6,558.8,789.2],w:[1071.8,3511.3,4958.8],L:[0.1253,1.3451,2.6826],v:[[0.2179,-0.5681,-1.0],[0.255,1.0,-0.5747],[1.0,-0.0978,0.3067]]}};
+  let modeRaf=null; function stopMode(){ if(modeRaf)cancelAnimationFrame(modeRaf); modeRaf=null; }
+  function drawMode(vec,amp){
+    gOv.innerHTML=""; const g=el("g",{},gOv);
+    const Q={1:XY(1),2:XY(2),3:[XY(3)[0]+vec[0]*amp, XY(3)[1]-vec[1]*amp],4:[XY(4)[0], XY(4)[1]-vec[2]*amp]};
+    bars.forEach(b=>el("line",{x1:Q[b.i][0],y1:Q[b.i][1],x2:Q[b.j][0],y2:Q[b.j][1],stroke:b.color,"stroke-width":6,"stroke-linecap":"round"},g));
+    Object.keys(Q).forEach(n=>el("circle",{cx:Q[n][0],cy:Q[n][1],r:6.5,fill:"var(--ink)"},g));
+  }
 
   // ---------- scenes ----------
   const board=document.getElementById("board");
@@ -799,6 +812,110 @@ ol.deriv li.enter{animation:rowIn .5s ease}
       const upd=()=>{const d=+th.value, t=d*Math.PI/180; tv.textContent=d+"°"; drawGeo(d);
         ro.innerHTML=prettify(`<dt>v₄ / 2L</dt><dd>tan θ = ${Math.tan(t).toFixed(3)}</dd><dt>线性理论 Δ</dt><dd>0</dd><dt>真实 Δ / 2L</dt><dd>1/cos θ − 1 = ${(1/Math.cos(t)-1).toFixed(4)}（≈ θ²/2 = ${(t*t/2).toFixed(4)}）</dd>`);};
       th.addEventListener("input",upd); upd();
+    }},
+    {title:"质量矩阵", steps:5, noLoad:true, draw(step,fwd){
+      gDofs.classList.add("hidden"); gDef.classList.add("hidden"); showEvec(null); setBarFocus(null);
+      const g=el("g",{class:"ov-fade"},gOv);
+      const dimExcept=ids=>bars.forEach(b=>{const d=!ids.includes(b.id); barEls[b.id].classList.toggle("dim",d); labelEls[b.id].style.opacity=d?.25:1;});
+      if(step===0){
+        setBoard(`<h2>Task 3/4：先组装质量矩阵 M</h2>
+          <p>自由振动方程 M·ü + K·u = 0，设 u = φ·sin ωt，得到 (K − ω²M)·φ = 0，固有频率由 det(K − ω²M) = 0 求出。自由度仍是 u₃、v₃、v₄，K 沿用前面的结果。</p>
+          <div class="calc"><div>一致质量（课件写法，轴向形函数转到整体坐标）：</div><div>m_e = (ρALₑ/6) · [ 2eeᵀ　eeᵀ ; eeᵀ　2eeᵀ ]</div><div>对比刚度：k_e = (EA/Lₑ) · [ eeᵀ　−eeᵀ ; −eeᵀ　eeᵀ ]</div></div>
+          <p>块结构和刚度矩阵完全一样，所以照样“看图填块”：对角块加 (ρALₑ/3)·eeᵀ，耦合块加 <b>+</b>(ρALₑ/6)·eeᵀ（注意是正号）。</p>
+          <p class="note">单位用 N–mm–t：ρ = 2.7×10⁻⁹ t/mm³，μ = ρAL = 2.7×10⁻⁹ × 50 × 1000 = 1.35×10⁻⁴ t（一根长 L 的杆的质量）。这样 K（N/mm）÷ M（t）得到 s⁻²。</p>`);
+        return;
+      }
+      if(step===1){
+        dimExcept(["13","23","34"]);
+        el("circle",{cx:XY(3)[0],cy:XY(3)[1],r:30,fill:"none",stroke:"var(--accent)","stroke-width":2.5,"stroke-dasharray":"6 4"},g);
+        setBoard(`<h2>一致质量：节点 3 的对角块</h2>
+          <p>节点 3 连着杆 1–3、2–3、3–4，各加 (ρALₑ/3)·eeᵀ：</p>
+          <div class="calc"><div>杆 1–3：(μ/3)·[1 0; 0 0]</div><div>杆 2–3：(√2 μ/3)·½·[1 1; 1 1] = (μ/(3√2))·[1 1; 1 1]</div><div>杆 3–4：(μ/(3√2))·[1 −1; −1 1]</div><div>合计：M₃₃ = [ μ/3 + √2 μ/3　0 ; 0　√2 μ/3 ]</div></div>
+          <p class="note">两根斜杆的 cs 项一正一负，耦合项正好抵消，和刚度矩阵的情况一样。</p>`);
+        return;
+      }
+      if(step===2){
+        dimExcept(["34","24"]);
+        el("circle",{cx:XY(4)[0],cy:XY(4)[1],r:30,fill:"none",stroke:"var(--accent)","stroke-width":2.5,"stroke-dasharray":"6 4"},g);
+        const Mc=[["2√2+4","0","−1"],["0","4","1"],["−1","1","2"]];
+        setBoard(`<h2>一致质量：节点 4 与耦合块 → M_c</h2>
+          <div class="calc"><div>v₄v₄：杆 3–4 给 (√2 μ/3)·½ = μ/(3√2)；杆 2–4 水平，s = 0，贡献 0</div><div>耦合块 3–4：+(√2 μ/6)·½·[1 −1; −1 1]，取 v₄ 列 → (−μ/(6√2), +μ/(6√2))</div></div>
+          <p>记 m* = μ/(6√2) = 1.591×10⁻⁵ t：</p>
+          <div class="sys grow"><span>M_c = m* ·</span>${matHTML(Mc)}<span>= 10⁻⁵ ·</span>${matHTML([["10.864","0","−1.591"],["0","6.364","1.591"],["−1.591","1.591","3.182"]])}<span>t</span></div>
+          <p class="note">和 K 一样对称；但非对角元的正负和 K 不同，因为质量矩阵的耦合块是 +eeᵀ。</p>`);
+        return;
+      }
+      if(step===3){
+        // lumped: half of each bar mass to each end
+        bars.forEach(b=>{const m=Le(b)/1000; [[b.i,b.j],[b.j,b.i]].forEach(([n,o])=>{const [x,y]=XY(n),[xo,yo]=XY(o);
+          const t=0.2, cx=x+(xo-x)*t, cy=y+(yo-y)*t; el("circle",{cx,cy,r:7*Math.sqrt(m),fill:b.color,opacity:(n===1||n===2)?.3:.95},g);});});
+        [[3,"m₃ = μ(½ + √2)",30,-10,"start"],[4,"m₄ = μ(1 + √2/2)",-12,-30,"end"]].forEach(([n,t,dx,dy,an])=>{const [x,y]=XY(n);
+          el("circle",{cx:x,cy:y,r:22,fill:"none",stroke:"var(--accent)","stroke-width":2.5},g); label(g,x+dx,y+dy,t,"var(--accent)",an);});
+        setBoard(`<h2>集中质量：每根杆的质量对半分到两端</h2>
+          <p>集中质量矩阵 m_e = (ρALₑ/2)·I，x、y 方向都一样。图中彩色圆点是每根杆分到各端的一半质量，节点质量就是这些圆点之和。</p>
+          <div class="calc"><div>节点 3：μ/2 + √2 μ/2 + √2 μ/2 = μ(½ + √2) = 2.584×10⁻⁴ t</div><div>节点 4：√2 μ/2 + μ = μ(1 + √2/2) = 2.305×10⁻⁴ t</div></div>
+          <div class="sys grow"><span>M_l = μ ·</span>${matHTML([["½+√2","0","0"],["0","½+√2","0"],["0","0","1+√2/2"]])}</div>
+          <p class="note">节点 1、2 上的半质量（浅色）对应的位移为 0，和刚度矩阵一样划掉，不进入 M。</p>`);
+        return;
+      }
+      setBoard(`<h2>两种质量矩阵对比</h2>
+        <div class="sys">${matHTML([["10.864","0","−1.591"],["0","6.364","1.591"],["−1.591","1.591","3.182"]])}<span>vs</span>${matHTML([["25.84","0","0"],["0","25.84","0"],["0","0","23.05"]])}<span>×10⁻⁵ t</span></div>
+        <table class="t"><tr><th></th><th>一致质量 M_c</th><th>集中质量 M_l</th></tr>
+        <tr><td>形状</td><td>满阵，有耦合</td><td>对角阵</td></tr>
+        <tr><td>来源</td><td>与 K 同一套形函数</td><td>质量直接堆在节点</td></tr>
+        <tr><td>频率</td><td>精确值的上界（偏高）</td><td>通常偏低</td></tr>
+        <tr><td>对角元之和</td><td>20.41×10⁻⁵ t</td><td>74.73×10⁻⁵ t</td></tr></table>
+        <p class="note">课件的一致质量只计沿杆轴方向的惯性，垂直于杆的运动没有质量，所以 M_c 的对角元比 M_l 小得多，频率也就高得多。</p>`);
+    }},
+    {title:"固有频率与振型", steps:3, noLoad:true, draw(step,fwd){
+      gDofs.classList.add("hidden"); gDef.classList.add("hidden"); showEvec(null); setBarFocus(null);
+      if(step===0){
+        setBoard(`<h2>一致质量：特征方程与频率</h2>
+          <p>K = k*·K̂，M_c = m*·M̂，其中 k* = EA/(2√2 L) = 1237.4 N/mm。令 ω² = (k*/m*)·Λ，k*/m* = 3EA/(ρAL²) = 7.778×10⁷ s⁻²：</p>
+          <div class="sys">${matHTML([["2√2+2","0","1"],["0","2","−1"],["1","−1","1"]])}<span>− Λ</span>${matHTML([["2√2+4","0","−1"],["0","4","1"],["−1","1","2"]])}<span>→ det = 0</span></div>
+          <div class="calc"><div>(24 + 14√2)Λ³ − (60 + 34√2)Λ² + (24 + 22√2)Λ − 2√2 = 0</div><div>43.799Λ³ − 108.083Λ² + 55.113Λ − 2.828 = 0</div></div>
+          <table class="t"><tr><th>阶</th><th>Λ</th><th>ω (rad/s)</th><th>f = ω/2π</th></tr>
+          ${MODES.c.L.map((L,k)=>`<tr><td>${k+1}</td><td>${L}</td><td>${MODES.c.w[k]}</td><td><b>${MODES.c.f[k]} Hz</b></td></tr>`).join("")}</table>
+          <p class="note">自检：三根之和 = 108.083/43.799 = 2.4677 = 0.0577 + 0.6281 + 1.7819 ✓</p>`);
+        drawMode(MODES.c.v[0],0); return;
+      }
+      if(step===1){
+        setBoard(`<h2>集中质量：特征方程与频率</h2>
+          <p>M_l = μ·diag(½+√2, ½+√2, 1+√2/2)。令 ω² = (k*/μ)·Λ，k*/μ = 9.166×10⁶ s⁻²：</p>
+          <div class="calc"><div>(13/4 + 17√2/8)Λ³ − (53/4 + 9√2)Λ² + (13 + 9√2)Λ − 2√2 = 0</div><div>6.255Λ³ − 25.978Λ² + 25.728Λ − 2.828 = 0</div></div>
+          <table class="t"><tr><th>阶</th><th>Λ</th><th>ω (rad/s)</th><th>f</th><th>一致质量</th></tr>
+          ${MODES.l.L.map((L,k)=>`<tr><td>${k+1}</td><td>${L}</td><td>${MODES.l.w[k]}</td><td><b>${MODES.l.f[k]} Hz</b></td><td>${MODES.c.f[k]} Hz</td></tr>`).join("")}</table>
+          <p class="note">集中质量的频率全部低于一致质量。网格很粗（每杆一个单元），且课件一致质量不含横向惯性，所以差别很大；加密网格后两者都收敛到精确解。</p>`);
+        drawMode(MODES.l.v[0],0); return;
+      }
+      let kind="c", mode=0, play=!matchMedia("(prefers-reduced-motion: reduce)").matches;
+      setBoard(`<h2>振型动画（mode shapes）</h2>
+        <p>每阶固有频率对应一个振型 φ：结构按这个形状同步振动。图中振幅已放大，动画速度只示意各阶快慢，不是真实频率。</p>
+        <div class="controls" style="margin-top:4px" id="kindbtns"><button type="button" data-k="c">一致质量</button><button type="button" data-k="l">集中质量</button></div>
+        <div class="controls" style="margin-top:6px" id="modebtns"><button type="button" data-m="0">第 1 阶</button><button type="button" data-m="1">第 2 阶</button><button type="button" data-m="2">第 3 阶</button><button type="button" id="mplay"></button></div>
+        <div id="modeinfo"></div>`);
+      const info=document.getElementById("modeinfo"), mplay=document.getElementById("mplay");
+      const desc={c:["节点 4 竖直振动为主，节点 3 跟着向右下摆","节点 3 斜向（右上–左下）振动为主，节点 4 反向小幅运动","节点 3 与节点 4 竖直方向反相振动"],
+                  l:["节点 4 竖直振动为主，节点 3 跟着向右下摆","节点 3 竖直振动为主，节点 4 反向运动","节点 3 水平振动为主"]};
+      function refresh(){
+        document.querySelectorAll("#kindbtns button").forEach(b=>b.classList.toggle("primary",b.dataset.k===kind));
+        document.querySelectorAll("#modebtns button[data-m]").forEach(b=>b.classList.toggle("primary",+b.dataset.m===mode));
+        mplay.textContent=play?"暂停":"播放";
+        const M=MODES[kind], v=M.v[mode];
+        info.innerHTML=prettify(`<table class="t"><tr><th>${M.name} · 第 ${mode+1} 阶</th><th>f = ${M.f[mode]} Hz</th></tr>
+          <tr><td>振型 φ = (u₃, v₃, v₄)</td><td>(${v.map(x=>String(x).replace("-","−")).join(", ")})</td></tr></table>
+          <p>${desc[kind][mode]}。</p>
+          <table class="t"><tr><th>阶</th><th>一致质量</th><th>集中质量</th></tr>${[0,1,2].map(k=>`<tr${k===mode?' class="cur"':''}><td>${k+1}</td><td>${MODES.c.f[k]} Hz</td><td>${MODES.l.f[k]} Hz</td></tr>`).join("")}</table>`);
+        stopMode();
+        const period=1800*Math.sqrt(MODES[kind].f[0]/MODES[kind].f[mode]);
+        if(play){ const t0=performance.now(); const tick=t=>{drawMode(v,60*Math.sin(2*Math.PI*(t-t0)/period)); modeRaf=requestAnimationFrame(tick);}; modeRaf=requestAnimationFrame(tick); }
+        else drawMode(v,60);
+      }
+      document.querySelectorAll("#kindbtns button").forEach(b=>b.addEventListener("click",()=>{kind=b.dataset.k;refresh();}));
+      document.querySelectorAll("#modebtns button[data-m]").forEach(b=>b.addEventListener("click",()=>{mode=+b.dataset.m;refresh();}));
+      mplay.addEventListener("click",()=>{play=!play;refresh();});
+      bars.forEach(b=>{barEls[b.id].classList.add("dim");labelEls[b.id].style.opacity=.2;});
+      refresh();
     }}
   ];
 
@@ -813,6 +930,7 @@ ol.deriv li.enter{animation:rowIn .5s ease}
   });
   const prevB=document.getElementById("prev"), nextB=document.getElementById("next"), autoB=document.getElementById("auto");
   function go(s,t,fwd){
+    stopMode();
     if(!scenes[s].deform) stopPlay();
     gLoad.classList.toggle("hidden", !!(scenes[s].noLoad||scenes[s].deform));
     gOv.innerHTML="";
