@@ -202,7 +202,7 @@ ol.deriv li.enter{animation:rowIn .5s ease}
   <header>
     <nav class="crumb" aria-label="导航"><a href="../">← 首页</a><a href="index.html">结构与材料</a><a href="course-notes.html#ch14-6">笔记 §14.6 块矩阵与组装</a><a href="exercises.html#l7-3">习题 Lecture 7 例 3</a><a href="exercises.html#l7-5">习题 Lecture 7 例 5（固有频率）</a></nav>
     <h1>桁架刚度法动画演示</h1>
-    <p>例题：铝制桁架，E = 70 GPa，A = 50 mm²，L = 1 m，F = 850 N。按章节一步步看单元矩阵怎么来、怎么组装、怎么求解，再由位移求杆力，最后组装质量矩阵、求固有频率和振型（ρ = 2.7 t/m³）。</p>
+    <p>例题：铝制桁架，E = 70 GPa，A = 50 mm²，ρ = 2.7 t/m³，L = 1 m，F = 850 N。依次演示 Task 1 的静力分析（自由度、单元刚度矩阵、组装、求位移、杆力与支反力）和 Task 3/4 的动力分析（质量矩阵、固有频率与振型）。</p>
   </header>
 
   <nav class="chapters" id="chapters" aria-label="章节"></nav>
@@ -345,6 +345,7 @@ ol.deriv li.enter{animation:rowIn .5s ease}
       if(/^[Nmt]$/.test(v)&&/[\d⁰-⁹]\s$/.test(pre))return v;
       if(v==="t"&&str[off+1]==="/")return v;
       if(v==="m"&&/N\/$/.test(pre))return v;
+      if(v==="m"&&/[²³]/.test(str[off+1]||""))return v;
       return "<i>"+v+"</i>";
     });
     t=t.replace(/\u0001/g,"<sub>").replace(/\u0002/g,"</sub>");
@@ -452,6 +453,8 @@ ol.deriv li.enter{animation:rowIn .5s ease}
   function label(g,x,y,str,color,anchor,weight){const t=el("text",{x,y,class:"dlabel","text-anchor":anchor||"start","font-weight":weight||"600",fill:color||"var(--ink)"},g);svgMath(t,str);return t;}
   const mmv=v=>(v*1000);
   const fmtN=n=>Math.abs(n)<1e-6?"0":(n>0?"+":"−")+Math.round(Math.abs(n));
+  const fmtNu=n=>Math.abs(n)<1e-6?"0":fmtN(n)+" N";
+  const fmtL=v=>Math.abs(v)<1e-9?"0":v.toFixed(3).replace("-","−");
   const stateChip=n=>Math.abs(n)<1e-6?`<span class="state" style="background:var(--muted)">零力</span>`:n>0?`<span class="state" style="background:var(--tension)">受拉</span>`:`<span class="state" style="background:var(--compress)">受压</span>`;
   const barDelta=b=>{const du=U[b.j][0]-U[b.i][0], dv=U[b.j][1]-U[b.i][1]; return {du,dv,D:b.c*du+b.s*dv};};
   const Le=b=>Math.hypot(P[b.j][0]-P[b.i][0],P[b.j][1]-P[b.i][1]);
@@ -489,29 +492,29 @@ ol.deriv li.enter{animation:rowIn .5s ease}
       const chips = DOF.map((d,k)=>'<span class="chip '+(FREE.includes(k)?"free":"fixed")+'">'+d+'</span>').join("");
       setBoard(step===0 ? `
         <h2>先读图：4 个节点、4 根杆</h2>
-        <p>节点 1、2 是固定铰支座（pin），节点 4 靠在竖直墙上，是滚动支座（roller）：只挡住水平方向。虚线只是尺寸 L，不是杆。</p>
+        <p>节点 1、2 是固定铰支座（pin），节点 4 靠在竖直墙上，是滚动支座（roller）：只约束水平位移，竖直方向可以滑动。虚线只是尺寸 L，不是杆。</p>
         <table class="t"><tr><th>杆</th><th>长度 Lₑ</th><th>EA/Lₑ</th></tr>
         ${bars.map(b=>`<tr><td><span class="sw" style="background:${b.color}"></span>${b.i}–${b.j}</td><td>${b.Le}</td><td>${b.kLabel}</td></tr>`).join("")}
         </table>
-        <p class="note">记 a = EA/L = 3.5×10⁶ N/m，b = EA/(√2 L) = a/√2。后面所有矩阵都只用 a、b 表示。</p>` : `
+        <p class="note">记 a = EA/L = 3500 N/mm，b = EA/(√2 L) = a/√2 = 2475 N/mm（EA = 7×10⁴ N/mm² × 50 mm² = 3.5×10⁶ N）。后面的矩阵都用 a、b 表示，单位统一用 N–mm。</p>` : `
         <h2>8 个自由度里只有 3 个是未知的</h2>
         <p>每个节点有 u（水平）、v（竖直）两个自由度，共 8 个。支座把其中 5 个定为 0，剩下的是要求的未知量。</p>
         <p>${chips}</p>
         <p>所以最后只需要解一个 <b>3×3</b> 的方程组，而不是 8×8。图上闪动的蓝色箭头就是这 3 个自由度。</p>`);
     }},
-    {title:"单元矩阵 k₀", steps:4, draw(step,fwd){
+    {title:"单元刚度矩阵", steps:4, draw(step,fwd){
       gDofs.classList.add("hidden"); gDef.classList.add("hidden");
       const b=bars[step];
       setBarFocus(b.id,"dim"); showEvec(b);
       const rows=bars.slice(0,step+1).map((x,k)=>`<tr class="${k===step?"cur"+(fwd?" enter":""):""}"><td><span class="sw" style="background:${x.color}"></span>${x.i}→${x.j}</td><td>${x.Le}</td><td>(${cs(x.c)}, ${cs(x.s)})</td><td>${k0Mini(x)}</td></tr>`).join("");
       setBoard(`
-        <h2>杆 ${b.i}→${b.j}：先求方向，再写 k₀</h2>
+        <h2>杆 ${b.i}→${b.j}：e = (${cs(b.c)}, ${cs(b.s)})</h2>
         <p>沿杆从节点 ${b.i} 指向节点 ${b.j} 画单位向量 e = (c, s)。整根杆的 4×4 单元矩阵只由这个 2×2 的 k₀ 决定：</p>
         <div class="formula"><span>k₀ = ${mini("(EA/Lₑ) ·",[["c²","cs"],["cs","s²"]])}</span><span>k_e = ${mini("",[["k₀","−k₀"],["−k₀","k₀"]])}</span></div>
         <table class="t"><tr><th>杆</th><th>Lₑ</th><th>(c, s)</th><th>k₀</th></tr>${rows}</table>
-        <p class="note">${step===3?"杆 2–4 是水平的，s = 0，所以 k₀ 里只有左上角一项：它不提供任何竖直刚度。":"c、s 的正负取决于从 i 走向 j 的方向；换个方向 k₀ 不变，因为 c²、cs、s² 都不受整体变号影响。"}</p>`);
+        <p class="note">${step===3?"杆 2–4 是水平的，s = 0，所以 k₀ 里只有左上角一项：它不提供任何竖直刚度。":"c、s 的正负取决于从 i 走向 j 的方向。把方向反过来，c、s 同时变号，但 c²、cs、s² 不变，所以 k₀ 不受影响。"}</p>`);
     }},
-    {title:"组装", steps:7, draw(step,fwd){
+    {title:"组装总刚度矩阵", steps:7, draw(step,fwd){
       gDofs.classList.add("hidden"); gDef.classList.add("hidden"); showEvec(null);
       const K=emptyK(); let idx=null, cur=null;
       const nb=Math.min(step,4);
@@ -523,7 +526,7 @@ ol.deriv li.enter{animation:rowIn .5s ease}
           <h2>得到 3×3 缩减刚度矩阵</h2>
           <p>只留下 u₃、v₃、v₄ 对应的行和列：</p>
           <div class="sys grow">${matHTML(R)}${vec(["u₃","v₃","v₄"])}<span>=</span>${vec(["0","0","−F"])}</div>
-          <p>自检：矩阵对称，三个对角元素 a+b、b、b/2 都是正的，说明结构不是机构（mechanism）。</p>
+          <p>自检：矩阵对称，对角元 a+b、b、b/2 都为正。对角元为正只是必要条件；这里 det K_ff = ab²/4 > 0，矩阵非奇异，结构不是机构（mechanism）。</p>
           <p class="note">注意右下角的 b/2 只来自杆 3–4。杆 2–4 在 v₄v₄ 上贡献为 0，它对这三个未知量完全没有贡献。</p>`);
         return;
       }
@@ -560,7 +563,7 @@ ol.deriv li.enter{animation:rowIn .5s ease}
         <p class="note">实际做题时，一开始就只填这 9 个格子，不必写整个 8×8。</p>`;
       setBoard(text+g);
     }},
-    {title:"求解", steps:6, draw(step,fwd){
+    {title:"求位移", steps:6, draw(step,fwd){
       gDofs.classList.add("hidden"); gDef.classList.add("hidden"); setBarFocus(null); showEvec(null);
       const R=[["a+b","0","b/2"],["0","b","−b/2"],["b/2","−b/2","b/2"]];
       const hl=[-1,1,0,2,2,-1][step];
@@ -576,23 +579,23 @@ ol.deriv li.enter{animation:rowIn .5s ease}
         <tr><td>u₃</td><td>2δ</td><td>+${fmtmm(u3)} mm</td></tr>
         <tr><td>v₃</td><td>−(2+2√2)δ</td><td>${fmtmm(v3).replace("-","−")} mm</td></tr>
         <tr><td>v₄</td><td>−(4+4√2)δ</td><td>${fmtmm(v4).replace("-","−")} mm</td></tr></table>
-        <p class="note">δ = FL/(EA) = 850 / 3.5×10⁶ m = ${fmtmm(delta)} mm。</p>`:"";
+        <p class="note">δ = FL/(EA) = 850 N × 1000 mm / (3.5×10⁶ N) = 0.2429 mm。</p>`:"";
       setBoard(`
-        <h2>${step===0?"手算 3×3：先消元，再回代":"第 "+step+" 步"}</h2>
+        <h2>${["手算 3×3：先消元，再回代","第 1 步：由第 2 行得 v₃","第 2 步：由第 1 行得 u₃","第 3 步：整理第 3 行","第 4 步：解出 v₄","第 5 步：回代求 u₃、v₃"][step]}</h2>
         <div class="sys">${matHTML(R,hl)}${vec(["u₃","v₃","v₄"],hl)}<span>=</span>${vec(["0","0","−F"],hl)}</div>
         ${step===0?'<p>思路：第 1、2 行右端是 0，可以先把 u₃、v₃ 都用 v₄ 表示，再代入第 3 行，只剩一个未知数。</p>':''}
         <ol class="deriv">${shown}</ol>${res}`);
     }},
 
-    {title:"杆力与反力", steps:10, vb:"50 40 620 500", noLoad:true, draw(step,fwd){
+    {title:"杆力与支反力", steps:10, vb:"50 40 620 500", noLoad:true, draw(step,fwd){
       gDofs.classList.add("hidden"); gDef.classList.add("hidden"); showEvec(null);
       const g=el("g",{class:"ov-fade"},gOv);
       const DS=78; // px per mm
       if(step===0){
         setBarFocus(null);
         setBoard(`<h2>由位移求杆力：只看沿杆轴的相对位移</h2>
-          <p>每根杆的伸长量是两端相对位移 u_j − u_i 在杆轴方向 e 上的投影，再乘以杆的刚度：</p>
-          <div class="formula"><span>Δ = eᵀ(u_j − u_i) = c·(u_j − u_i) + s·(v_j − v_i)</span><span>N = (EA/Lₑ)·Δ</span></div>
+          <p>每根杆的伸长量 Δ 是两端相对位移在杆轴方向 e = (c, s) 上的投影，轴力 N 等于杆的轴向刚度 EA/Lₑ 乘以 Δ：</p>
+          <div class="formula"><span>Δ = c·(u_j − u_i) + s·(v_j − v_i)</span><span>N = (EA/Lₑ)·Δ</span></div>
           <p>N 为正表示受拉（tension），为负表示受压（compression）。垂直于杆轴的相对位移只让杆转动，不改变长度。</p>
           <table class="t"><tr><th>已知位移</th><th>表达式</th><th>数值</th></tr>
           <tr><td>u₃</td><td>2δ</td><td>+0.486 mm</td></tr><tr><td>v₃</td><td>−(2+2√2)δ</td><td>−1.173 mm</td></tr><tr><td>v₄</td><td>−(4+4√2)δ</td><td>−2.345 mm</td></tr></table>
@@ -615,14 +618,14 @@ ol.deriv li.enter{animation:rowIn .5s ease}
         label(g,tx+8,ty+14,"u_j − u_i","var(--ink)");
         if(Math.abs(D)>1e-12){ arrow(g,ox,oy,fx,fy,forceColor(Nn),5); label(g,fx+nx*14,fy+ny*14+4,"Δ",forceColor(Nn),"middle"); }
         else { el("circle",{cx:xj,cy:yj,r:6,fill:"none",stroke:"var(--muted)","stroke-width":2},g); label(g,xj-14,yj-18,"Δ = 0","var(--muted)","end"); }
-        const rows=bars.slice(0,step).map((x,k)=>{const r=barDelta(x), n=EA/Le(x)*r.D; return `<tr class="${k===step-1?"cur"+(fwd?" enter":""):""}"><td><span class="sw" style="background:${x.color}"></span>${x.i}–${x.j}</td><td>${(mmv(r.D)).toFixed(3).replace("-","−")} mm</td><td>${fmtN(n)} N</td><td>${(n/50).toFixed(1).replace("-","−")} MPa</td></tr>`;}).join("");
+        const rows=bars.slice(0,step).map((x,k)=>{const r=barDelta(x), n=EA/Le(x)*r.D; return `<tr class="${k===step-1?"cur"+(fwd?" enter":""):""}"><td><span class="sw" style="background:${x.color}"></span>${x.i}–${x.j}</td><td>${Math.abs(r.D)<1e-12?"0":fmtL(mmv(r.D))+" mm"}</td><td>${fmtNu(n)}</td><td>${Math.abs(n)<1e-6?"0":(n/50).toFixed(1).replace("-","−")+" MPa"}</td></tr>`;}).join("");
         const X={
           "13":{calc:["c = 1,　s = 0,　Lₑ = L","Δ = u₃ − u₁ = 2δ = 0.486 mm","N = (EA/L)·Δ = 3500 N/mm × 0.486 mm = +1700 N"],note:"竖向位移 v₃ 垂直于杆轴，不影响伸长。"},
           "23":{calc:["c = s = 1/√2,　Lₑ = √2 L","Δ = (u₃ + v₃)/√2 = [2 − (2 + 2√2)]·δ/√2 = −2δ = −0.486 mm","N = EA/(√2 L)·Δ = 2475 N/mm × (−0.486 mm) = −1202 N"],note:"节点 3 向下的位移比向右的大，沿杆轴方向是靠近节点 2，所以杆被压短。"},
           "34":{calc:["c = 1/√2,　s = −1/√2,　Lₑ = √2 L","Δ = [(u₄ − u₃) − (v₄ − v₃)]/√2 = 2δ = 0.486 mm","N = EA/(√2 L)·Δ = 2475 N/mm × 0.486 mm = +1202 N"],note:"节点 4 比节点 3 下沉得多，沿杆轴方向两端远离，杆被拉长。"},
           "24":{calc:["c = 1,　s = 0,　Lₑ = 2L","Δ = u₄ − u₂ = 0 − 0 = 0","N = 0"],note:"节点 4 的位移是竖直的，正好垂直于这根水平杆。一阶近似下杆只转动、不伸长。"}}[b.id];
-        setBoard(`<h2>杆 ${b.i}→${b.j}：N = ${fmtN(Nn)} N ${stateChip(Nn)}</h2>
-          <p>相对位移 <span class="mono">u_j − u_i = (${mmv(du).toFixed(3).replace("-","−")}, ${mmv(dv).toFixed(3).replace("-","−")}) mm</span></p>
+        setBoard(`<h2>杆 ${b.i}→${b.j}：N = ${fmtNu(Nn)} ${stateChip(Nn)}</h2>
+          <p>相对位移 <span class="mono">u_j − u_i = (${fmtL(mmv(du))}, ${fmtL(mmv(dv))}) mm</span></p>
           <div class="calc">${X.calc.map(l=>`<div>${l}</div>`).join("")}</div>
           <p>${X.note}</p>
           <table class="t"><tr><th>杆</th><th>Δ</th><th>N</th><th>σ = N/A</th></tr>${rows}</table>
@@ -675,9 +678,9 @@ ol.deriv li.enter{animation:rowIn .5s ease}
         cutForce(g,250,330,"24",[-1,0]);
         reac(g,4,850,0,"R₄ₓ = ?",XY(4)[0]-14,XY(4)[1]+36,"end");
         setBoard(`<h2>截面 I–I：取右半部分求 R₄</h2>
-          <p>截断法（method of sections）：用截面把结构切开，取一侧为隔离体，被切断的杆用已知轴力代替，再列平衡方程求支反力。</p>
+          <p>截面法（又称截断法，method of sections）：用截面把结构切开，取一侧为隔离体，被切断的杆用已知轴力代替，再列平衡方程求支反力。</p>
           <p>截面 I–I 切断杆 1–3、2–3、2–4，取右边（节点 3、4）为隔离体。受拉杆的力背离隔离体，受压杆的力指向隔离体。</p>
-          <div class="calc"><div>ΣF_x = 0：　−N₁₃ − N₂₃/√2 + R₄ₓ = 0</div><div>　　　−1700 − (−1202)/√2 + R₄ₓ = −1700 + 850 + R₄ₓ = 0</div><div>⇒　R₄ₓ = +850 N（向右）</div><div>ΣF_y = 0：　−N₂₃/√2 − F = 850 − 850 = 0 ✓</div></div>
+          <div class="calc"><div>ΣF_x = 0：　−N₁₃ − N₂₃/√2 − N₂₄ + R₄ₓ = 0</div><div>　　　−1700 − (−1202)/√2 + R₄ₓ = −1700 + 850 + R₄ₓ = 0</div><div>⇒　R₄ₓ = +850 N（向右）</div><div>ΣF_y = 0：　−N₂₃/√2 − F = 850 − 850 = 0 ✓</div></div>
           <p class="note">右半部分只有一个支反力 R₄ₓ，所以一个方程就能解出来，竖直方向正好用来校核。</p>`);
         return;
       }
@@ -715,11 +718,11 @@ ol.deriv li.enter{animation:rowIn .5s ease}
       reac(g,4,850,0,"R₄ = (850, 0)",XY(4)[0]-14,XY(4)[1]+36,"end");
       setBoard(`<h2>整体平衡校核</h2>
         <p>把整个桁架当作一个隔离体，三个支反力和载荷 F 必须满足三个平衡方程：</p>
-        <div class="calc"><div>ΣF_x：　−1700 + 850 + 850 = 0 ✓</div><div>ΣF_y：　850 − 850 = 0 ✓</div><div>ΣM（对节点 2）：　R₁ₓ·L 产生 +1700 N·m，F·2L 产生 −1700 N·m，合计 0 ✓</div></div>
-        <table class="t"><tr><th>支座</th><th>R_x</th><th>R_y</th></tr><tr><td>节点 1</td><td>−1700 N</td><td>0</td></tr><tr><td>节点 2</td><td>+850 N</td><td>+850 N</td></tr><tr><td>节点 4</td><td>+850 N</td><td>—（滑动方向）</td></tr></table>
+        <div class="calc"><div>ΣF_x：　−1700 + 850 + 850 = 0 ✓</div><div>ΣF_y：　850 − 850 = 0 ✓</div><div>ΣM（对节点 2，逆时针为正）：</div><div>　R₁ₓ 作用在高度 L 处：−(−1700 N)·1 m = +1700 N·m</div><div>　F 作用在 2L 处：−850 N·2 m = −1700 N·m</div><div>　R₂ 作用在节点 2，R₄ₓ 的作用线过节点 2：力矩为 0</div><div>　合计 0 ✓</div></div>
+        <table class="t"><tr><th>支座</th><th>R_x</th><th>R_y</th></tr><tr><td>节点 1</td><td>−1700 N</td><td>0</td></tr><tr><td>节点 2</td><td>+850 N</td><td>+850 N</td></tr><tr><td>节点 4</td><td>+850 N</td><td>0（竖直可滑动）</td></tr></table>
         <p class="note">整体只有 3 个方程，却有 5 个反力分量，所以单靠整体平衡求不出来，必须先有杆力，再用截面逐个求。也可以用矩阵 R = K_sf·u_f 直接算，结果相同。</p>`);
     }},
-    {title:"变形动画", steps:1, deform:true, draw(step,fwd){
+    {title:"变形图", steps:1, deform:true, draw(step,fwd){
       gDofs.classList.add("hidden"); showEvec(null);
       setBarFocus(null);
       bars.forEach(b=>{barEls[b.id].classList.add("dim");labelEls[b.id].style.opacity=.25;});
@@ -746,7 +749,7 @@ ol.deriv li.enter{animation:rowIn .5s ease}
         else{playing=true;osc.textContent="停止";raf=requestAnimationFrame(loop);}
       });
     }},
-    {title:"零力杆与二阶效应", steps:1, vb:"50 40 640 570", noLoad:true, draw(step,fwd){
+    {title:"零力杆的二阶伸长", steps:1, vb:"50 40 640 570", noLoad:true, draw(step,fwd){
       gDofs.classList.add("hidden"); gDef.classList.add("hidden"); showEvec(null);
       setBarFocus("24","dim");
       const R2=440, [x2,y2]=XY(2);
@@ -803,14 +806,14 @@ ol.deriv li.enter{animation:rowIn .5s ease}
         <dl class="readout">
           <dt>转角</dt><dd>θ = v₄/(2L) = 2.345/2000 ≈ 0.067°</dd>
           <dt>二阶伸长</dt><dd>Δ ≈ v₄²/(4L) = 2.345²/4000 ≈ 0.0014 mm</dd>
-          <dt>对应内力</dt><dd>N ≈ 1750 N/mm × 0.0014 mm ≈ 2.4 N（其他杆 1202–1700 N）</dd>
+          <dt>对应内力</dt><dd>N ≈ EA/(2L) · Δ = 1750 N/mm × 0.0014 mm ≈ 2.4 N（其他杆为 1202–1700 N）</dd>
         </dl>
         <div id="rawslot"></div>
         <p class="note">红线是杆 2–4 的真实伸长随 |v₄| 的变化，虚线是其他杆的一阶伸长。只有 |v₄| 大到约 ${vx.toFixed(0)} mm（本题的 ${ (vx/2.345).toFixed(0)} 倍）时，二者才相当；那时就要做几何非线性（大变形）分析，在变形后的构形上重新列平衡。</p>`);
       document.getElementById("rawslot").innerHTML=chart;
       const th=document.getElementById("theta"), tv=document.getElementById("thetaval"), ro=document.getElementById("ro");
       const upd=()=>{const d=+th.value, t=d*Math.PI/180; tv.textContent=d+"°"; drawGeo(d);
-        ro.innerHTML=prettify(`<dt>v₄ / 2L</dt><dd>tan θ = ${Math.tan(t).toFixed(3)}</dd><dt>线性理论 Δ</dt><dd>0</dd><dt>真实 Δ / 2L</dt><dd>1/cos θ − 1 = ${(1/Math.cos(t)-1).toFixed(4)}（≈ θ²/2 = ${(t*t/2).toFixed(4)}）</dd>`);};
+        ro.innerHTML=prettify(`<dt>|v₄| / 2L</dt><dd>tan θ = ${Math.tan(t).toFixed(3)}</dd><dt>线性理论 Δ</dt><dd>0</dd><dt>真实 Δ / 2L</dt><dd>1/cos θ − 1 = ${(1/Math.cos(t)-1).toFixed(4)}（≈ θ²/2 = ${(t*t/2).toFixed(4)}）</dd>`);};
       th.addEventListener("input",upd); upd();
     }},
     {title:"质量矩阵", steps:5, noLoad:true, draw(step,fwd){
@@ -864,7 +867,7 @@ ol.deriv li.enter{animation:rowIn .5s ease}
         <tr><td>形状</td><td>满阵，有耦合</td><td>对角阵</td></tr>
         <tr><td>来源</td><td>与 K 同一套形函数</td><td>质量直接堆在节点</td></tr>
         <tr><td>频率</td><td>精确值的上界（偏高）</td><td>通常偏低</td></tr>
-        <tr><td>对角元之和</td><td>20.41×10⁻⁵ t</td><td>74.73×10⁻⁵ t</td></tr></table>
+        <tr><td>u₃ 方向的质量</td><td>10.86×10⁻⁵ t</td><td>25.84×10⁻⁵ t</td></tr></table>
         <p class="note">课件的一致质量只计沿杆轴方向的惯性，垂直于杆的运动没有质量，所以 M_c 的对角元比 M_l 小得多，频率也就高得多。</p>`);
     }},
     {title:"固有频率与振型", steps:3, noLoad:true, draw(step,fwd){
