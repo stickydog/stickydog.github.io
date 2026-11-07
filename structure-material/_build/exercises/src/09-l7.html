@@ -88,6 +88,7 @@
 <li>记 \(a=EA/L=3.5\cdot10^3\)，\(b=EA/(\sqrt2L)=a/\sqrt2=2.475\cdot10^3\)（N/mm），直接得到 \(\begin{bmatrix}a+b&0&b/2\\0&b&-b/2\\b/2&-b/2&b/2\end{bmatrix}\)，与上面的数值矩阵一致。下弦是水平杆，\(s=0\)，对竖向的 \(D_7\) 没有刚度贡献，所以不出现在这里。</li>
 <li>不求逆，直接消元：第 2 行 \(\Rightarrow D_3=D_7/2\)；第 1 行 \(\Rightarrow D_2=-\frac{\sqrt2-1}{2}D_7\)；代入第 3 行得 \(\frac{2-\sqrt2}{2}D_7=-2\sqrt2\,\frac{FL}{EA}\)。</li>
 <li>结果（\(\delta=FL/EA=0.2429\,\mathrm{mm}\)）：\(D_7=-(4+4\sqrt2)\delta=-2.345\,\mathrm{mm}\)，\(D_3=-(2+2\sqrt2)\delta=-1.173\,\mathrm{mm}\)，\(D_2=2\delta=0.486\,\mathrm{mm}\)（上面的 0.485 是舍入误差）。</li>
+<li>单位：全程用 N–mm–MPa 配套（\(E=7\times10^4\) N/mm²，\(L=1000\) mm），位移直接得 mm；GPa 与 mm 混用会差 10³ 倍。两套单位制的对照见笔记 <a href="course-notes.html#ch14-8">§14.8</a>。</li>
 <li>逐步动画（单元矩阵、填块组装、划去约束自由度、消元、变形与杆力）：<a href="truss-stiffness-animation.html">桁架刚度法动画演示</a>。</li>
 </ul></div>
 </details>
