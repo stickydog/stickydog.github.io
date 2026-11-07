@@ -3,7 +3,7 @@
 <p class="lead">FEM 的五个例题由浅入深：一维杆 (组装与边界条件)→ 两杆桁架 (坐标变换)→ 悬臂梁 (集中力、均布载荷与等效节点力)→ 梁–杆组合结构 (不同单元组装在一起)。每个例题都按同一个流程：单元刚度 → 变换到全局 → 组装 → 施加边界条件求解 → 后处理求应力。</p>
 
 <article class="task" id="l6-1">
-<h3><span class="tno">例 1</span>三单元杆：组装、boundary conditions 与求解</h3>
+<h3><span class="tno">例 1</span>三单元杆：组装、边界条件与求解</h3>
 <div class="q">
 <figure class="fig"><img src="exercises/L6-bar.png" alt="长 l 的杆分为 3 个 l/3 单元，左端固定，右端受力 F"></figure>
 <p>A bar of length \(l\) (left end fixed, tip load \(F\)) is discretized by three truss elements of length \(l_e=l/3\). Assemble the global stiffness matrix, apply the boundary conditions, solve for the nodal displacements and compute strain and stress.</p>
@@ -28,7 +28,7 @@
 </article>
 
 <article class="task" id="l6-2">
-<h3><span class="tno">例 2</span>两杆 truss：节点位移与杆应力</h3>
+<h3><span class="tno">例 2</span>两杆桁架：节点位移与杆应力</h3>
 <div class="q">
 <figure class="fig"><img src="exercises/L6-truss.png" alt="两根杆从墙上两点汇交于节点 3，节点 3 受向下 5 N"></figure>
 <p><b>Task 1:</b> Find the displacement of node 3. <b>Task 2:</b> Calculate the stresses in the elements. (Node 1 at (0, 10), node 2 at (0, 0), node 3 at (10, 5); both elements have the same \(EA\) and length \(l\); load \(F\) downward at node 3. \(A\) := constant cross section area, \(E\) := Young's modulus.)</p>

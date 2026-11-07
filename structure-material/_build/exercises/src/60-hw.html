@@ -44,7 +44,7 @@
 <p>小转角 \(\sin\theta\approx\theta\to\) 一阶小量，\(\cos\theta\approx1\)，略去高阶项：</p>
 \[\vec V_G\approx\begin{bmatrix}0\\s\dot\theta+\dot h\end{bmatrix},\qquad v_G^2=(s\dot\theta+\dot h)^2\]
 \[T=\tfrac12m(s\dot\theta+\dot h)^2+\tfrac12I_G\dot\theta^2=\tfrac12m\dot h^2+ms\,\dot h\dot\theta+\tfrac12\underbrace{(I_G+ms^2)}_{I_E}\dot\theta^2\]
-<p><b>外力 virtual work</b>：\(W_e=M\theta+Lh+Le\theta\) → 广义力 \(Q_h=L\)，\(Q_\theta=M+eL\)。</p>
+<p><b>外力虚功</b>：\(W_e=M\theta+Lh+Le\theta\) → 广义力 \(Q_h=L\)，\(Q_\theta=M+eL\)。</p>
 <p><b>运动方程</b>：</p>
 \[h:\quad m(\ddot h+s\ddot\theta)+K_hh=L\]
 \[\theta:\quad I_E\ddot\theta+ms\ddot h+K_\theta\theta=M+eL\]
@@ -52,7 +52,7 @@
 <p class="erratum">原解答小笔误：小角度近似写成了 "\(\sin\theta\approx0\)"，应为 \(\sin\theta\approx\theta\) (在速度表达式中 \(s\sin\theta\,\dot\theta\) 是二阶小量才被略去)。</p>
 <div class="note"><span class="lbl">补充说明</span>
 <ul>
-<li>耦合出现在 <b>mass matrix</b> (\(ms\)，惯性耦合)，因为自由度取在剪心而不是重心；如果 \(s=0\) (重心与剪心重合)，沉浮和扭转就解耦了。</li>
+<li>耦合出现在<b>质量矩阵</b> (\(ms\)，惯性耦合)，因为自由度取在剪心而不是重心；如果 \(s=0\) (重心与剪心重合)，沉浮和扭转就解耦了。</li>
 <li>\(I_E=I_G+ms^2\) 是平行轴定理 (parallel axis theorem)。</li>
 <li>这就是颤振 (flutter) 分析的经典二元机翼模型 (典型截面，typical section)。气动力 \(L\)、\(M\) 若依赖于 \(h,\theta\) 及其导数，就会改变系统的等效刚度和阻尼。重心越靠后 (\(s\) 越大，且在剪心之后)，越容易颤振——这就是机翼前缘配重的原因。Trial Exam 题 6 的发动机–机翼模型也是同一结构。</li>
 </ul></div>
@@ -61,7 +61,7 @@
 </section>
 
 <section class="set" id="h2" data-short="Home Exercise 2">
-<h2 class="set-title"><span class="set-num">Home Exercise 2</span>fatigue<span class="set-src">2 页</span></h2>
+<h2 class="set-title"><span class="set-num">Home Exercise 2</span>疲劳 Fatigue<span class="set-src">2 页</span></h2>
 <p class="lead">由 S–N 曲线 (Wöhler curve) 读寿命，用 Palmgren–Miner 线性累积损伤准则 \(D=\sum n_i/N_i\) 判断是否失效 (\(D\ge1\) 失效)。</p>
 
 <article class="task" id="h2-1">
@@ -103,7 +103,7 @@
 <p class="lead">C-AS4/EP 单向层的柔度矩阵 \([S]\)、刚度矩阵 \([Q]\) (两种方法)，以及 45° 层的转换刚度矩阵 \([\bar Q]_{45}\)。用于 \([0/45]_S\) 层合板。</p>
 
 <article class="task" id="h3-1">
-<h3><span class="tno">Task 1</span>UD 单层的柔度与 stiffness matrix</h3>
+<h3><span class="tno">Task 1</span>UD 单层的柔度与刚度矩阵</h3>
 <div class="q">
 <p>Given are the material properties of a UD ply made of C-AS4 EP: \(E_1=142\,\mathrm{GPa}\), \(E_2=10.3\,\mathrm{GPa}\), \(G_{12}=7200\,\mathrm{MPa}\), \(\nu_{12}=0.27\).</p>
 <ol class="parts">
@@ -123,7 +123,7 @@
 </article>
 
 <article class="task" id="h3-2">
-<h3><span class="tno">Task 2</span>[0/45]<sub>s</sub> laminate 中 45° 层的刚度</h3>
+<h3><span class="tno">Task 2</span>[0/45]<sub>s</sub> 层合板中 45° 层的刚度</h3>
 <div class="q">
 <p>The UD ply from Task 1 is used to set up a laminate with the stacking sequence \([0/45]_S\). The ply thickness is \(t=0.125\,\mathrm{mm}\).</p>
 <ol class="parts">
@@ -150,12 +150,12 @@
 </section>
 
 <section class="set" id="h4" data-short="Home Exercise 4">
-<h2 class="set-title"><span class="set-num">Home Exercise 4</span>buckling<span class="set-src">10 页 · HSB 图表</span></h2>
+<h2 class="set-title"><span class="set-num">Home Exercise 4</span>屈曲 Buckling<span class="set-src">10 页 · HSB 图表</span></h2>
 <p class="lead">用 HSB (Handbuch Strukturberechnung，航空结构计算手册) 的屈曲图表做工程屈曲评估：确定边界条件 → 计算长宽比 → 从图表读屈曲系数 \(k\) → 求临界应力 → 与工作应力比较得到安全系数。配套图表：<a href="homework/hsb-45111-01-buckling-diagrams.pdf">HSB 45111-01 屈曲图表 (PDF)</a>。</p>
 <p class="note-inline">两道题均未直接给出 \(E\)；由解答数值反推，使用的是 \(E=70\,\mathrm{GPa}\) (铝)。</p>
 
 <article class="task" id="h4-1">
-<h3><span class="tno">Task 1</span>机身铝蒙皮板的单向压缩 buckling</h3>
+<h3><span class="tno">Task 1</span>机身铝蒙皮板的单向压缩屈曲</h3>
 <div class="q">
 <figure class="fig small"><img src="exercises/hw4-panel.png" alt="l = 500 mm、w = 200 mm 的矩形板"></figure>
 <p>Given is an aluminum panel of an aircraft fuselage with the thickness \(t\), framed by stringers and frames on all four sides. They all have a low torsional stiffness. \(l=500\,\mathrm{mm}\), \(w=200\,\mathrm{mm}\), \(t=2\,\mathrm{mm}\), \(\nu=0.33\). For all following tasks, a constant uniaxial compression load is applied to the shorter sides: \(\sigma_c=30\,\mathrm{N/mm^2}\).</p>
@@ -281,7 +281,7 @@
 <p class="lead">卫星天线支架：三根刚度为 \(k\) 的支杆在一点汇交，汇交点集中质量 \(m\)，两个平动自由度。用 Lagrange 法建立运动方程，然后求固有频率、振型、质量归一化模态矩阵和模态坐标方程。</p>
 
 <article class="task" id="h6-1">
-<h3><span class="tno">Task 1</span>卫星天线 truss</h3>
+<h3><span class="tno">Task 1</span>卫星天线桁架</h3>
 <div class="q">
 <figure class="fig small"><img src="exercises/hw6-sat.png" alt="卫星天线：三根刚度 k 的支杆，两侧斜杆与竖直方向夹角 α，节点质量 m，水平测试力 F"></figure>
 <p>A satellite structure with a parabolic antenna mounted on a truss (see sketch) shall be analyzed with respect to its dynamic behavior. The system is composed of three struts, each with a stiffness \(k\). The mass is lumped into one single mass \(m\) in the connecting node. Two translational degrees of freedom shall be examined. There is an external test load \(F\) acting. \(k=1\), \(m=\tfrac32\), \(\alpha=30^\circ\), \(l=1\).</p>

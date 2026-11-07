@@ -3,14 +3,14 @@
 <p class="lead">经典层合板理论 (Classical Laminate Theory, CLT) 的完整手算流程：单层刚度 \([Q]\) → 坐标变换 \([\bar Q]\) → 组装 \([A],[B],[D]\)。之后用 eLamX² 软件观察不同铺层的 ABD 特征、拉伸与弯曲时该看哪个刚度、\(E_x\) 极坐标图以及层内应力分布，最后是一道铝板与准各向同性 CFRP 板的开放式比较题。</p>
 
 <article class="task" id="t4-1">
-<h3><span class="tno">1 · Task 1</span>[0/90]<sub>s</sub> laminate 的本构关系 (CLT 手算)</h3>
+<h3><span class="tno">1 · Task 1</span>[0/90]<sub>s</sub> 层合板的本构关系 (CLT 手算)</h3>
 <div class="q">
 <figure class="fig"><img src="exercises/t4-stack.png" alt="[0/90]s 四层层合板及 h0–h4 坐标"></figure>
 <p>Determine the constitutive law for a laminate with a lay-up of \([0/90]_S\).</p>
 \[E_1=132\,680\,\mathrm{MPa},\quad E_2=9370\,\mathrm{MPa},\quad G_{12}=9642\,\mathrm{MPa},\quad \nu_{12}=0.287,\quad t=0.2\,\mathrm{mm}\ (\text{per ply})\]
 </div>
 <details class="sol"><summary>解答</summary>
-<p><b>Step 1 – 0° 单层的 stiffness matrix \([Q]\)</b>，\(\nu_{21}=\nu_{12}E_2/E_1=0.02027\)：</p>
+<p><b>Step 1 – 0° 单层的刚度矩阵 \([Q]\)</b>，\(\nu_{21}=\nu_{12}E_2/E_1=0.02027\)：</p>
 \[[Q]=\begin{bmatrix}\frac{E_1}{1-\nu_{12}\nu_{21}}&\frac{\nu_{12}E_2}{1-\nu_{12}\nu_{21}}&0\\\frac{\nu_{21}E_1}{1-\nu_{12}\nu_{21}}&\frac{E_2}{1-\nu_{12}\nu_{21}}&0\\0&0&G_{12}\end{bmatrix}=\begin{bmatrix}133\,456&2704&0\\2704&9424&0\\0&0&9642\end{bmatrix}\mathrm{MPa}\]
 <p><b>Step 2 – 转换到 90°</b> (\(\cos90^\circ=0,\ \sin90^\circ=1\))：</p>
 \[[T]=\begin{bmatrix}\cos^2\theta&\sin^2\theta&2\sin\theta\cos\theta\\\sin^2\theta&\cos^2\theta&-2\sin\theta\cos\theta\\-\sin\theta\cos\theta&\sin\theta\cos\theta&\cos^2\theta-\sin^2\theta\end{bmatrix}_{90^\circ}=\begin{bmatrix}0&1&0\\1&0&0\\0&0&-1\end{bmatrix}=[T]^{-1}\]
@@ -38,7 +38,7 @@
 </article>
 
 <article class="task" id="t4-2">
-<h3><span class="tno">2 · eLamX</span>ABD 矩阵的特征与 laminate 分类</h3>
+<h3><span class="tno">2 · eLamX</span>ABD 矩阵的特征与层合板分类</h3>
 <div class="q">
 <p>The use of eLamX is not relevant for the exam, but the calculation will help to strengthen your understanding.</p>
 <p><b>Task 1:</b> Create the UD material model. <b>Task 2:</b> Create a laminate with 1 ply: check the ABD matrix; check the stiffness polar plot. <b>Task 3:</b> Set up the laminate of Chapter 1 and double-confirm the results.</p>
@@ -53,7 +53,7 @@
 <tr><td>Cross-ply \([0/90/0]_S\)</td><td>\(A_{16}=A_{26}=0\)</td><td>0</td><td>\(D_{16}=D_{26}=0\) → 无弯扭耦合 (no bend–twist coupling)</td></tr>
 <tr><td>\([\pm30/\pm60/0/90]_S\)</td><td>\(A_{16}=A_{26}=0\)</td><td>0</td><td>满阵</td></tr>
 </tbody></table>
-<p><b>laminate 分类 (Type of Laminates)</b>：</p>
+<p><b>层合板分类 (Type of Laminates)</b>：</p>
 <ul>
 <li><b>Angle-ply</b>：各层材料、厚度相同，方向为 \(+\theta\) 与 \(-\theta\)。</li>
 <li><b>Cross-ply</b>：所有层都是 0° 或 90°。</li>
@@ -164,7 +164,7 @@
 </article>
 
 <article class="task" id="t4-7">
-<h3><span class="tno">5 · Design</span>铝板 vs 准 isotropic CFRP 板 (开放题)</h3>
+<h3><span class="tno">5 · Design</span>铝板 vs 准各向同性 CFRP 板 (开放题)</h3>
 <div class="q">
 <p>Compare the structural performance of an aluminium plate with a quasi-isotropic Black Metal Design composite laminate using Classical Laminate Theory (CLT).</p>
 <p>Geometry: square plate 300 mm × 300 mm × 5 mm; CFRP: C-AS4 | EP-3501-6; Aluminium 7075-T6: \(\sigma_{max}=500\,\mathrm{MPa}\), \(E=72\,\mathrm{GPa}\), \(\nu=0.33\).</p>

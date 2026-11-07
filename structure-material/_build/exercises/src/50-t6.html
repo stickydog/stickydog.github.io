@@ -9,11 +9,11 @@
 <div class="q"><p>Consider the truss framework shown. Determine the vertical deflection of the mass \(m\) due to gravity.</p></div>
 <details class="sol"><summary>解答</summary>
 <figure class="fig small"><img src="exercises/t6-dof.png" alt="全局自由度编号 U1–U6"><figcaption>自由度编号：节点 \(U_1,U_2\)；杆 1 上端 \(U_3,U_4\)；杆 2 下端 \(U_5,U_6\)</figcaption></figure>
-<p><b>Step 1 – 单元 stiffness matrix</b>。杆 1 竖直，只在 \(y\) 向有刚度：</p>
+<p><b>Step 1 – 单元刚度矩阵</b>。杆 1 竖直，只在 \(y\) 向有刚度：</p>
 \[k_1=\frac{E_1A_1}{l_1}\begin{bmatrix}1&-1\\-1&1\end{bmatrix}\ (U_2,U_4)\]
 <p>杆 2 倾角 45°，\(c=s=\tfrac{\sqrt2}{2}\)，\(c^2=s^2=sc=\tfrac12\)：</p>
 \[k_2=\frac{E_2A_2}{l_2}\begin{bmatrix}c^2&sc&-c^2&-sc\\sc&s^2&-sc&-s^2\\-c^2&-sc&c^2&sc\\-sc&-s^2&sc&s^2\end{bmatrix}=\frac{E_2A_2}{2l_2}\begin{bmatrix}1&1&-1&-1\\1&1&-1&-1\\-1&-1&1&1\\-1&-1&1&1\end{bmatrix}\ (U_5,U_6,U_1,U_2)\]
-<p><b>Step 2 – global stiffness matrix</b> (只保留自由的 \(U_1,U_2\))：</p>
+<p><b>Step 2 – 总刚度矩阵</b> (只保留自由的 \(U_1,U_2\))：</p>
 \[K=\begin{bmatrix}\dfrac{E_2A_2}{2l_2}&\dfrac{E_2A_2}{2l_2}\\[2mm]\dfrac{E_2A_2}{2l_2}&\dfrac{E_1A_1}{l_1}+\dfrac{E_2A_2}{2l_2}\end{bmatrix}=\begin{bmatrix}3000&3000\\3000&58\,000\end{bmatrix}\mathrm{N/mm}\]
 <p>(\(E_2A_2/2l_2=24\,000\cdot100/800=3000\)，\(E_1A_1/l_1=110\,000\cdot100/200=55\,000\))</p>
 <p><b>Step 3 – 载荷向量</b>：\(f=\begin{bmatrix}0\\-mg\end{bmatrix}=\begin{bmatrix}0\\-98.1\end{bmatrix}\mathrm N\)</p>
@@ -30,7 +30,7 @@
 </article>
 
 <article class="task" id="t6-2">
-<h3><span class="tno">Task 2</span>support reaction</h3>
+<h3><span class="tno">Task 2</span>支反力</h3>
 <div class="q"><p>Calculate the reaction forces.</p></div>
 <details class="sol"><summary>解答</summary>
 <p>把总方程按自由/约束自由度分块：</p>
@@ -68,7 +68,7 @@
 </article>
 
 <article class="task" id="t6-5">
-<h3><span class="tno">Task 5</span>natural frequency (lumped mass matrix)</h3>
+<h3><span class="tno">Task 5</span>固有频率 (集中质量矩阵)</h3>
 <div class="q"><p>Calculate the eigenfrequencies of the structure using a lumped mass matrix, assuming that the two truss elements are massless.</p></div>
 <details class="sol"><summary>解答</summary>
 \[K=\begin{bmatrix}3000&3000\\3000&58\,000\end{bmatrix},\qquad M=\begin{bmatrix}10&0\\0&10\end{bmatrix},\qquad \det([K]-\lambda[M])=0,\quad \lambda=\omega^2\]
@@ -83,7 +83,7 @@
 </article>
 
 <article class="task" id="t6-6">
-<h3><span class="tno">Task 6</span>特征向量与 mode shape</h3>
+<h3><span class="tno">Task 6</span>特征向量与振型</h3>
 <div class="q"><p>Calculate the eigenvectors and create a sketch of the eigenforms.</p></div>
 <details class="sol"><summary>解答</summary>
 <p>\(\lambda_1=283.685\)：</p>
@@ -134,7 +134,7 @@
 </article>
 
 <article class="task" id="t6-10">
-<h3><span class="tno">Task 10</span>consistent mass matrix</h3>
+<h3><span class="tno">Task 10</span>一致质量矩阵</h3>
 <div class="q"><p>Calculate the mass matrix of the system using a consistent mass formulation. Use a density of \(\rho_{Ti}=4430\,\mathrm{kg/m^3}\) for titanium and \(\rho_{GFRP}=1800\,\mathrm{kg/m^3}\) for glass-fibre-reinforced polymer (GFRP).</p></div>
 <details class="sol"><summary>解答</summary>
 <p>杆 1：\(\rho Al=4430\cdot10^{-4}\cdot0.2=0.0886\,\mathrm{kg}\)</p>

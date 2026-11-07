@@ -3,17 +3,17 @@
 <p class="lead">三个例题：机翼两自由度模型 (特征值、振型、质量归一化)、两质量串联振子 (静变形与模态)，以及一个四杆铝桁架的完整 FEM 分析——静力位移、支反力，以及一致质量矩阵和集中质量矩阵下的固有频率。</p>
 
 <article class="task" id="l7-1">
-<h3><span class="tno">例 1</span>弹性机翼：natural frequency、mode shape 与质量归一化</h3>
+<h3><span class="tno">例 1</span>弹性机翼：固有频率、振型与质量归一化</h3>
 <div class="q">
 <figure class="fig small"><img src="exercises/L7-wing.png" alt="机翼简化为带两个质量 m1、m2 的梁，自由度 U1、U2"></figure>
 <p><b>Task:</b> Calculate the eigenfrequencies and eigenmodes of the elastic wing, and normalize the modes with respect to the mass matrix.</p>
 \[M=\begin{bmatrix}8&0\\0&5\end{bmatrix},\qquad K=\begin{bmatrix}100&-30\\-30&65\end{bmatrix}\]
 </div>
 <details class="sol"><summary>解答</summary>
-<p><b>natural frequency</b>：\(([K]-\lambda[M])\phi\,e^{i\omega t}=0\)：</p>
+<p><b>固有频率</b>：\(([K]-\lambda[M])\phi\,e^{i\omega t}=0\)：</p>
 \[\det\begin{bmatrix}100-8\lambda&-30\\-30&65-5\lambda\end{bmatrix}=(100-8\lambda)(65-5\lambda)-30^2=0\ \Rightarrow\ \lambda^2-25.5\lambda+140=0\]
 \[\lambda_1=17.5,\quad \lambda_2=8.0,\qquad \omega_i=\sqrt{\lambda_i},\qquad f_i=\frac{\omega_i}{2\pi}\]
-<p><b>mode shape</b>：</p>
+<p><b>振型</b>：</p>
 \[\lambda=17.5:\ \begin{bmatrix}-40&-30\\-30&-22.5\end{bmatrix}\begin{Bmatrix}\phi_{1,1}\\\phi_{1,2}\end{Bmatrix}=0,\quad \phi_{1,1}=1\Rightarrow-40-30\phi_{1,2}=0\Rightarrow\phi_1=\begin{Bmatrix}1\\-\tfrac43\end{Bmatrix}\]
 \[\lambda=8.0:\ \begin{bmatrix}36&-30\\-30&25\end{bmatrix}\begin{Bmatrix}\phi_{2,1}\\\phi_{2,2}\end{Bmatrix}=0,\quad \phi_{2,1}=1\Rightarrow36-30\phi_{2,2}=0\Rightarrow\phi_2=\begin{Bmatrix}1\\\tfrac65\end{Bmatrix}\]
 <p><b>质量归一化</b>：求系数 \(a\) 使 \((a\phi)^T[M](a\phi)=1\)：</p>
@@ -60,7 +60,7 @@
 </article>
 
 <article class="task" id="l7-3">
-<h3><span class="tno">例 3</span>四杆铝 truss：静力位移场</h3>
+<h3><span class="tno">例 3</span>四杆铝桁架：静力位移场</h3>
 <div class="q">
 <figure class="fig"><img src="exercises/L7-truss.png" alt="四杆桁架：上弦 L、下弦 2L、两根斜杆，右下节点受向下力 F"></figure>
 <p>Given is a framework made of aluminium (\(E=70\,\mathrm{GPa},\ \nu=0.3\)) with a constant cross-section \(A=50\,\mathrm{mm^2}\) and density \(\rho=2.7\,\mathrm{t/m^3}\); \(L=1\,\mathrm m\).</p>
@@ -95,7 +95,7 @@
 </article>
 
 <article class="task" id="l7-4">
-<h3><span class="tno">例 4</span>四杆铝 truss：support reaction</h3>
+<h3><span class="tno">例 4</span>四杆铝桁架：支反力</h3>
 <div class="q"><p><b>Task 2:</b> Calculate all reaction forces.</p></div>
 <details class="sol"><summary>解答</summary>
 <p>用总方程中被约束自由度对应的行乘以已求出的位移：</p>
@@ -113,10 +113,10 @@
 </article>
 
 <article class="task" id="l7-5">
-<h3><span class="tno">例 5</span>四杆铝 truss：一致质量 vs 集中质量的 natural frequency</h3>
+<h3><span class="tno">例 5</span>四杆铝桁架：一致质量 vs 集中质量的固有频率</h3>
 <div class="q"><p><b>Task 3:</b> Calculate the eigenfrequencies of the system using a consistent mass matrix. <b>Task 4:</b> Calculate the eigenfrequencies of the system using a lumped mass matrix.</p></div>
 <details class="sol"><summary>解答</summary>
-<p><b>单元 mass matrix</b> (\(\rho=2.7\times10^{-9}\,\mathrm{t/mm^3}\)，质量单位 t，配合 N/mm 得 \(\lambda\) 单位 s⁻²)：</p>
+<p><b>单元质量矩阵</b> (\(\rho=2.7\times10^{-9}\,\mathrm{t/mm^3}\)，质量单位 t，配合 N/mm 得 \(\lambda\) 单位 s⁻²)：</p>
 \[[m]_1=\frac{\rho AL_1}{6}\begin{bmatrix}2&1\\1&2\end{bmatrix}=2.25\cdot10^{-5}\begin{bmatrix}2&1\\1&2\end{bmatrix},\quad [m]_2=4.5\cdot10^{-5}[\cdots],\quad [m]_3=[m]_4=\sqrt2\cdot2.25\cdot10^{-5}[\cdots]\]
 <p><b>原解答</b>：组装后 (自由度 \(D_2,D_3,D_7\))</p>
 \[[M]=\sqrt2\cdot2.25\cdot10^{-5}\begin{bmatrix}\sqrt2+\frac16+\frac16&\frac16+\frac16&\frac1{12}\\\frac16+\frac16&\frac16+\frac16&\frac1{12}\\\frac1{12}&\frac1{12}&\frac16\end{bmatrix},\qquad f_1=303.4,\ f_2=1551.3,\ f_3=4283.3\,\mathrm{Hz}\]

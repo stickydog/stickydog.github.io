@@ -33,7 +33,7 @@
 
 ## 二、术语 (最高优先级，禁止另造译名)
 
-### 1. 全站统一术语 (中文正文里出现时用此写法；突出位置见第 2 条)
+### 1. 全站统一术语 (出现即用此写法)
 
 **空气动力学 / 飞行力学**
 
@@ -84,39 +84,13 @@
 - "粘"只作动词 (读 zhān) 时保留，如"粘在表面上""粘结""脱粘 (debonding)"；表示黏性的一律用"黏"。
 - 剪力 (shear force) 与切应力 (shear stress) 是不同的量，不要把"剪力"改成"切力"。
 
-### 2. 核心术语在突出位置直接用英文
-
-为了直接对接英文课件和文献，下面这些高频核心术语在**单独、突出出现**的位置直接写英文原文，不写中文。在大段中文正文里反复出现时保持中文 (第 1 条的写法)，不要替换。
-
-**哪些位置算"单独、突出" (要替换)**
-- 标题：`h1`–`h4`、章标题、节标题、习题页题组和题目标题
-- 导航：侧栏目录、hero 卡片标题 (`.card-title`)、部分横幅名称、导航页条目标题 (`.t`)
-- 强调：`<strong>` / `<b>` 加粗的术语
-- 短条目：表格单元格 (≤ 20 字)；列表项、图注、卡片描述等不成句的短语 (≤ 15 字，图注 ≤ 20 字，且不含，。；：、等句内标点)
-
-**不替换**：长段落和完整句子里的普通出现；附录 B 中英术语表 (`table.glossary`，保持中英对照)；习题英文原题 (`.q`)；公式内部；`alt` 文字。
-
-**术语与英文写法** (小写；人名、Mach、Reynolds 等专有名词保持大写)
-
-| 课程 | 中文 → 英文 |
-|---|---|
-| 空气动力学 | 升力 lift、阻力 drag、翼型 airfoil、迎角 angle of attack、环量 circulation、涡面 vortex sheet、流线 streamline、无黏 inviscid、黏性 viscous、边界层 boundary layer、失速 stall、下洗 downwash、诱导阻力 induced drag、升力线 lifting line、Mach 数 Mach number、Reynolds 数 Reynolds number、流动分离 flow separation |
-| 结构与材料 | 切应力 shear stress、切应变 shear strain、剪力 shear force、弯矩 bending moment、屈曲 buckling、刚度矩阵 stiffness matrix、质量矩阵 mass matrix、层合板 laminate、疲劳 fatigue、各向同性 isotropic、振型 mode shape、固有频率 natural frequency、自由度 DoF、边界条件 boundary conditions |
-| 工程力学 | 桁架 truss、刚架 frame、支反力 support reaction、虚功 virtual work、力偶 couple、合力 resultant force |
-| 飞行力学 | 配平 trim、角速度 angular velocity、特征值 eigenvalue |
-
-- **复合词整体替换**：含上述术语的复合词，如果附录 B 术语表里有英文，就整体换成术语表的英文，而不是只换其中一半。例如 升力系数 → lift coefficient、壁面切应力 → wall shear stress、临界 Mach 数 → critical Mach number、虚功原理 → principle of virtual work、剪力图 → shear force diagram、流线体 → streamlined body、阻力发散 → drag divergence。术语表里没有的复合词只换核心词：`boundary layer 厚度`。
-- **去重**：替换后若紧跟着同义的英文注释，删去重复的一份：`边界层 (Boundary Layers)` 作标题时写成 `Boundary Layers`；`<strong>各向同性</strong> isotropic` 写成 `<strong>isotropic</strong>`。
-- **空格**：英文术语与相邻的中文、数字之间留一个空格：`平面 ideal truss 的计数准则`、`3 个 DoF`。
-- 新增核心术语前先征得用户同意，再补进上表。
-
-### 3. 矢量 vs 向量 (按语境区分，两者都合法)
+### 2. 矢量 vs 向量 (按语境区分，两者都合法)
 
 - **物理量 → "矢量"**：速度矢量、角速度矢量、力矢量、涡量矢量、应力矢量、牵引力矢量、力矩矢量、位置矢量、定位 / 滑移 / 自由矢量、矢量积、矢量场、矢量代数、矢量投影、矢量求导、单位矢量 (物理语境)
 - **线性代数对象 → "向量"**：特征向量、基向量、列向量、状态向量、零向量、法向量、载荷向量、位移向量、应变 / 应力向量 (Voigt 列向量)、振型向量、模态坐标向量、方向向量、单位向量 (几何 / 代数语境)、参考向量、常向量、形函数向量
 - 判断不了时保持原文，并在回复中列出待确认。
 
-### 4. 易混淆概念 (是不同概念，切勿"统一"错)
+### 3. 易混淆概念 (是不同概念，切勿"统一"错)
 
 - **下沉** (sink rate，飞行下降率)≠ **下洗** (downwash，翼尖涡诱导速度)
 - **展长** (span length，"单位展长"per unit span)≠ **翼展** (wingspan，机翼总展长)
@@ -125,7 +99,7 @@
 - **剪力** (shear force，截面内力)≠ **切应力** (shear stress，单位面积上的力)
 - **支反力** (support reaction)≠ **约束反力** (constraint force，泛指一切约束力)
 
-### 5. 新增术语
+### 4. 新增术语
 
 - 新课程或新章节出现表中没有的术语：先查本站已有页面 (尤其各附录 B 中英术语表) 里的写法并沿用；全站都没有时，采用全国科学技术名词审定委员会 (术语在线) 的规范名，并在回复中列出新增术语，建议补进上表。
 
@@ -134,7 +108,8 @@
 ## 三、文字排版
 
 ### 1. 语言与英文标注
-- 正文以中文为主；专业术语**每章首次出现**时用半角括号标注英文：`迎角 (angle of attack)`。同一章后文不再重复标注。
+- 正文、标题、目录、表格一律**以中文为主，英文辅助标注**：专业术语**每章首次出现**时在中文后用半角括号标注英文：`迎角 (angle of attack)`。同一章后文不再重复标注。
+- **不要用英文原文替换中文术语** (标题、目录、加粗、表格里也不要)，英文只作括号注释；需要对照时查附录 B 中英术语表。
 - 题目原文 (习题页 `.q` 块)、课件原名 (Lecture / Tutorial / Home Exercise / Slides 等)、人名保留英文。
 - 人名、定理名保留规范写法；两个人名并列用**连接号 en dash `–`**，不用连字符 `-`：Kutta–Joukowski、Navier–Stokes、Prandtl–Glauert、Euler–Bernoulli、Green–Lagrange、Euler–Eytelwein。其他：von Mises、Bernoulli、Reynolds、Mach。
 
@@ -323,7 +298,7 @@ npm run build        # 生成 ../../exercises.html
 ## 九、提交前自检
 
 **内容**
-- [ ] 术语逐一对照第二节；没有新造译名；矢量 / 向量按语境；核心术语在标题、目录、加粗、短条目里已用英文
+- [ ] 术语逐一对照第二节；没有新造译名；矢量 / 向量按语境
 - [ ] 标点、半角括号、空格、直引号、en dash 符合第三节；全站没有全角括号 `（）` 和弯引号 `“”`
 - [ ] 公式全部是渲染好的 KaTeX；页面中无残留 `$`、`\(`、TeX 源码、`{{ }}`、`katex-error`
 - [ ] 每章末尾有"本章要点"；节号、图号连续；侧栏 / hero / 正文的章节名一致
