@@ -1,0 +1,87 @@
+<section class="set" id="t3" data-short="Tutorial 3">
+<h2 class="set-title"><span class="set-num">Tutorial 3</span>结构设计元件 Structural Design Elements<span class="set-src">Lecture 3 · 5 页</span></h2>
+<p class="lead">两道题：一是从"拉伸刚度相同"出发比较铝板与钢板的质量和弯曲刚度，体会轻量化设计中厚度的作用；二是简支梁的完整强度与刚度校核——弯曲正应力 + 轴向应力、剪应力与 von Mises 等效应力、计入剪切变形的挠度。</p>
+
+<article class="task" id="t3-1">
+<h3><span class="tno">Task 1</span>铝板 vs 钢板</h3>
+<div class="q">
+<figure class="fig"><img src="exercises/t3-task1.png" alt="宽度相同的铝板与钢板"></figure>
+<p>Compare the mass and bending stiffness of an aluminum plate and a steel plate that have been designed to possess identical tensile stiffness.</p>
+<ol class="parts">
+<li>Calculate the thickness ratio between the plates necessary to ensure their tensile stiffnesses are equal.</li>
+<li>Calculate the mass ratio of the two plates, given that they have identical tensile stiffness.</li>
+<li>Calculate the bending stiffness ratio of the two plates, given that they have identical tensile stiffness.</li>
+</ol>
+</div>
+<details class="sol"><summary>解答</summary>
+<p><b>A)</b> 拉伸刚度 \(EA\) 相同，宽度 \(b\) 相同：</p>
+\[E_{St}t_{St}b=E_{Al}t_{Al}b\ \Rightarrow\ \frac{t_{Al}}{t_{St}}=\frac{E_{St}}{E_{Al}}=\frac{210\,\mathrm{GPa}}{70\,\mathrm{GPa}}=3\]
+<p><b>B)</b> 质量比：</p>
+\[\frac{m_{Al}}{m_{St}}=\frac{\rho_{Al}t_{Al}Lb}{\rho_{St}t_{St}Lb}=\frac{2.7\cdot3}{7.8\cdot1}=1.04\]
+<p><b>C)</b> 弯曲刚度 \(EI\)，矩形截面 \(I=bt^3/12\)：</p>
+\[\frac{E_{Al}I_{Al}}{E_{St}I_{St}}=\frac{E_{Al}}{E_{St}}\left(\frac{t_{Al}}{t_{St}}\right)^3=\frac13\cdot27=9\]
+<div class="note"><span class="lbl">补充说明</span>
+<ul>
+<li>结论：同样的拉伸刚度下，两种材料质量几乎相同（因为钢和铝的比刚度 \(E/\rho\) 都约为 26 GPa·cm³/g），但铝板的弯曲刚度是钢板的 9 倍。这就是航空蒙皮用铝而不用钢的主要原因——薄壁结构更容易受弯曲和屈曲控制。</li>
+<li>推广：屈曲临界应力 \(\sigma_{cr}\propto E(t/b)^2\)，同样是厚度的高次方。材料越轻，在等质量下能做得越厚，对弯曲和稳定越有利。夹层结构、复合材料也都是同一思路。</li>
+<li>轻量化选材指标（Ashby）：等拉伸刚度看 \(E/\rho\)，等弯曲刚度的板看 \(E^{1/3}/\rho\)：铝 \(70^{1/3}/2.7=1.53\)，钢 \(210^{1/3}/7.8=0.76\)，铝约为钢的 2 倍。</li>
+</ul></div>
+</details>
+</article>
+
+<article class="task" id="t3-2">
+<h3><span class="tno">Task 2</span>简支铝梁的强度与刚度校核</h3>
+<div class="q">
+<figure class="fig"><img src="exercises/t3-task2.png" alt="矩形截面 20×60 mm 简支梁，0.75L 处受 F1，B 端受轴向拉力 F2"></figure>
+<p>Given is an elastic aluminium beam (\(E=70\,\mathrm{GPa},\ \nu=0.3\)) loaded by a constant force \(F_1=10\,\mathrm{kN}\) (at \(0.75L\)) and \(F_2=30\,\mathrm{kN}\) (axial). \(L=0.5\,\mathrm m\); rectangular cross-section \(b=20\,\mathrm{mm}\), \(h=60\,\mathrm{mm}\).</p>
+<ol class="parts">
+<li>Calculate the maximum normal stress in the structure and its safety margin, if the maximum allowable stress is \(\sigma_{b,allow}=350\,\mathrm{MPa}\).</li>
+<li>Include the transverse shear force and check if the beam is sufficiently dimensioned considering the von Mises criterion \(\sigma_V=350\,\mathrm{MPa}\).</li>
+<li>Calculate the deflection of the beam considering shear deformation.</li>
+</ol>
+</div>
+<details class="sol"><summary>解答（A、B）</summary>
+<p><b>A) Step 1 – 支反力</b></p>
+\[\sum F_y:\ A_Y+B_Y-F_1=0,\qquad \sum M^{(B)}:\ -A_Y L+F_1\cdot0.25L=0\]
+\[A_Y=0.25F_1=2.5\,\mathrm{kN},\qquad B_Y=0.75F_1=7.5\,\mathrm{kN}\]
+<p><b>Step 2 – 最大弯矩</b>（在集中力处，\(x=0.75L\)）：</p>
+\[M_{\max}=A_Y\cdot0.75L=2.5\,\mathrm{kN}\cdot0.375\,\mathrm m=0.9375\,\mathrm{kNm}\]
+<p><b>Step 3 – 弯曲应力</b>（约定：正弯矩使下缘受拉，\(\sigma=-\tfrac{M_z}{I_z}y\)）：</p>
+\[I_z=\frac{bh^3}{12}=\frac{20\cdot60^3}{12}=360\,000\,\mathrm{mm^4},\qquad \sigma_b(y=\pm30)=\mp\frac{937.5\times10^3\,\mathrm{Nmm}}{360\,000\,\mathrm{mm^4}}\cdot30\,\mathrm{mm}=\mp78.125\,\mathrm{MPa}\]
+<figure class="fig small"><img src="exercises/t3-sign.png" alt="弯曲应力符号约定"><figcaption>原解答采用的符号约定</figcaption></figure>
+<p><b>Step 4 – 轴向应力</b>：\(\sigma_N=\dfrac{F_2}{bh}=\dfrac{30\,000}{20\cdot60}=25\,\mathrm{MPa}\)（拉）</p>
+<p><b>Step 5 – 叠加与安全系数</b>（下缘拉应力最大）：</p>
+\[\sigma_{\max}=\sigma_N+\sigma_{b,\max}=25+78.125=103.125\,\mathrm{MPa},\qquad SF=\frac{350}{103.125}=3.4\]
+<p><b>B)</b> 平面应力 von Mises：\(\sigma_V=\sqrt{\sigma_x^2-\sigma_x\sigma_y+\sigma_y^2+3\tau_{xy}^2}\)，梁中 \(\sigma_y=\sigma_z=0\)：</p>
+\[\sigma_V=\sqrt{\sigma_x^2+3\tau_{xy}^2}\]
+<p>矩形截面最大剪应力在中性轴处（取最大剪力 \(Q=B_Y=7.5\,\mathrm{kN}\)）：</p>
+\[\tau_{\max}=\frac{Q\,h^2}{8I_z}=\frac{3}{2}\frac{Q}{bh}=\frac{7500\cdot3600}{8\cdot360\,000}=9.375\,\mathrm{MPa}\]
+\[\sigma_V=\sqrt{103.125^2+3\cdot9.375^2}=104.4\,\mathrm{MPa},\qquad SF=\frac{350}{104.4}=3.35\]
+<p>安全系数几乎不变 → 剪应力对这根梁不重要。</p>
+<p class="erratum">原解答勘误：幻灯片写作 \(\tau_{\max}=A_Yh^2/(8I_z)\)，但数值 9.375 MPa 实际用的是 \(B_Y=7.5\,\mathrm{kN}\)（用 \(A_Y\) 只得 3.125 MPa）。最大剪力在 B 侧那一段，应取 \(B_Y\)。</p>
+<div class="note"><span class="lbl">补充说明</span>
+<ul>
+<li>B 的做法偏保守：\(\sigma_{\max}\) 出现在上下表面，而 \(\tau_{\max}\) 出现在中性轴，两者不在同一点。严格做法是在截面各点分别计算 \(\sigma_V\) 再取最大；对矩形实心截面，最大值仍在表面，约等于 103.1 MPa。</li>
+<li>工字梁等薄壁截面中，腹板–翼缘交接处 \(\sigma\) 和 \(\tau\) 都较大，这时组合校核才真正起作用。</li>
+<li>\(\tau_{\max}=\tfrac32\,Q/A\) 是矩形截面的常用快捷公式；剪应力沿高度呈抛物线分布。</li>
+</ul></div>
+</details>
+<details class="sol"><summary>解答（C 挠度）及勘误</summary>
+<p><b>原解答思路</b>：由 \(w''=-M/(EI)\) 在第 1 段（\(M=A_Yx\)）积分，用 \(w(0)=0\) 和 \(w'(3l/4)=0\) 定常数，得 \(w_b=-6.1\,\mathrm{mm}\)；剪切挠度 \(w_s'=Q/(\kappa GA)\)，\(\kappa\approx5/6\)，\(G=E/[2(1+\nu)]=26\,923\,\mathrm{MPa}\)：</p>
+\[w_s\left(x=\tfrac{3l}{4}\right)=-\frac{A_Y}{\kappa GA}\cdot\frac{3l}{4}=-\frac{2500\cdot375}{\tfrac56\cdot26923\cdot1200}=-0.035\,\mathrm{mm}\]
+<p>并给出 \(w_{total}=w_b+w_s=-6.135\,\mathrm{mm}\)。</p>
+<p class="erratum">原解答勘误（弯曲挠度部分不成立）：① 载荷不在跨中，集中力处的转角 \(w'(3l/4)\neq0\)，这个边界条件只在对称情况下才成立，正确做法是两段分别积分，用 \(w(0)=w(L)=0\) 及 \(x=0.75L\) 处 \(w\)、\(w'\) 连续定 4 个常数；② 即使按原式，\(-\tfrac{27}{384}+\tfrac{27}{64}=\tfrac{135}{384}\)，也不是 \(\tfrac{63}{128}\)。数量级也可以快速判断：这根梁 \(EI=2.52\times10^{10}\,\mathrm{Nmm^2}\)，跨中受 10 kN 时最大挠度也只有 \(PL^3/48EI\approx1.0\,\mathrm{mm}\)，不可能出现 6 mm。</p>
+<p><b>正确结果</b>（简支梁，载荷距 A 为 \(a=375\,\mathrm{mm}\)、距 B 为 \(b=125\,\mathrm{mm}\)）：</p>
+\[w_b(x=a)=\frac{P\,a^2b^2}{3EIL}=\frac{10\,000\cdot375^2\cdot125^2}{3\cdot2.52\times10^{10}\cdot500}=0.581\,\mathrm{mm}\]
+\[w_{total}(x=a)=0.581+0.035=0.616\,\mathrm{mm}\ (\text{向下})\]
+<p>最大弯曲挠度不在载荷点，而在 \(x=\sqrt{(L^2-b^2)/3}=279.5\,\mathrm{mm}\) 处：</p>
+\[w_{b,\max}=\frac{P\,b\,(L^2-b^2)^{3/2}}{9\sqrt3\,EIL}=0.722\,\mathrm{mm}\]
+<div class="note"><span class="lbl">补充说明</span>
+<ul>
+<li>剪切挠度只占约 6%（\(0.035/0.616\)）。比值大致为 \(\sim(h/L)^2\cdot E/(\kappa G)\)，梁越短粗（\(h/L\) 越大）剪切变形越重要，这就是 Timoshenko 梁的适用范围。本题 \(h/L=0.12\)，已经不能完全忽略。</li>
+<li>剪切挠度是分段线性的：\(w_s=-A_Yx/(\kappa GA)\)（\(x\le a\)），在载荷点取最大值，所以 0.035 mm 这一项是对的。</li>
+<li>轴向拉力 \(F_2\) 对小变形线性理论下的挠度没有影响（若考虑二阶效应，拉力会使梁"变硬"，挠度略减小）。</li>
+</ul></div>
+</details>
+</article>
+</section>

@@ -1,0 +1,207 @@
+<section class="set" id="ex" data-short="Trial Exam">
+<h2 class="set-title"><span class="set-num">Trial Exam 2026</span>期末模拟考试<span class="set-src">18 页 · 含解答</span></h2>
+<p class="lead">课件前 5 页是复习框架，后面是 8 道考题（满分标注见各题）。考试题型：选择题、填表、简答、CLT 计算、结构动力学、FEM。</p>
+
+<article class="task" id="ex-0">
+<h3><span class="tno">复习框架</span>六大主题 Topics</h3>
+<div class="q"><p>Introduction / fundamental tools → Elasticity → Structural Idealisations → Material Behaviour → Stability → Numerical Structural Analysis.</p></div>
+<div class="review">
+<p><b>Topic 1 · Engineering tools and concepts</b>：线性代数、静力学、截面法等基础工具。</p>
+<p><b>Topic 2 · Loads, stress and deformation</b>（可变形体如何表现？）：平衡 → 应力；运动学 → 应变；本构关系 → 应力与应变的联系。应力是张量，与截面方向有关；应变度量变形，刚体运动不产生应变。完整三维弹性问题难以逐一求解，因此引入结构理想化。</p>
+<p><b>Topic 3 · Structural elements</b>（如何简化？）：杆（轴力）、梁（弯曲、剪切、扭转）、膜（面内载荷）、板（面外载荷）、壳（膜 + 板）。结构刚度 = 材料性能 × 几何性能（\(EA,\ EI,\ GI_t,\ GA\)）。每个模型只在其假设范围内有效。</p>
+<p><b>Topic 4 · Material selection</b>（赋予什么材料行为与失效准则？）：选材从结构和使用要求出发；相关性能包括密度、刚度、强度、韧性、疲劳、腐蚀、热性能、制造和成本。金属基本各向同性，用屈服/失效准则校核；复合材料具有方向性，刚度和强度可通过纤维方向和铺层定制。选材同时决定本构模型和失效模型。</p>
+<p><b>Topic 5 · Structural stability and buckling</b>（能否保持平衡？）：结构可能在达到材料强度之前失稳，细长和薄壁结构在压缩或剪切下尤其如此；几何、刚度、边界条件和缺陷强烈影响临界载荷；区分局部与整体屈曲；屈曲不一定立即破坏，后屈曲仍可承载。轻量化结构中稳定性常常是控制性设计条件。</p>
+<p><b>Topic 6 · Computational structural analysis (FEM)</b>（如何求解复杂结构？）：离散 → 单元刚度 → 变换与组装 → 施加载荷和边界条件并求解 → 由位移恢复应变与应力。FEM 是前五个主题力学原理的数值实现，结果质量仍取决于模型、材料假设、单元选择和边界条件。</p>
+</div>
+</article>
+
+<article class="task" id="ex-1">
+<h3><span class="tno">1 · Materials</span>选择题（4 分）</h3>
+<div class="q">
+<p><b>a)</b> Which statement about <i>rigid body motions</i> is correct?</p>
+<ul class="mc"><li>They produce stress but no strain</li><li class="ok">They produce neither stress nor strain</li><li>They always produce strain</li><li>They produce no stress, but produce strain</li><li>None is correct</li></ul>
+<p><b>b)</b> For an isotropic linear elastic material, how many independent elastic constants exist?</p>
+<ul class="mc"><li>21</li><li>81</li><li>3</li><li>6</li><li class="ok">None is correct</li></ul>
+<p><b>c)</b> In an orthotropic material, the anisotropic constitutive matrix becomes simpler because:</p>
+<ul class="mc"><li>Shear stresses are always zero.</li><li>Poisson's ratio is always zero.</li><li class="ok">Many coupling terms vanish due to symmetry planes.</li><li>The material behaves identically in all directions</li><li>None is correct</li></ul>
+<p><b>d)</b> The Green strain tensor is used instead of the small strain tensor when:</p>
+<ul class="mc"><li>Stresses are small.</li><li>Material is brittle.</li><li class="ok">Deformations are large or include large rotations.</li><li>Poisson's ratio is unknown.</li><li>None is correct</li></ul>
+</div>
+<details class="sol"><summary>解析</summary>
+<div class="note"><span class="lbl">补充说明</span>
+<ul>
+<li><b>a)</b> 刚体运动（平移 + 转动）不改变任何两点间的距离和夹角 → 无应变 → 由本构关系也无应力。注意：小应变张量在<b>大</b>转动下会给出虚假应变（Tutorial 2 Task 3），这是 d) 的伏笔。</li>
+<li><b>b)</b> 各向同性只有 2 个独立常数（如 \(E,\nu\)，或 Lamé 常数 \(\lambda,\mu\)）；\(G=E/[2(1+\nu)]\) 不独立。81 是四阶张量的分量总数，21 是一般各向异性材料的独立常数个数，正交各向异性为 9，横观各向同性为 5。</li>
+<li><b>c)</b> 三个相互正交的材料对称面使正应力与剪应变之间、不同剪切分量之间的耦合项全部为零，21 → 9 个常数。剪应力本身并不为零。</li>
+<li><b>d)</b> 见 Tutorial 2 Task 3。</li>
+</ul></div>
+</details>
+</article>
+
+<article class="task" id="ex-2">
+<h3><span class="tno">2 · Materials</span>弹性模量与拉伸曲线（4 分）</h3>
+<div class="q">
+<ol class="parts">
+<li>State in the table below typical values for the Young's modulus of the listed materials in MPa.</li>
+<li>Identify the corresponding qualitative tensile test curves A–D for the materials listed in part a).</li>
+</ol>
+<figure class="fig small"><img src="exercises/ex-curves.png" alt="四条定性拉伸曲线 A–D"></figure>
+</div>
+<details class="sol"><summary>解答</summary>
+<table class="tbl"><thead><tr><th>Material</th><th>Young's modulus [MPa]</th><th>Tensile-test curve</th></tr></thead>
+<tbody>
+<tr><td>Aluminium</td><td>70 000</td><td>B</td></tr>
+<tr><td>Steel</td><td>210 000</td><td>D</td></tr>
+<tr><td>Titanium</td><td>110 000</td><td>C</td></tr>
+<tr><td>Quasi-isotropic GFRP</td><td>24 000</td><td>A</td></tr>
+</tbody></table>
+<div class="note"><span class="lbl">补充说明</span>
+<ul>
+<li>曲线初始斜率 = 弹性模量：D（钢）最陡，C（钛）次之，B（铝）再次，A（GFRP）最平。</li>
+<li>A 是一条几乎直到断裂的直线 → 复合材料线弹性、脆性断裂、无屈服平台；金属曲线有明显的屈服和塑性段。</li>
+<li>这几个数字在 Tutorial 3、Tutorial 6 中都出现过，值得记住：钢 210、钛 110、铝 70、QI-GFRP 约 24 GPa。</li>
+</ul></div>
+</details>
+</article>
+
+<article class="task" id="ex-3">
+<h3><span class="tno">3 · Composites</span>选择题（1 分）</h3>
+<div class="q">
+<p><b>a)</b> For a unidirectional (UD) composite ply loaded in the fibre direction, which statement is most accurate?</p>
+<ul class="mc"><li class="ok">Increasing fibre volume fraction generally increases the modulus in fibre direction.</li><li>The stiffness in fibre direction is dominated by the matrix modulus.</li><li>The stiffness in fibre direction is independent of fibre properties.</li><li>The modulus in fibre direction is always equal to the matrix modulus.</li><li>None is correct</li></ul>
+</div>
+<details class="sol"><summary>解析</summary>
+<div class="note"><span class="lbl">补充说明</span><p>纤维方向的混合律 (rule of mixtures)：\(E_1=\varphi E_f+(1-\varphi)E_m\)，纤维与基体并联、应变相同。碳纤维 \(E_f\approx230\,\mathrm{GPa}\)，环氧 \(E_m\approx3.5\,\mathrm{GPa}\)，所以 \(E_1\) 由纤维主导，并随纤维体积分数 \(\varphi\) 线性增加。横向 \(E_2\)（串联）才由基体主导。</p></div>
+</details>
+</article>
+
+<article class="task" id="ex-4">
+<h3><span class="tno">4 · Buckling</span>局部 / 整体屈曲；强度降低对屈曲的影响（4 分）</h3>
+<div class="q">
+<ol class="parts">
+<li>Explain the difference between global and local buckling in lightweight structures.</li>
+<li>The critical buckling load of the panel is \(P_{crit}=10.0\,\mathrm{kN}\). Due to a new manufacturing method, the material strength σ is reduced by 10 %. What is the new critical load \(P_{crit,new}\)?</li>
+</ol>
+</div>
+<details class="sol"><summary>解答</summary>
+<p><b>a)</b> <b>整体屈曲 (global buckling)</b>：整个结构构件作为一个整体弯曲或偏移，可能超过整体承载能力，导致坍塌。<b>局部屈曲 (local buckling)</b>：只有结构的一小部分（如板、翼缘或腹板）发生屈曲，构件整体基本保持直线。载荷可以重新分配，结构可能仍保持稳定；若未超过屈服强度，变形是可恢复的。</p>
+<p><b>b)</b> 不变。弹性屈曲取决于刚度，而不是强度，因此 \(P_{crit,new}=10.0\,\mathrm{kN}\)。</p>
+<div class="note"><span class="lbl">补充说明</span>
+<ul>
+<li>依据：\(P_{cr}=\pi^2EI/(\beta L)^2\)、\(\sigma_{cr}=kE(t/b)^2\)，公式中只有 \(E\) 和几何，没有屈服强度。</li>
+<li>前提是"弹性"屈曲：如果临界应力接近屈服强度（短粗构件），会发生弹塑性屈曲，这时强度（切线模量）就有影响了。</li>
+<li>典型例子：机身加筋板中蒙皮在长桁之间鼓起（局部），长桁 + 蒙皮一起在框之间弯曲（整体）。设计时通常允许局部屈曲先发生、不允许整体屈曲。</li>
+</ul></div>
+</details>
+</article>
+
+<article class="task" id="ex-5">
+<h3><span class="tno">5 · CLT</span>[0/45/0]<sub>s</sub> 层合板的 A<sub>11</sub>、A<sub>12</sub>、B<sub>11</sub>（10 分）</h3>
+<div class="q">
+<p>Given a \([0/45/0]_S\) CFRP laminate with each layer having a thickness of 0.25 mm. Determine the \(A_{11}\), \(A_{12}\) and \(B_{11}\) coefficients of the laminate stiffness matrix.</p>
+<p>Material properties: \(E_1=138\,\mathrm{GPa}\), \(E_2=8960\,\mathrm{MPa}\), \(G_{12}=7.1\,\mathrm{GPa}\), \(\nu_{12}=0.3\).</p>
+<ol class="parts">
+<li>Calculate the plane stiffness matrix for the 0° and 45° ply.</li>
+<li>Determine the \(A_{11}\), \(A_{12}\) and \(B_{11}\) coefficients of the laminate stiffness matrix.</li>
+</ol>
+</div>
+<details class="sol"><summary>解答</summary>
+<p><b>a)</b> \(\nu_{21}=\nu_{12}\dfrac{E_2}{E_1}=0.3\cdot\dfrac{8.96}{138}=0.01948\)</p>
+\[Q_{11}=\frac{E_1}{1-\nu_{12}\nu_{21}}=138.811\,\mathrm{GPa},\quad Q_{22}=\frac{E_2}{1-\nu_{12}\nu_{21}}=9.013\,\mathrm{GPa},\quad Q_{12}=\frac{\nu_{12}E_2}{1-\nu_{12}\nu_{21}}=2.704\,\mathrm{GPa},\quad Q_{66}=G_{12}=7.1\,\mathrm{GPa}\]
+\[\bar Q^{0^\circ}=\begin{bmatrix}138.811&2.704&0\\2.704&9.013&0\\0&0&7.100\end{bmatrix}\mathrm{GPa}\]
+<p>\(m=\cos45^\circ=\tfrac{1}{\sqrt2}\)，\(n=\sin45^\circ=\tfrac{1}{\sqrt2}\)：</p>
+\[T=\begin{bmatrix}m^2&n^2&2mn\\n^2&m^2&-2mn\\-mn&mn&m^2-n^2\end{bmatrix},\quad T_{45}=\begin{bmatrix}0.5&0.5&1\\0.5&0.5&-1\\-0.5&0.5&0\end{bmatrix},\qquad \bar Q=T^{-1}QT\]
+\[\bar Q^{45^\circ}=\begin{bmatrix}45.408&31.208&32.450\\31.208&45.408&32.450\\32.450&32.450&35.604\end{bmatrix}\mathrm{GPa}\]
+<p><b>b)</b> 6 层：4 层 0°、2 层 45°，每层 0.25 mm：</p>
+\[A_{ij}=\sum_k\bar Q_{ij}^{(k)}t_k\]
+\[A_{11}=0.25\left[4\cdot138\,811.14+2\cdot45\,407.85\right]=161\,515\,\mathrm{N/mm}\]
+\[A_{12}=0.25\left[4\cdot2703.80+2\cdot31\,207.85\right]=18\,308\,\mathrm{N/mm}\]
+<p>对称铺层 → \([B]=0\)，\(B_{11}=0\)。</p>
+<div class="note"><span class="lbl">补充说明</span>
+<ul>
+<li>拿分要点：① 正确识别 \([0/45/0]_S=[0/45/0/0/45/0]\)，共 4 层 0° + 2 层 45°；② \(A\) 与层的位置无关，只需"每种角度的 \(\bar Q\) × 总厚度"；③ \(B\) 直接由对称性判断为零，不用算。</li>
+<li>没有 \(-45^\circ\) 层 → 不均衡，\(A_{16}=0.25\cdot2\cdot32\,450=16\,225\,\mathrm{N/mm}\neq0\)，存在拉剪耦合（题目没问，但可能是追问点）。</li>
+<li>45° 层的 \(\bar Q_{11}=\bar Q_{22}\)，是 \(Q_{11}\) 的三分之一左右：偏轴 45° 后纤维的贡献大幅下降。快速验算：\(\bar Q_{11}^{45}=\tfrac14(Q_{11}+Q_{22}+2Q_{12}+4Q_{66})=\tfrac14(138.811+9.013+5.408+28.4)=45.408\) ✓。</li>
+</ul></div>
+</details>
+</article>
+
+<article class="task" id="ex-6">
+<h3><span class="tno">6 · Dynamics</span>机翼–发动机二自由度系统（12 分）</h3>
+<div class="q">
+<figure class="fig"><img src="exercises/ex-engine.png" alt="翼吊发动机：沉浮弹簧 Kh、扭转弹簧 Kθ，发动机重心在坐标原点前方 s、下方 e，推力 T、重力 G"></figure>
+<p>Given is an engine, mounted on a wing, as shown in the figure. The equations for a 2-DoF system shall be formulated to evaluate the structural dynamics. Two forces, thrust \(T\) and weight \(G\), shall be considered. Aerodynamic forces can be neglected. The engine shall be assumed to be a concentrated point mass. The bending stiffness is modelled with a spring stiffness \(K_h\) and the torsional stiffness is modelled with the rotational spring stiffness \(K_\theta\).</p>
+<p>\(K_h=550\,\mathrm{kN/m}\), \(K_\theta=4200\,\mathrm{kNm/rad}\), \(m_{engine}=6160\,\mathrm{kg}\), \(e=1.5\,\mathrm m\), \(s=3.2\,\mathrm m\).</p>
+<ol class="parts">
+<li>Formulate the linearized equations of motion for the two coordinates \(h\) (translation in z direction) and \(\theta\) (rotation around y) in the shown coordinate centre. Potential energy from the location of the centre of gravity outside the coordinate centre shall be neglected.</li>
+<li>The system has now been transformed into modal coordinates and has been mass normalized. Calculate all the eigenfrequencies for the mounted engine system: \([M_{G,n}]\{\ddot q\}+[K_{G,n}]\{q\}=\{Q_{G,n}\}\); \(K_{G,n,11}=35.45\); \(K_{G,n,22}=763.22\).</li>
+</ol>
+</div>
+<details class="sol"><summary>解答</summary>
+<p><b>a)</b> 发动机重心的速度（线性化）：</p>
+\[\dot z_G=\dot h+s\dot\theta,\qquad \dot x_G=-e\dot\theta\]
+\[T_{kin}=\tfrac12m\left[(\dot h+s\dot\theta)^2+(e\dot\theta)^2\right]=\tfrac12m\dot h^2+ms\,\dot h\dot\theta+\tfrac12m(s^2+e^2)\dot\theta^2\]
+\[\mathbf M=\begin{bmatrix}m&ms\\ms&m(s^2+e^2)\end{bmatrix}=\begin{bmatrix}6160&19\,712\\19\,712&76\,938.4\end{bmatrix}\]
+\[V=\tfrac12K_hh^2+\tfrac12K_\theta\theta^2,\qquad \mathbf K=\begin{bmatrix}K_h&0\\0&K_\theta\end{bmatrix}\]
+<p>广义力：重力 \(G\) 向下作用在 \(z\) 方向；推力 \(T\) 作用线在原点下方 \(e\)、重力作用点在原点前方 \(s\)，对 \(y\) 轴产生力矩：</p>
+\[\begin{bmatrix}6160&19\,712\\19\,712&76\,938.4\end{bmatrix}\begin{Bmatrix}\ddot h\\\ddot\theta\end{Bmatrix}+\begin{bmatrix}550\,000&0\\0&4.2\times10^6\end{bmatrix}\begin{Bmatrix}h\\\theta\end{Bmatrix}=\begin{Bmatrix}-G\\eT-sG\end{Bmatrix}\]
+<p><b>b)</b> 质量归一化后 \(M_{G,n}=I\)，\(\omega_i^2=K_{G,n,ii}\)：</p>
+\[\omega_1=\sqrt{35.45}=5.95\,\mathrm{rad/s},\quad f_1=\frac{\omega_1}{2\pi}\approx0.95\,\mathrm{Hz};\qquad \omega_2=\sqrt{763.22}=27.63\,\mathrm{rad/s},\quad f_2\approx4.40\,\mathrm{Hz}\]
+<div class="note"><span class="lbl">补充说明</span>
+<ul>
+<li>与 Home Exercise 1 的弹性机翼段完全同构，只是这里重心既有水平偏距 \(s\) 也有竖向偏距 \(e\)，所以转动惯量项是 \(m(s^2+e^2)\)（点质量对原点的转动惯量，即 \(m r^2\)）。</li>
+<li>耦合仍在质量矩阵（惯性耦合）。数值：\(ms=6160\cdot3.2=19\,712\)；\(m(s^2+e^2)=6160\cdot12.49=76\,938.4\)。</li>
+<li>b) 的关键是识别"质量归一化"意味着 \(M=I\)，所以无需求解特征值问题，直接开方。\(f\) 与 \(\omega\) 别混：\(f=\omega/2\pi\)。</li>
+<li>"Potential energy from the location of the centre of gravity … neglected"：即不考虑重心偏移带来的重力势能项 \(-mg(\ldots)\)，重力只作为外力出现在右端。</li>
+</ul></div>
+</details>
+</article>
+
+<article class="task" id="ex-7">
+<h3><span class="tno">7 · FEM</span>板 + 支杆结构（10 分）</h3>
+<div class="q">
+<figure class="fig"><img src="exercises/ex-fem7.png" alt="板由两根支杆悬挂，全局自由度 1–4，板刚度与支杆刚度"></figure>
+<p>The following structure shall be examined by means of FEM. All stiffness matrices are already given in the rotated degrees of freedom as sketched.</p>
+\[\text{Plate: }[K_P]=\begin{bmatrix}15&-10&0&0\\-10&15&0&0\\0&0&5&2\\0&0&2&5\end{bmatrix}\ (1,2,3,4),\qquad \text{Strut: }[K_S]=\begin{bmatrix}8&-4\\-4&8\end{bmatrix}\]
+<ol class="parts">
+<li>Assemble the global stiffness matrix for all those DOFs where \(U\) is not zero.</li>
+<li>Calculate the displacements \(U_1\) and \(U_2\) in relation to the force \(F\). If necessary, you can use a backup result for a): \([K]=\begin{bmatrix}20&4\\4&20\end{bmatrix}\).</li>
+</ol>
+</div>
+<details class="sol"><summary>解答</summary>
+<p><b>a)</b> 支杆 (2) 连接自由度 1 和 3，支杆 (3) 连接自由度 2 和 4，各贡献一个 \(K_S\)：</p>
+\[K_G=K_P+K_S^{(1,3)}+K_S^{(2,4)}=\begin{bmatrix}15+8&-10&-4&0\\-10&15+8&0&-4\\-4&0&5+8&2\\0&-4&2&5+8\end{bmatrix}=\begin{bmatrix}23&-10&-4&0\\-10&23&0&-4\\-4&0&13&2\\0&-4&2&13\end{bmatrix}\]
+<p><b>b)</b> 用备用结果（backup）：</p>
+\[\begin{bmatrix}20&4\\4&20\end{bmatrix}\begin{Bmatrix}U_1\\U_2\end{Bmatrix}=\begin{Bmatrix}F\\0\end{Bmatrix}\ \Rightarrow\ U_1=\frac{20}{384}F=\frac{5}{96}F,\qquad U_2=-\frac{4}{384}F=-\frac{1}{96}F\]
+<div class="note"><span class="lbl">补充说明</span>
+<ul>
+<li>组装规则：同一个全局自由度对上的元素直接相加，例如 \(K_{11}=15\)（板）\(+8\)（支杆）。没有共享自由度的位置保持为 0（如 \(K_{14}\)）。</li>
+<li>Backup 矩阵是考试中故意给出的"另一个"矩阵，目的是让 a) 做错的同学也能继续做 b)，它的数值与 a) 的正确结果不同。2×2 方程组用克莱姆法则：\(\det=20^2-4^2=384\)。</li>
+<li>若用 a) 中正确的 4×4 \(K_G\) 并令 \(F\) 作用在自由度 1 上，数值解为 \(U=[0.0577,\ 0.0260,\ 0.0169,\ 0.0054]^TF\)（补充计算，供核对）。</li>
+<li>"in the rotated degrees of freedom"：支杆的刚度已经在倾斜的局部方向（45° 箭头）上给出，题目中的自由度 3、4 正是这些方向，所以无需再做坐标变换。</li>
+</ul></div>
+</details>
+</article>
+
+<article class="task" id="ex-8">
+<h3><span class="tno">8 · FEM</span>杆 + 弹簧（8 分）</h3>
+<div class="q">
+<figure class="fig"><img src="exercises/ex-fem8.png" alt="两段各 1 m 的铝杆与 1.2 m 的弹簧串联，x = 1 m 处受力 P"></figure>
+<p>A structure consists of a continuous truss connected to a discrete spring. At the position \(x=1\,\mathrm m\), a load of 3.5 kN is applied. The truss is made of aluminium, with a modulus of elasticity of 68 GPa and a cross-sectional area of 350 mm². The spring has a stiffness of 1200 kN/m.</p>
+<ol class="parts"><li>Calculate the displacement at \(x=1\,\mathrm m\).</li></ol>
+</div>
+<details class="sol"><summary>解答</summary>
+<p>把杆分成两个 1 m 的单元，节点 1（\(x=0\)，固定）、2（\(x=1\,\mathrm m\)）、3（\(x=2\,\mathrm m\)，接弹簧），弹簧另一端固定：</p>
+\[k_b=\frac{EA}{L}=\frac{68\times10^9\cdot350\times10^{-6}}{1}=23.8\times10^6\,\mathrm{N/m},\qquad k_s=1.2\times10^6\,\mathrm{N/m}\]
+\[\begin{bmatrix}2k_b&-k_b\\-k_b&k_b+k_s\end{bmatrix}\begin{Bmatrix}u_2\\u_3\end{Bmatrix}=\begin{Bmatrix}P\\0\end{Bmatrix}\ \Rightarrow\ \begin{bmatrix}47\,600&-23\,800\\-23\,800&25\,000\end{bmatrix}\begin{Bmatrix}u_2\\u_3\end{Bmatrix}=\begin{Bmatrix}3.5\\0\end{Bmatrix}\ (\mathrm{kN/m},\ \mathrm{kN})\]
+\[u(x=1\,\mathrm m)=u_2=\frac{3.5\cdot25\,000}{47\,600\cdot25\,000-23\,800^2}=1.403\times10^{-4}\,\mathrm m\approx0.140\,\mathrm{mm}\]
+<div class="note"><span class="lbl">补充说明</span>
+<ul>
+<li>物理理解：载荷点左边是一段刚度 \(k_b\) 的杆直接连到墙；右边是另一段杆与弹簧<b>串联</b>，等效刚度 \(k_bk_s/(k_b+k_s)=1.143\times10^6\)。两条路径<b>并联</b>：\(k_{tot}=23.8+1.143=24.94\times10^6\,\mathrm{N/m}\)，\(u=3500/24.94\times10^6=0.140\,\mathrm{mm}\) ✓。</li>
+<li>弹簧比杆软得多，约 95% 的载荷走左边那段杆（受拉）。</li>
+<li>弹簧的长度 1.2 m 是干扰信息：离散弹簧只用刚度，与长度无关。</li>
+<li>\(u_3=1.336\times10^{-4}\,\mathrm m\)，可用于进一步求杆内力和弹簧力（\(F_s=k_su_3=160\,\mathrm N\)）。</li>
+</ul></div>
+</details>
+</article>
+</section>

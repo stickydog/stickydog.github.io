@@ -1,0 +1,6 @@
+{
+  "private": true,
+  "description": "Build structure-material/exercises.html (KaTeX pre-rendered)",
+  "scripts": { "build": "node build.js ../../exercises.html" },
+  "dependencies": { "katex": "0.16.47" }
+}

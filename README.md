@@ -24,6 +24,9 @@ aerodynamics/            每门课一个文件夹
 structure-material/
   index.html
   course-notes.html
+  exercises.html         习题与解答网页（全部 Tutorial / Home Exercise / Trial Exam，含补充说明与勘误）
+  exercises/             习题网页用到的示意图（截取自原课件）
+  _build/exercises/      习题网页的源文件：改 src/*.html 后在该目录运行 npm install && npm run build
   handwritten/           手写笔记（GoodNotes 导出 PDF）
   tutorials/             Tutorial 带解答版（PDF）
   homework/              课后作业解答 + HSB 屈曲图表（PDF）

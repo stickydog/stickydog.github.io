@@ -1,0 +1,154 @@
+<section class="set" id="t6" data-short="Tutorial 6">
+<h2 class="set-title"><span class="set-num">Tutorial 6</span>有限元与结构动力学 Finite Element Method<span class="set-src">Lecture 6–7 · 13 页</span></h2>
+<p class="lead">一个贯穿 10 道小题的例子：钛杆 + GFRP 杆组成的两杆桁架悬挂 10 kg 质量。静力部分：单元刚度 → 总刚度 → 位移 → 支反力 → 杆应力 → 给定位移反求载荷；动力部分：集中质量矩阵下的固有频率与振型 → 广义坐标 → 质量归一化 → 一致质量矩阵。（课件页脚写的是 "Tutorial 05"。）</p>
+<figure class="fig"><img src="exercises/t6-truss.png" alt="两杆桁架：竖直钛杆 l1 与 45° GFRP 杆 l2 连接质量 m"><figcaption>结构：杆 1 竖直向上连到天花板，杆 2 与水平成 45° 连到左下方支座</figcaption></figure>
+<p><b>Given:</b> Truss 1: titanium, \(E=110\,\mathrm{GPa}\), \(l_1=200\,\mathrm{mm}\). Truss 2: quasi-isotropic GFRP, \(E=24\,\mathrm{GPa}\), \(l_2=400\,\mathrm{mm}\). Both members \(A=100\,\mathrm{mm^2}\). Mass \(m=10\,\mathrm{kg}\), \(g=9.81\,\mathrm{m/s^2}\).</p>
+
+<article class="task" id="t6-1">
+<h3><span class="tno">Task 1</span>重力下的竖向挠度</h3>
+<div class="q"><p>Consider the truss framework shown. Determine the vertical deflection of the mass \(m\) due to gravity.</p></div>
+<details class="sol"><summary>解答</summary>
+<figure class="fig small"><img src="exercises/t6-dof.png" alt="全局自由度编号 U1–U6"><figcaption>自由度编号：节点 \(U_1,U_2\)；杆 1 上端 \(U_3,U_4\)；杆 2 下端 \(U_5,U_6\)</figcaption></figure>
+<p><b>Step 1 – 单元刚度矩阵</b>。杆 1 竖直，只在 \(y\) 向有刚度：</p>
+\[k_1=\frac{E_1A_1}{l_1}\begin{bmatrix}1&-1\\-1&1\end{bmatrix}\ (U_2,U_4)\]
+<p>杆 2 倾角 45°，\(c=s=\tfrac{\sqrt2}{2}\)，\(c^2=s^2=sc=\tfrac12\)：</p>
+\[k_2=\frac{E_2A_2}{l_2}\begin{bmatrix}c^2&sc&-c^2&-sc\\sc&s^2&-sc&-s^2\\-c^2&-sc&c^2&sc\\-sc&-s^2&sc&s^2\end{bmatrix}=\frac{E_2A_2}{2l_2}\begin{bmatrix}1&1&-1&-1\\1&1&-1&-1\\-1&-1&1&1\\-1&-1&1&1\end{bmatrix}\ (U_5,U_6,U_1,U_2)\]
+<p><b>Step 2 – 总刚度矩阵</b>（只保留自由的 \(U_1,U_2\)）：</p>
+\[K=\begin{bmatrix}\dfrac{E_2A_2}{2l_2}&\dfrac{E_2A_2}{2l_2}\\[2mm]\dfrac{E_2A_2}{2l_2}&\dfrac{E_1A_1}{l_1}+\dfrac{E_2A_2}{2l_2}\end{bmatrix}=\begin{bmatrix}3000&3000\\3000&58\,000\end{bmatrix}\mathrm{N/mm}\]
+<p>（\(E_2A_2/2l_2=24\,000\cdot100/800=3000\)，\(E_1A_1/l_1=110\,000\cdot100/200=55\,000\)）</p>
+<p><b>Step 3 – 载荷向量</b>：\(f=\begin{bmatrix}0\\-mg\end{bmatrix}=\begin{bmatrix}0\\-98.1\end{bmatrix}\mathrm N\)</p>
+<p><b>Step 4 – 求解</b> \([K]\{u\}=\{f\}\)：</p>
+\[\{u\}=\frac{1}{58\,000\cdot3000-3000^2}\begin{bmatrix}58\,000&-3000\\-3000&3000\end{bmatrix}\begin{Bmatrix}0\\-98.1\end{Bmatrix}=\begin{Bmatrix}0.001784\\-0.001784\end{Bmatrix}\mathrm{mm}\]
+<p>质量竖向下移 0.00178 mm（同时向右移同样大小）。</p>
+<div class="note"><span class="lbl">补充说明</span>
+<ul>
+<li>位移方向 \((1,-1)/\sqrt2\) 恰好垂直于杆 2（杆 2 方向为 \((1,1)/\sqrt2\)）→ 杆 2 长度不变、不受力。这也可以直接由节点平衡看出：\(x\) 方向只有杆 2 有分量，没有水平外力 → 杆 2 轴力为 0，重量全部由杆 1 承担。</li>
+<li>那为什么还会有水平位移？因为杆 1 伸长后节点下移，杆 2 只能绕下端转动来"跟上"，转动的切向就是 \((1,-1)\) 方向——这是小变形下的几何协调。</li>
+<li>验算：杆 1 伸长 \(=98.1/55\,000=0.001784\,\mathrm{mm}\) ✓。</li>
+</ul></div>
+</details>
+</article>
+
+<article class="task" id="t6-2">
+<h3><span class="tno">Task 2</span>支反力</h3>
+<div class="q"><p>Calculate the reaction forces.</p></div>
+<details class="sol"><summary>解答</summary>
+<p>把总方程按自由/约束自由度分块：</p>
+\[\begin{bmatrix}K_{11}&K_{12}\\K_{21}&K_{22}\end{bmatrix}\begin{Bmatrix}U_{1,2}\\U_{3..6}=0\end{Bmatrix}=\begin{Bmatrix}f_{1,2}\\F_{3..6}\end{Bmatrix}\ \Rightarrow\ \{F_{3..6}\}=[K_{21}]\begin{Bmatrix}U_1\\U_2\end{Bmatrix}\]
+\[K_{12}=\begin{bmatrix}0&0&-\frac{E_2A_2}{2l_2}&-\frac{E_2A_2}{2l_2}\\0&-\frac{E_1A_1}{l_1}&-\frac{E_2A_2}{2l_2}&-\frac{E_2A_2}{2l_2}\end{bmatrix}=\begin{bmatrix}0&0&-3000&-3000\\0&-55\,000&-3000&-3000\end{bmatrix}\]
+\[\begin{Bmatrix}F_3\\F_4\\F_5\\F_6\end{Bmatrix}=\begin{bmatrix}0&0\\0&-55\,000\\-3000&-3000\\-3000&-3000\end{bmatrix}\begin{Bmatrix}0.0017836\\-0.0017836\end{Bmatrix}=\begin{Bmatrix}0\\98.1\\0\\0\end{Bmatrix}\mathrm N\]
+<p class="erratum">原解答小笔误：\(K_{12}\) 的符号表达式中杆 2 的项写成了 \(-EA/l_2\)，应为 \(-E_2A_2/(2l_2)\)；代入的数值 −3000 是对的。</p>
+<div class="note"><span class="lbl">补充说明</span><p>结果与 Task 1 的分析一致：上支座承担全部 98.1 N，下支座反力为 0。检查 \(\sum F_y=98.1-98.1=0\) ✓。</p></div>
+</details>
+</article>
+
+<article class="task" id="t6-3">
+<h3><span class="tno">Task 3</span>杆中应力</h3>
+<div class="q"><p>Calculate the stress in the truss.</p></div>
+<details class="sol"><summary>解答</summary>
+<p>杆 1（局部节点 1 = 质量处，节点 2 = 天花板）：</p>
+\[\sigma=E\varepsilon=\frac El\begin{bmatrix}-1&1\end{bmatrix}\begin{Bmatrix}d_1\\d_2\end{Bmatrix}=\frac{110\,000}{200}\begin{bmatrix}-1&1\end{bmatrix}\begin{Bmatrix}-0.0017836\\0\end{Bmatrix}=0.981\,\mathrm{MPa}\ (\text{拉})\]
+<p>杆 2：\(\sigma=0\)。</p>
+<div class="note"><span class="lbl">补充说明</span><p>直接验算：\(\sigma_1=mg/A=98.1/100=0.981\,\mathrm{MPa}\)。局部坐标的方向要和 \([-1\ \ 1]\) 对应：\(d\) 是沿杆轴、从节点 1 指向节点 2 为正的位移分量；这里杆轴向上，质量处位移 \(-0.00178\)，上端 0，伸长为正 → 拉应力。</p></div>
+</details>
+</article>
+
+<article class="task" id="t6-4">
+<h3><span class="tno">Task 4</span>给定位移反求载荷</h3>
+<div class="q"><p>The displacement of the mass is specified to be <b>1 mm in the x-direction</b>. What additional load, besides the gravitational load, must be applied to the mass (m) to achieve this displacement?</p></div>
+<details class="sol"><summary>解答</summary>
+<p>已知 \(U_1=1\)，未知 \(U_2\) 和水平力 \(F\)：</p>
+\[\begin{bmatrix}3000&3000\\3000&58\,000\end{bmatrix}\begin{Bmatrix}U_1=1\\U_2\end{Bmatrix}=\begin{Bmatrix}F\\-98.1\end{Bmatrix}\]
+<p>第二行：</p>
+\[U_2=\frac{1}{58\,000}(-98.1-3000)=-0.0534155\,\mathrm{mm}\]
+<p>第一行：</p>
+\[F=3000+3000\,U_2=3000-3000\cdot0.0534155=2839.75\,\mathrm N\approx2.84\,\mathrm{kN}\]
+<div class="note"><span class="lbl">补充说明</span><p>这类"混合边界条件"问题：已知位移的自由度对应未知力，未知位移的自由度对应已知力。先用"力已知"的行求出未知位移，再用"位移已知"的行求反力。水平刚度只有 3000 N/mm，而且被竖杆牵制，所以 1 mm 的水平位移需要约 2.84 kN。</p></div>
+</details>
+</article>
+
+<article class="task" id="t6-5">
+<h3><span class="tno">Task 5</span>固有频率（集中质量矩阵）</h3>
+<div class="q"><p>Calculate the eigenfrequencies of the structure using a lumped mass matrix, assuming that the two truss elements are massless.</p></div>
+<details class="sol"><summary>解答</summary>
+\[K=\begin{bmatrix}3000&3000\\3000&58\,000\end{bmatrix},\qquad M=\begin{bmatrix}10&0\\0&10\end{bmatrix},\qquad \det([K]-\lambda[M])=0,\quad \lambda=\omega^2\]
+\[(3000-10\lambda)(58\,000-10\lambda)-3000^2=0\ \Rightarrow\ \lambda_1=283.685,\quad \lambda_2=5816.32\]
+\[\omega_1=532.62\,\mathrm{rad/s},\quad f_1=\frac{\omega_1}{2\pi}=84.7\,\mathrm{Hz};\qquad \omega_2=2411.7\,\mathrm{rad/s},\quad f_2=383.8\,\mathrm{Hz}\]
+<div class="note"><span class="lbl">补充说明</span>
+<ul>
+<li><b>单位陷阱</b>：\(K\) 用的是 N/mm、\(M\) 用 kg，所以 \(\lambda\) 的单位是 N/(mm·kg) = \(1000\,\mathrm{s^{-2}}\)。\(\omega_1=\sqrt{283.685\times1000}=532.6\,\mathrm{rad/s}\)。如果直接开方 \(\sqrt{283.685}=16.8\) 就错了 √1000 倍。最稳妥的做法是先把 \(K\) 换成 N/m。</li>
+<li>粗略估计：竖向 \(\sqrt{58\,000\,000/10}/2\pi=383\,\mathrm{Hz}\)，水平 \(\sqrt{3\,000\,000/10}/2\pi=87\,\mathrm{Hz}\)，与精确值很接近——耦合项 3000 相对较小。</li>
+</ul></div>
+</details>
+</article>
+
+<article class="task" id="t6-6">
+<h3><span class="tno">Task 6</span>特征向量与振型</h3>
+<div class="q"><p>Calculate the eigenvectors and create a sketch of the eigenforms.</p></div>
+<details class="sol"><summary>解答</summary>
+<p>\(\lambda_1=283.685\)：</p>
+\[\begin{bmatrix}3000-10\lambda_1&3000\\3000&58\,000-10\lambda_1\end{bmatrix}=\begin{bmatrix}163.15&3000\\3000&55\,163.15\end{bmatrix},\qquad \begin{Bmatrix}\phi_{11}\\\phi_{12}\end{Bmatrix}=\begin{Bmatrix}1\\-0.05438\end{Bmatrix}\]
+<p>\(\lambda_2=5816.32\)：</p>
+\[\begin{bmatrix}-55\,163.15&3000\\3000&-163.15\end{bmatrix},\qquad \begin{Bmatrix}\phi_{21}\\\phi_{22}\end{Bmatrix}=\begin{Bmatrix}0.05438\\1\end{Bmatrix}\]
+<figure class="fig small"><img src="exercises/t6-mode.png" alt="第 1 阶振型以水平运动为主，第 2 阶以竖直运动为主"><figcaption>上：第 1 阶（主要水平摆动）；下：第 2 阶（主要竖直振动）</figcaption></figure>
+<p class="erratum">原解答笔误：幻灯片写成 \(\lambda_1=2.83685\)、\(\lambda_2=5.8132\)，但矩阵中实际代入的是 283.685 和 5816.32（\(3000-10\cdot283.685=163.15\)）。</p>
+<div class="note"><span class="lbl">补充说明</span><p>两个振型正交：\(\phi_1^T M\phi_2=10(1\cdot0.05438-0.05438\cdot1)=0\)。因为 \(M\) 是单位矩阵的倍数，振型本身也互相垂直。特征向量只确定方向，长度任意，下一题的归一化就是为了把长度固定下来。</p></div>
+</details>
+</article>
+
+<article class="task" id="t6-7">
+<h3><span class="tno">Task 7</span>广义坐标（含重力）</h3>
+<div class="q"><p>Transform the system into generalized coordinates while accounting for gravitational loading.</p></div>
+<details class="sol"><summary>解答</summary>
+<p>令 \(\{u\}=[\Phi]\{q\}\)，左乘 \([\Phi]^T\)：</p>
+\[\Phi=\begin{bmatrix}1&0.05438\\-0.05438&1\end{bmatrix}\]
+\[K_{gen}=\Phi^TK\Phi=\begin{bmatrix}2845.24&0\\0&58\,335.18\end{bmatrix}\mathrm{N/mm},\qquad M_{gen}=\Phi^TM\Phi=\begin{bmatrix}10.0296&0\\0&10.0296\end{bmatrix}\mathrm{kg}\]
+\[F_{gen}=\Phi^T\begin{Bmatrix}0\\-98.1\end{Bmatrix}=\begin{Bmatrix}5.335\\-98.1\end{Bmatrix}\]
+\[\begin{bmatrix}10.0296&0\\0&10.0296\end{bmatrix}\begin{Bmatrix}\ddot q_1\\\ddot q_2\end{Bmatrix}+\begin{bmatrix}2845.24&0\\0&58\,335.18\end{bmatrix}\begin{Bmatrix}q_1\\q_2\end{Bmatrix}=\begin{Bmatrix}5.335\\-98.1\end{Bmatrix}\]
+<p class="erratum">原解答笔误：\(M_{gen}\) 写成了 0.0100296，应为 10.0296（\(10\cdot(1+0.05438^2)\)）。检查：\(K_{gen,11}/M_{gen,11}=2845.24/10.0296=283.685=\lambda_1\) ✓。</p>
+<div class="note"><span class="lbl">补充说明</span><p>变换后 \(K_{gen}\)、\(M_{gen}\) 都是对角阵，两个方程互相独立（解耦），每个都是单自由度振子，可以分别求解后再叠加回 \(\{u\}\)。这就是模态叠加法 (modal superposition)。</p></div>
+</details>
+</article>
+
+<article class="task" id="t6-8">
+<h3><span class="tno">Task 8</span>质量归一化</h3>
+<div class="q"><p>Perform a mass normalization of the mass matrix.</p></div>
+<details class="sol"><summary>解答</summary>
+\[\tilde M_1=\phi_1^T\begin{bmatrix}10&0\\0&10\end{bmatrix}\phi_1=10.029576,\qquad \alpha_1=\sqrt{10.029576}=3.16696\]
+\[\tilde M_2=\phi_2^TM\phi_2=10.029576,\qquad \alpha_2=3.16696\]
+\[\hat\phi_1=\frac{1}{3.16696}\begin{Bmatrix}1\\-0.05438\end{Bmatrix},\qquad \hat\phi_2=\frac{1}{3.16696}\begin{Bmatrix}0.05438\\1\end{Bmatrix},\qquad \hat\Phi=\begin{bmatrix}0.315761&0.017172\\-0.017172&0.315761\end{bmatrix}\]
+<div class="note"><span class="lbl">补充说明</span><p>质量归一化的目标是 \(\hat\Phi^TM\hat\Phi=I\)：每个振型除以自己的广义质量的平方根。归一化后 \(\hat\Phi^TK\hat\Phi=\mathrm{diag}(\lambda_i)\)，即广义刚度直接等于 \(\omega_i^2\)。</p></div>
+</details>
+</article>
+
+<article class="task" id="t6-9">
+<h3><span class="tno">Task 9</span>质量归一化后的模态方程</h3>
+<div class="q"><p>Transform the system into generalized coordinates while accounting for gravitational loading using a mass normalized matrix.</p></div>
+<details class="sol"><summary>解答</summary>
+\[K_{gen}=\hat\Phi^TK\hat\Phi=\begin{bmatrix}283.685&0\\0&5816.32\end{bmatrix},\qquad M_{gen}=\hat\Phi^TM\hat\Phi=\begin{bmatrix}1&0\\0&1\end{bmatrix}\]
+\[F_{gen}=\hat\Phi^T\begin{Bmatrix}0\\-98.1\end{Bmatrix}=\begin{bmatrix}0.315761&-0.017172\\0.017172&0.315761\end{bmatrix}\begin{Bmatrix}0\\-98.1\end{Bmatrix}=\begin{Bmatrix}1.685\\-30.976\end{Bmatrix}\]
+\[\begin{bmatrix}1&0\\0&1\end{bmatrix}\ddot q+\begin{bmatrix}\lambda_1&0\\0&\lambda_2\end{bmatrix}q=\begin{Bmatrix}1.685\\-30.976\end{Bmatrix}\]
+<p class="erratum">原解答勘误：\(F_{gen,1}=(-0.017172)\cdot(-98.1)=+1.685\)，幻灯片写成了 −1.685（与 Task 7 中 \(+5.335\) 的符号也不一致）。</p>
+<div class="note"><span class="lbl">补充说明</span><p>静力验算：\(q_1=1.685/283.685=0.00594\)，\(q_2=-30.976/5816.32=-0.005326\)；\(u=\hat\Phi q\) → \(u_1=0.315761\cdot0.00594+0.017172\cdot(-0.005326)=0.001784\)、\(u_2=-0.017172\cdot0.00594+0.315761\cdot(-0.005326)=-0.001784\)，与 Task 1 一致 ✓。</p></div>
+</details>
+</article>
+
+<article class="task" id="t6-10">
+<h3><span class="tno">Task 10</span>一致质量矩阵</h3>
+<div class="q"><p>Calculate the mass matrix of the system using a consistent mass formulation. Use a density of \(\rho_{Ti}=4430\,\mathrm{kg/m^3}\) for titanium and \(\rho_{GFRP}=1800\,\mathrm{kg/m^3}\) for glass-fibre-reinforced polymer (GFRP).</p></div>
+<details class="sol"><summary>解答</summary>
+<p>杆 1：\(\rho Al=4430\cdot10^{-4}\cdot0.2=0.0886\,\mathrm{kg}\)</p>
+\[M_1=\frac{\rho Al}{6}\begin{bmatrix}2&1\\1&2\end{bmatrix}=\begin{bmatrix}0.029533&0.014767\\0.014767&0.029533\end{bmatrix}\ (U_2,U_4)\]
+<p>杆 2：\(\rho Al=1800\cdot10^{-4}\cdot0.4=0.072\,\mathrm{kg}\)</p>
+\[M_2=\rho Al\begin{bmatrix}\frac13c^2&\frac13sc&\frac16c^2&\frac16sc\\\frac13sc&\frac13s^2&\frac16sc&\frac16s^2\\\frac16c^2&\frac16sc&\frac13c^2&\frac13sc\\\frac16sc&\frac16s^2&\frac13sc&\frac13s^2\end{bmatrix}=\begin{bmatrix}0.012&0.012&0.006&0.006\\0.012&0.012&0.006&0.006\\0.006&0.006&0.012&0.012\\0.006&0.006&0.012&0.012\end{bmatrix}\ (U_5,U_6,U_1,U_2)\]
+<p>组装到自由度 \(U_1,U_2\) 并加上集中质量 10 kg：</p>
+\[M=\begin{bmatrix}0.012+10&0.012\\0.012&0.029533+0.012+10\end{bmatrix}=\begin{bmatrix}10.012&0.012\\0.012&10.041533\end{bmatrix}\]
+<div class="note"><span class="lbl">补充说明</span>
+<ul>
+<li>用这个 \(M\) 重算固有频率：\(f_1=84.72\,\mathrm{Hz}\)、\(f_2=383.0\,\mathrm{Hz}\)，比集中质量的 84.77 / 383.8 Hz 略低——杆的质量（共 0.16 kg）相对 10 kg 很小，影响不到 1%。</li>
+<li>一致质量矩阵 (consistent mass matrix) 用与刚度矩阵相同的形函数推导 \(M=\int\rho A N^TN\,dx\)，所以有非对角项；集中质量矩阵把质量平均分到两端节点，是对角阵，计算更简单。</li>
+<li>这里杆 2 的质量矩阵只考虑了沿杆轴方向的运动（与刚度矩阵同样的旋转方式）。完整的二维杆单元一致质量矩阵还包含横向平动的质量 \(\tfrac{\rho Al}{6}\begin{bmatrix}2I&I\\I&2I\end{bmatrix}\)，在质量很重要的问题中需要注意。</li>
+</ul></div>
+</details>
+</article>
+</section>

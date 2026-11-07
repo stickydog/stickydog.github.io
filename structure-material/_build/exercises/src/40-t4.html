@@ -1,0 +1,208 @@
+<section class="set" id="t4" data-short="Tutorial 4">
+<h2 class="set-title"><span class="set-num">Tutorial 4</span>复合材料 Composites<span class="set-src">Lecture 4 · 19 页</span></h2>
+<p class="lead">经典层合板理论 (Classical Laminate Theory, CLT) 的完整手算流程：单层刚度 \([Q]\) → 坐标变换 \([\bar Q]\) → 组装 \([A],[B],[D]\)。之后用 eLamX² 软件观察不同铺层的 ABD 特征、拉伸与弯曲时该看哪个刚度、\(E_x\) 极坐标图以及层内应力分布，最后是一道铝板与准各向同性 CFRP 板的开放式比较题。</p>
+
+<article class="task" id="t4-1">
+<h3><span class="tno">1 · Task 1</span>[0/90]<sub>s</sub> 层合板的本构关系（CLT 手算）</h3>
+<div class="q">
+<figure class="fig"><img src="exercises/t4-stack.png" alt="[0/90]s 四层层合板及 h0–h4 坐标"></figure>
+<p>Determine the constitutive law for a laminate with a lay-up of \([0/90]_S\).</p>
+\[E_1=132\,680\,\mathrm{MPa},\quad E_2=9370\,\mathrm{MPa},\quad G_{12}=9642\,\mathrm{MPa},\quad \nu_{12}=0.287,\quad t=0.2\,\mathrm{mm}\ (\text{per ply})\]
+</div>
+<details class="sol"><summary>解答</summary>
+<p><b>Step 1 – 0° 单层的刚度矩阵 \([Q]\)</b>，\(\nu_{21}=\nu_{12}E_2/E_1=0.02027\)：</p>
+\[[Q]=\begin{bmatrix}\frac{E_1}{1-\nu_{12}\nu_{21}}&\frac{\nu_{12}E_2}{1-\nu_{12}\nu_{21}}&0\\\frac{\nu_{21}E_1}{1-\nu_{12}\nu_{21}}&\frac{E_2}{1-\nu_{12}\nu_{21}}&0\\0&0&G_{12}\end{bmatrix}=\begin{bmatrix}133\,456&2704&0\\2704&9424&0\\0&0&9642\end{bmatrix}\mathrm{MPa}\]
+<p><b>Step 2 – 转换到 90°</b>（\(\cos90^\circ=0,\ \sin90^\circ=1\)）：</p>
+\[[T]=\begin{bmatrix}\cos^2\theta&\sin^2\theta&2\sin\theta\cos\theta\\\sin^2\theta&\cos^2\theta&-2\sin\theta\cos\theta\\-\sin\theta\cos\theta&\sin\theta\cos\theta&\cos^2\theta-\sin^2\theta\end{bmatrix}_{90^\circ}=\begin{bmatrix}0&1&0\\1&0&0\\0&0&-1\end{bmatrix}=[T]^{-1}\]
+\[[\bar Q]_{90}=[T]^{-1}[Q][T]=\begin{bmatrix}9424&2704&0\\2704&133\,456&0\\0&0&9642\end{bmatrix}\]
+<p>90° 层就是把 1、2 方向互换。</p>
+<p><b>Step 3 – 组装 ABD</b>，层界面坐标 \(h_0..h_4=-0.4,-0.2,0,0.2,0.4\,\mathrm{mm}\)：</p>
+\[A_{ij}=\sum_k[\bar Q_{ij}]_k(h_k-h_{k-1}),\qquad B_{ij}=\tfrac12\sum_k[\bar Q_{ij}]_k(h_k^2-h_{k-1}^2),\qquad D_{ij}=\tfrac13\sum_k[\bar Q_{ij}]_k(h_k^3-h_{k-1}^3)\]
+\[A=0.2\left(2[Q]_0+2[\bar Q]_{90}\right)=\begin{bmatrix}57\,152&2163&0\\2163&57\,152&0\\0&0&7713\end{bmatrix}\mathrm{N/mm}\]
+<p>\(B\)：上下对称层的 \(h_k^2-h_{k-1}^2\) 大小相等、符号相反，两两抵消 → \([B]=[0]\)。</p>
+<p>\(D\)：外层 \(h^3\) 差 \(=0.4^3-0.2^3=0.056\)，内层 \(=0.2^3=0.008\)：</p>
+\[D=\tfrac13\left(2\cdot0.056\,[Q]_0+2\cdot0.008\,[\bar Q]_{90}\right)=\begin{bmatrix}5032&115&0\\115&1063&0\\0&0&411\end{bmatrix}\mathrm{Nmm}\]
+<p><b>完整本构关系：</b></p>
+\[\begin{Bmatrix}N_x\\N_y\\N_{xy}\\M_x\\M_y\\M_{xy}\end{Bmatrix}=\begin{bmatrix}57152&2163&0&0&0&0\\2163&57152&0&0&0&0\\0&0&7713&0&0&0\\0&0&0&5032&115&0\\0&0&0&115&1063&0\\0&0&0&0&0&411\end{bmatrix}\begin{Bmatrix}\varepsilon_x^0\\\varepsilon_y^0\\\gamma_{xy}^0\\\kappa_x\\\kappa_y\\\kappa_{xy}\end{Bmatrix}\]
+<figure class="fig"><img src="exercises/t4-loads.png" alt="层合板上的线载荷 Nx、Ny 与线力矩 Mx"></figure>
+<p>线载荷与外力的关系：\(N_x=F_x/w\ [\mathrm{N/mm}]\)，\(N_y=F_y/l\ [\mathrm{N/mm}]\)，\(M_x=M_x^{ext}/w\ [\mathrm{Nmm/mm}]\)。</p>
+<p><b>D<sub>11</sub> 与 D<sub>22</sub> 的物理意义</b>：\(D_{11}>D_{22}\)，因为 0° 层离中面更远 → 对截面惯性矩贡献更大 → 对 \(x\) 向弯曲刚度影响更大。</p>
+<div class="note"><span class="lbl">补充说明</span>
+<ul>
+<li>\(A_{11}=A_{22}\)：面内刚度只与各方向层的<b>数量和厚度</b>有关，与堆叠顺序无关；\(D\) 则强烈依赖于顺序（权重 \(\propto z^2\)）。同样的 2×0° + 2×90°，换成 [90/0]<sub>s</sub> 后 \(D_{11}\) 和 \(D_{22}\) 就对调了。</li>
+<li>单位：\(A\) 是 N/mm（刚度 × 厚度），\(B\) 是 N，\(D\) 是 Nmm（刚度 × 厚度³）。</li>
+<li>原解答把 \(\bar Q=[T]^{-1}[Q][T]\) 写在一起，严格地说应力变换矩阵和应变变换矩阵差一个 Reuter 矩阵 \(R=\mathrm{diag}(1,1,2)\)：\(\bar Q=T^{-1}QRTR^{-1}\)；对 0°/90° 两者结果相同，45° 时就必须注意（见 Home Exercise 3）。</li>
+<li>验算：\(A_{66}=9642\cdot0.8=7713.6\)，\(D_{12}=2704\cdot0.128/3=115.4\)，\(D_{66}=9642\cdot0.128/3=411.4\)。</li>
+</ul></div>
+</details>
+</article>
+
+<article class="task" id="t4-2">
+<h3><span class="tno">2 · eLamX</span>ABD 矩阵的特征与层合板分类</h3>
+<div class="q">
+<p>The use of eLamX is not relevant for the exam, but the calculation will help to strengthen your understanding.</p>
+<p><b>Task 1:</b> Create the UD material model. <b>Task 2:</b> Create a laminate with 1 ply: check the ABD matrix; check the stiffness polar plot. <b>Task 3:</b> Set up the laminate of Chapter 1 and double-confirm the results.</p>
+<p>Special features of the ABD matrices (all laminates are symmetric → \([B]=0\)): General \([\pm20/60]_S\); Balanced \([\pm15/\pm30]_S\); Angle-ply \([\pm20]_S\); Cross-ply \([0/90/0]_S\); and \([\pm30/\pm60/0/90]_S\) → compare with aluminium plate.</p>
+</div>
+<details class="sol"><summary>解答</summary>
+<table class="tbl">
+<thead><tr><th>铺层</th><th>[A]</th><th>[B]</th><th>[D]</th></tr></thead>
+<tbody>
+<tr><td>General \([\pm20/60]_S\)</td><td>满阵（\(A_{16},A_{26}\neq0\)）</td><td>0</td><td>满阵</td></tr>
+<tr><td>Balanced \([\pm15/\pm30]_S\)、Angle-ply \([\pm20]_S\)</td><td>\(A_{16}=A_{26}=0\) → 无拉剪耦合 (no shear–tension coupling)</td><td>0</td><td>满阵（\(D_{16},D_{26}\neq0\)）</td></tr>
+<tr><td>Cross-ply \([0/90/0]_S\)</td><td>\(A_{16}=A_{26}=0\)</td><td>0</td><td>\(D_{16}=D_{26}=0\) → 无弯扭耦合 (no bend–twist coupling)</td></tr>
+<tr><td>\([\pm30/\pm60/0/90]_S\)</td><td>\(A_{16}=A_{26}=0\)</td><td>0</td><td>满阵</td></tr>
+</tbody></table>
+<p><b>层合板分类 (Type of Laminates)</b>：</p>
+<ul>
+<li><b>Angle-ply</b>：各层材料、厚度相同，方向为 \(+\theta\) 与 \(-\theta\)。</li>
+<li><b>Cross-ply</b>：所有层都是 0° 或 90°。</li>
+<li><b>Balanced（均衡）</b>：每个 \(+\theta\) 层都有一个相同材料和厚度的 \(-\theta\) 层，可另含 0°、90° 层。</li>
+<li><b>Symmetric（对称）</b>：中面上下对应层的材料、角度、厚度相同 → \([B]=0\)。</li>
+<li><b>Antisymmetric（反对称）</b>：中面上下对应层材料、厚度相同，但角度符号相反。</li>
+</ul>
+<div class="note"><span class="lbl">补充说明</span>
+<ul>
+<li>三种耦合各由一组矩阵元控制：\(B\neq0\) → 拉弯耦合（对称消除）；\(A_{16},A_{26}\neq0\) → 拉剪耦合（均衡消除）；\(D_{16},D_{26}\neq0\) → 弯扭耦合（只有当 \(\pm\theta\) 层在同一 \(z\) 位置时才能消除，所以一般的均衡对称板 \(D_{16}\) 仍不为零，只是较小）。</li>
+<li>\([\pm30/\pm60/0/90]_S\) 和准各向同性铺层的 \(A\) 接近各向同性，但 \(D\) 仍然各向异性——"准各向同性"只针对面内刚度。与铝板比较时要注意这一点。</li>
+</ul></div>
+</details>
+</article>
+
+<article class="task" id="t4-3">
+<h3><span class="tno">3 · Tension</span>受拉板：该看哪个刚度？</h3>
+<div class="q">
+<figure class="fig"><img src="exercises/t4-tension.png" alt="受拉板，铺层 1: (90/0)s，2: (0/0/90/90)"></figure>
+<p>A suitable laminate is to be chosen for the tensile loaded plate shown. The material is C(HM)-EP. The maximum allowed plate thickness is \(t=1.0\,\mathrm{mm}\). Lay-ups: 1: \((90/0)_S\), 2: \((0/0/90/90)\).</p>
+<ol class="parts">
+<li>Which stiffness is relevant for this load type?</li>
+<li>Which laminate will presumably exhibit a higher stiffness \(E_x\) in load direction?</li>
+<li>Calculate the relevant stiffnesses (engineering constants) for both laminates and compare your estimations with the calculated values.</li>
+</ol>
+</div>
+<details class="sol"><summary>解答</summary>
+<p><b>1)</b> 载荷在板平面内 → 用膜刚度 (membrane stiffness)，即 \([A]\) 矩阵。</p>
+<p><b>2)</b> 两种铺层用的单层完全相同（2 × 0° + 2 × 90°），所以预计膜刚度相同。</p>
+<p><b>3)</b> eLamX 结果：</p>
+<table class="tbl"><thead><tr><th></th><th>with transverse contraction restriction</th><th>without transverse contraction restriction</th></tr></thead>
+<tbody><tr><td>\([90/0]_S\)</td><td>118 512 MPa</td><td>118 489 MPa</td></tr>
+<tr><td>\([0/0/90/90]\)</td><td>118 512 MPa</td><td>39 246 MPa</td></tr></tbody></table>
+<div class="note"><span class="lbl">补充说明</span>
+<ul>
+<li>"with restriction" 对应只看 \(A_{11}/t\)：其余应变（以及曲率）被约束为零时的刚度，两种铺层 \(A\) 完全一样，所以都是 118 512 MPa。</li>
+<li>"without restriction" 对应 \(E_x=1/(t\cdot a_{11})\)，\(a_{11}\) 取自整个 ABD 矩阵的逆，即允许横向收缩和弯曲自由发生。对称铺层 \([90/0]_S\) 只多了泊松收缩，刚度几乎不变（118 489）；非对称铺层 \([0/0/90/90]\) 有 \(B\neq0\)，拉伸时板会同时弯曲（拉弯耦合），表观刚度跌到约 1/3（39 246）。</li>
+<li>所以第 2 问的"预计相同"只在曲率被约束时成立。实际设计中应使用对称铺层，避免拉弯耦合，以及固化冷却时的翘曲变形。</li>
+</ul></div>
+</details>
+</article>
+
+<article class="task" id="t4-4">
+<h3><span class="tno">3 · Bending</span>受弯板：铺层顺序的作用</h3>
+<div class="q">
+<figure class="fig"><img src="exercises/t4-bending.png" alt="同一块板改受弯矩 M"></figure>
+<p>The same plate as in the previous task is loaded by a bending moment instead of the tensile force. The laminate and the material are the same.</p>
+<ol class="parts">
+<li>Would you use the membrane stiffness for analysis again in this case?</li>
+<li>Will the relevant stiffnesses be independent from the lay-up?</li>
+<li>Calculate the relevant values for the stiffness for both laminates and compare the stiffnesses with each other.</li>
+<li>Which lay-up could improve the relevant stiffness for the given load?</li>
+</ol>
+</div>
+<details class="sol"><summary>解答</summary>
+<p><b>1)</b> 不用。受弯时相关的是板的弯曲刚度系数 \(D_{11}\)。</p>
+<p><b>2)</b> 不独立。受弯时铺层顺序非常重要，离对称面越远的层对抗弯能力的贡献越大。</p>
+<p><b>3)</b></p>
+<table class="tbl"><thead><tr><th></th><th>\([90/0]_S\)</th><th>\([0/0/90/90]\)</th></tr></thead>
+<tbody><tr><td>\(D_{11}\) [Nmm]</td><td>2882</td><td>9876</td></tr></tbody></table>
+<p><b>4)</b> 把 0° 层移到外侧：</p>
+<table class="tbl"><thead><tr><th></th><th>\([0/90]_S\)</th></tr></thead>
+<tbody><tr><td>\(D_{11}\) [Nmm]</td><td>16 869</td></tr></tbody></table>
+<p>外层离中面距离最大，对截面惯性矩影响最大，所以 0° 层放在外面可以显著提高弯曲刚度。</p>
+<div class="note"><span class="lbl">补充说明</span>
+<ul>
+<li>用四层、每层 \(t/4\) 估算：外层的 \(z^3\) 权重为 \(0.5^3-0.25^3=0.109\)，内层为 \(0.25^3=0.016\)，外层贡献约是内层的 7 倍。所以 \([0/90]_S\) 与 \([90/0]_S\) 的 \(D_{11}\) 之比约为 \((7Q_{11}+Q_{22})/(Q_{11}+7Q_{22})\)，对高模量碳纤维接近 6 倍，与 16 869 / 2882 = 5.9 吻合。</li>
+<li>\([0/0/90/90]\) 介于两者之间：一侧是 0°，另一侧是 90°。但它不对称，有拉弯耦合，不推荐使用。</li>
+<li>对应 Tutorial 3 Task 1 的结论：弯曲刚度由"材料放在离中面多远的地方"决定。</li>
+</ul></div>
+</details>
+</article>
+
+<article class="task" id="t4-5">
+<h3><span class="tno">4 · Polar</span>E<sub>x</sub> 极坐标图</h3>
+<div class="q">
+<p>Three different laminates, each with C(HM)-EP material with ply thickness 0.125 mm, are given: 1. UD laminate; 2. \([0/90]_S\); 3. \([0/45/-45/90]_S\).</p>
+<p><b>Task 1:</b> Sketch the curve of the stiffness \(E_x\) in the polar diagrams for laminates 1–3 and confirm it with the results from eLamX.</p>
+</div>
+<details class="sol"><summary>解答</summary>
+<figure class="fig wide"><img src="exercises/t4-polar.png" alt="UD、[0/90]s、准各向同性三种铺层的 Ex 极坐标图"><figcaption>左：UD；中：\([0/90]_S\)；右：\([0/45/-45/90]_S\)（前两个只画了 0° 到 −90° 的一个象限，其余象限按对称补全）</figcaption></figure>
+<ul>
+<li><b>UD</b>：0° 方向最大（\(\approx E_1\)），偏离纤维方向后迅速下降，90° 处只剩 \(E_2\)，形状像一个"细长的 8 字"。</li>
+<li><b>[0/90]<sub>s</sub></b>：0° 和 90° 处都高（约 \((E_1+E_2)/2\)），45° 处出现明显低谷——这个方向主要靠基体剪切承载。</li>
+<li><b>[0/±45/90]<sub>s</sub></b>：准各向同性 (quasi-isotropic)，面内 \(E_x\) 与方向无关，曲线是圆。</li>
+</ul>
+<div class="note"><span class="lbl">补充说明</span>
+<p>准各向同性的条件：至少 3 个方向、等角度间隔（\(180^\circ/n\)）、各方向层数相同，例如 [0/±60] 或 [0/±45/90]。这时 \(A\) 矩阵与各向同性材料的形式完全一样，\(A_{66}=(A_{11}-A_{12})/2\)。</p></div>
+</details>
+</article>
+
+<article class="task" id="t4-6">
+<h3><span class="tno">4 · Distribution</span>应变与应力沿厚度的分布</h3>
+<div class="q">
+<p>Two laminates each with C(HM)-EP material with ply thickness 0.125 mm are given: 1. UD laminate; 2. \([0/90]_S\).</p>
+<p><b>Task 1:</b> Sketch the in-plane stress under a line load of \(n_x=1\,\mathrm{N/mm}\) and \(m_x=1\,\mathrm{Nmm}\).</p>
+</div>
+<details class="sol"><summary>解答</summary>
+<figure class="fig wide"><img src="exercises/t4-stress.png" alt="UD 单层与 [0/90]s 层合板在 nx（蓝）和 mx（绿）作用下的应变和应力分布"><figcaption>蓝色：\(n_x\)；绿色：\(m_x\)。左：UD；右：层合板的应变（中）与应力（右）</figcaption></figure>
+<ul>
+<li><b>应变</b>在两种情况下都是连续的：\(n_x\) 下沿厚度为常数，\(m_x\) 下沿厚度线性分布（Kirchhoff 假设：\(\varepsilon=\varepsilon^0+z\kappa\)）。</li>
+<li><b>UD</b>：各层刚度相同，应力与应变成比例，分布形状一样。</li>
+<li><b>[0/90]<sub>s</sub></b>：应力 \(\sigma_x=\bar Q_{11}^{(k)}\varepsilon_x\) 逐层跳变。0° 层（外层）\(\bar Q_{11}\) 大 → 应力大；90° 层（内层）\(\bar Q_{11}\) 小 → 应力小。弯曲时外层既离中面远、又刚度大，承担了绝大部分弯矩。</li>
+</ul>
+<div class="note"><span class="lbl">补充说明</span>
+<p>层间应力跳变是复合材料分层 (delamination) 的根源之一。失效校核必须逐层进行（在材料主轴 1-2 坐标系中），不能像金属那样只看表面最大应力。</p></div>
+</details>
+</article>
+
+<article class="task" id="t4-7">
+<h3><span class="tno">5 · Design</span>铝板 vs 准各向同性 CFRP 板（开放题）</h3>
+<div class="q">
+<p>Compare the structural performance of an aluminium plate with a quasi-isotropic Black Metal Design composite laminate using Classical Laminate Theory (CLT).</p>
+<p>Geometry: square plate 300 mm × 300 mm × 5 mm; CFRP: C-AS4 | EP-3501-6; Aluminium 7075-T6: \(\sigma_{max}=500\,\mathrm{MPa}\), \(E=72\,\mathrm{GPa}\), \(\nu=0.33\).</p>
+<p><b>Task 1 – Aluminium reference:</b> calculate the tensile/bending stiffness; select an appropriate failure criterion; determine the failure load; calculate the plate mass.</p>
+<p><b>Task 2 – Composite plate:</b> design a symmetric quasi-isotropic laminate; calculate the laminate tensile/bending stiffness; choose an appropriate composite failure criterion (e.g. Tsai-Wu or Maximum Stress); determine the laminate failure load; calculate the laminate mass.</p>
+<p><b>Task 3 – Discussion:</b> Which structure is stiffer? Which carries the highest load? Which is lighter? Which design provides the highest structural efficiency? Was the chosen failure criterion appropriate? Complete the comparison table (failure criterion, plate tensile/bending stiffness, failure load, plate mass, specific tensile/bending stiffness, specific strength).</p>
+</div>
+<details class="sol"><summary>参考解答（原课件未给出，以下为补充）</summary>
+<p class="erratum">课件只有题目，没有解答。下面是按同样思路做的一套参考计算：CFRP 刚度取 Home Exercise 3 中 C-AS4/EP 的数据（\(E_1=142\,\mathrm{GPa},\ E_2=10.3\,\mathrm{GPa},\ G_{12}=7.2\,\mathrm{GPa},\ \nu_{12}=0.27\)），强度和密度取文献中 AS4/3501-6 的典型值（\(X_t=2280,\ X_c=1440,\ Y_t=57,\ Y_c=228,\ S=71\,\mathrm{MPa}\)，\(\rho=1.58\,\mathrm{g/cm^3}\)），铝 7075 密度取 \(2.81\,\mathrm{g/cm^3}\)。数值仅用于理解量级。载荷工况假设为沿一边方向的单轴拉伸 \(N_x\)。</p>
+<p><b>Task 1 – 铝板</b></p>
+\[\text{拉伸刚度 }Et=72\,000\cdot5=360\,000\,\mathrm{N/mm},\qquad D=\frac{Et^3}{12(1-\nu^2)}=\frac{72\,000\cdot125}{12\cdot0.891}=8.42\times10^5\,\mathrm{Nmm}\]
+<p>失效准则：各向同性延性金属 → von Mises（单轴拉伸时就是 \(\sigma\le\sigma_{max}\)）。失效载荷 \(N_x=\sigma_{max}t=2500\,\mathrm{N/mm}\)，整块板 \(F=2500\cdot300=750\,\mathrm{kN}\)。质量 \(m=2.81\times10^{-6}\cdot300\cdot300\cdot5=1.26\,\mathrm{kg}\)。</p>
+<p><b>Task 2 – CFRP 板</b>：5 mm / 0.125 mm = 40 层 → \([0/45/-45/90]_{5S}\)（对称、均衡、准各向同性）。CLT 结果：</p>
+\[A_{11}=3.09\times10^5\,\mathrm{N/mm},\quad E_x=\frac{1}{t\,a_{11}}=56.7\,\mathrm{GPa},\quad D_{11}=7.22\times10^5\,\mathrm{Nmm}\ (D_{22}=5.66\times10^5,\ D_{16}\neq0)\]
+<p>首层失效 (first-ply failure, FPF)：在 1-2 主轴系中逐层校核。90° 层的横向拉应力 \(\sigma_2\) 最先达到 \(Y_t\)：</p>
+<ul>
+<li>最大应力准则：\(N_{x,FPF}\approx1690\,\mathrm{N/mm}\) → 507 kN</li>
+<li>Tsai-Wu（\(F_{12}=-\tfrac12\sqrt{F_{11}F_{22}}\)）：\(N_{x,FPF}\approx1530\,\mathrm{N/mm}\) → 459 kN</li>
+</ul>
+<p>质量 \(m=1.58\times10^{-6}\cdot300\cdot300\cdot5=0.71\,\mathrm{kg}\)。</p>
+<p><b>Task 3 – 比较表</b></p>
+<table class="tbl"><thead><tr><th></th><th>Aluminium 7075-T6</th><th>CFRP QI [0/±45/90]<sub>5s</sub></th></tr></thead>
+<tbody>
+<tr><td>Failure criterion</td><td>von Mises</td><td>Max. stress / Tsai-Wu（逐层）</td></tr>
+<tr><td>Plate tensile stiffness [N/mm]</td><td>3.60 × 10⁵</td><td>3.09 × 10⁵（\(E_x\) = 56.7 GPa）</td></tr>
+<tr><td>Plate bending stiffness \(D_{11}\) [Nmm]</td><td>8.42 × 10⁵</td><td>7.22 × 10⁵</td></tr>
+<tr><td>Failure load [kN]</td><td>750</td><td>≈ 460–510（FPF）</td></tr>
+<tr><td>Plate mass [kg]</td><td>1.26</td><td>0.71</td></tr>
+<tr><td>Specific tensile stiffness [GPa/(g/cm³)]</td><td>25.6</td><td>35.9</td></tr>
+<tr><td>Specific bending stiffness \(D_{11}/m\)</td><td>6.7 × 10⁵</td><td>10.2 × 10⁵</td></tr>
+<tr><td>Specific strength [kN/kg]</td><td>593</td><td>≈ 650–710（FPF）</td></tr>
+</tbody></table>
+<div class="note"><span class="lbl">补充说明</span>
+<ul>
+<li><b>同厚度</b>下铝板更刚、更强；<b>同质量</b>（比性能）下 CFRP 更好，轻约 44%。"Black Metal Design"（把 CFRP 当成准各向同性的铝来用）浪费了复合材料的方向性优势：准各向同性铺层的 \(E_x\) 只有 \(E_1\) 的 40%。</li>
+<li>首层失效通常是 90° 层的基体开裂，不等于整体破坏，最终失效（纤维断裂）载荷更高；但设计中常以 FPF 或带折减的 FPF 为准。最大应力准则忽略应力分量间的相互作用，Tsai-Wu 更保守、也更常用，二者都不区分失效模式（Puck、Hashin 可以区分）。</li>
+<li>如果要求"等刚度"或"等质量"比较，应改变厚度重新计算——比较的前提要先说清楚，这也是这道开放题考察的点。</li>
+</ul></div>
+</details>
+</article>
+</section>
