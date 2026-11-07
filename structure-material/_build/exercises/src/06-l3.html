@@ -97,7 +97,7 @@
 </article>
 
 <article class="task" id="l3-5">
-<h3><span class="tno">例 5</span>悬臂梁端部挠度（Euler–Bernoulli）</h3>
+<h3><span class="tno">例 5</span>悬臂梁端部挠度 (Euler–Bernoulli)</h3>
 <div class="q">
 <figure class="fig small"><img src="exercises/L3-cant.png" alt="悬臂梁端部受力 F"></figure>
 <p><b>Task 1:</b> Find the tip displacement under a constant tip load \(F\).</p>
@@ -116,7 +116,7 @@
 </article>
 
 <article class="task" id="l3-6">
-<h3><span class="tno">例 6</span>矩形截面的剪应力分布</h3>
+<h3><span class="tno">例 6</span>矩形截面的切应力分布</h3>
 <div class="q">
 <figure class="fig"><img src="exercises/L3-shear.png" alt="悬臂梁，矩形截面 h = 40 mm，b = 7.5 mm，F = 10 kN"></figure>
 <p>Determine the shear stress distribution \(\tau(z)\) over the rectangular cross-section of the cantilever (\(h=40\,\mathrm{mm}\), \(b=7.5\,\mathrm{mm}\), \(F=10\,\mathrm{kN}\)).</p>
@@ -125,14 +125,14 @@
 <p><b>Step 1</b> 二阶矩：\(I_y=\dfrac{bh^3}{12}=80\,000\,\mathrm{mm^4}\)</p>
 <p><b>Step 2</b> 一阶矩（\(z\) 以外部分面积对中性轴）：</p>
 \[S_y=\int_z^{h/2}z\,b\,dz=\frac12b\,z^2\Big|_z^{h/2}=\frac12b\left(\frac{h^2}{4}-z^2\right)\]
-<p><b>Step 3</b> 剪应力 \(\tau=\dfrac{Q_zS_y}{I_yb}\)：</p>
+<p><b>Step 3</b> 切应力 \(\tau=\dfrac{Q_zS_y}{I_yb}\)：</p>
 \[\tau(z)=\frac{Q_z}{I_y}\cdot\frac12\left(\frac{h^2}{4}-z^2\right),\qquad \tau(\pm h/2)=0,\qquad \tau_{\max}=\tau(0)=\frac{Q_zh^2}{8I_y}=25\,\mathrm{MPa}\]
 \[\tau_m=\frac{Q_z}{bh}=16.7\,\mathrm{MPa}\]
 <p class="erratum">原解答数据不一致：\(b=7.5\,\mathrm{mm}\) 时 \(I_y=7.5\cdot40^3/12=40\,000\,\mathrm{mm^4}\)，\(\tau_{\max}=50\,\mathrm{MPa}\)，\(\tau_m=33.3\,\mathrm{MPa}\)。幻灯片的 80 000、25 MPa、16.7 MPa 三个数彼此一致，对应的是 \(b=15\,\mathrm{mm}\)。比例关系 \(\tau_{\max}=1.5\,\tau_m\) 在两种情况下都成立。</p>
 <div class="note"><span class="lbl">补充说明</span>
 <ul>
-<li>剪应力沿高度呈抛物线分布：上下表面为零（自由表面无剪应力 + 切应力互等），中性轴最大，为平均值的 1.5 倍。</li>
-<li>这与 Bernoulli 假设矛盾（假设没有剪切变形），所以 Euler–Bernoulli 梁的剪应力只能事后由平衡方程"补出来"；Timoshenko 梁用平均剪应变 + 剪切修正系数 \(\kappa\) 来处理。</li>
+<li>切应力沿高度呈抛物线分布：上下表面为零（自由表面无切应力 + 切应力互等），中性轴最大，为平均值的 1.5 倍。</li>
+<li>这与 Bernoulli 假设矛盾（假设没有剪切变形），所以 Euler–Bernoulli 梁的切应力只能事后由平衡方程"补出来"；Timoshenko 梁用平均切应变 + 剪切修正系数 \(\kappa\) 来处理。</li>
 </ul></div>
 </details>
 </article>
@@ -159,7 +159,7 @@
 <ul>
 <li>夹层结构的思路与工字梁相同：薄而强的面板承担弯曲正应力（像翼缘），轻芯材承担剪力并把两块面板分开（像腹板）。面板应力校核：\(M=Pl/4=750\,\mathrm{Nm}\)，面板力 \(=M/t_c=29.5\,\mathrm{kN}\)，应力 \(\approx118\,\mathrm{MPa}\lt150\,\mathrm{MPa}\) ✓。</li>
 <li>本例芯材 \(G_z=220\,\mathrm{MPa}\) 较高，剪切挠度不到 1%；若用泡沫芯（\(G\) 只有几十 MPa）且跨度较短，\(w_s\) 会成为主要部分——这正是要用 Timoshenko 梁的场合（Slide 23 的曲线：长细比越小，剪切变形占比越大）。</li>
-<li>夹层截面一般取 \(\kappa\approx1\)（剪应力在芯材中几乎均匀）；矩形实心截面 \(\kappa\approx5/6\)。用 5/6 得 0.32 mm，结论不变。</li>
+<li>夹层截面一般取 \(\kappa\approx1\)（切应力在芯材中几乎均匀）；矩形实心截面 \(\kappa\approx5/6\)。用 5/6 得 0.32 mm，结论不变。</li>
 </ul></div>
 </details>
 </article>

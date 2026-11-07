@@ -20,12 +20,12 @@
 <p><b>B)</b> 平面应力 Hooke 定律：</p>
 \[\sigma_{xx}=\frac{E}{1-\nu^2}(\varepsilon_{xx}+\nu\varepsilon_{yy}),\qquad \sigma_{yy}=\frac{E}{1-\nu^2}(\nu\varepsilon_{xx}+\varepsilon_{yy}),\qquad \sigma_{xy}=\frac{E}{1+\nu}\varepsilon_{xy}\]
 \[\boldsymbol\sigma(2,2)=\begin{bmatrix}\dfrac{70\,\mathrm{GPa}}{1-0.3^2}(2a_1+0.6a_3)&\dfrac{70\,\mathrm{GPa}}{1.3}\left(\tfrac12a_0+a_1+a_3\right)\\[2mm]\dfrac{70\,\mathrm{GPa}}{1.3}\left(\tfrac12a_0+a_1+a_3\right)&\dfrac{70\,\mathrm{GPa}}{1-0.3^2}(0.6a_1+a_3)\end{bmatrix}\]
-<p>矩阵形式（Voigt 记法，注意剪切用工程剪应变 \(\gamma_{xy}=2\varepsilon_{xy}\)）：</p>
+<p>矩阵形式（Voigt 记法，注意剪切用工程切应变 \(\gamma_{xy}=2\varepsilon_{xy}\)）：</p>
 \[\begin{Bmatrix}\sigma_{xx}\\\sigma_{yy}\\\sigma_{xy}\end{Bmatrix}=\begin{bmatrix}\frac{E}{1-\nu^2}&\frac{E\nu}{1-\nu^2}&0\\\frac{E\nu}{1-\nu^2}&\frac{E}{1-\nu^2}&0\\0&0&\frac{E}{2(1+\nu)}\end{bmatrix}\begin{Bmatrix}\varepsilon_{xx}\\\varepsilon_{yy}\\2\varepsilon_{xy}\end{Bmatrix},\qquad S=\frac1E\begin{bmatrix}1&-\nu&0\\-\nu&1&0\\0&0&2(1+\nu)\end{bmatrix}\]
 <p class="erratum">原解答勘误：幻灯片中间写的 \(Q=S^{-1}\) 第三个对角元为 \(\tfrac{1}{2(1+\nu)}\)，漏了因子 \(E\)，应为 \(\tfrac{E}{2(1+\nu)}=G\)；下方完整矩阵是对的。</p>
 <div class="note"><span class="lbl">补充说明</span>
 <ul>
-<li>题目问的是 "engineering strain"：正应变两种定义一样；剪切分量若按工程定义应为 \(\gamma_{xy}=2\varepsilon_{xy}=a_0+2a_1+2a_3\)。原解答给的是张量剪应变 \(\varepsilon_{xy}\)，两者差 2 倍，代入本构时务必配对：\(\tau=G\gamma=2G\varepsilon_{xy}=\tfrac{E}{1+\nu}\varepsilon_{xy}\)。</li>
+<li>题目问的是 "engineering strain"：正应变两种定义一样；剪切分量若按工程定义应为 \(\gamma_{xy}=2\varepsilon_{xy}=a_0+2a_1+2a_3\)。原解答给的是张量切应变 \(\varepsilon_{xy}\)，两者差 2 倍，代入本构时务必配对：\(\tau=G\gamma=2G\varepsilon_{xy}=\tfrac{E}{1+\nu}\varepsilon_{xy}\)。</li>
 <li>\(\tfrac{E}{1-\nu^2}=76.9\,\mathrm{GPa}\)，\(\tfrac{E}{1+\nu}=53.8\,\mathrm{GPa}\)。位移系数 \(a_i\) 没给数值，所以结果保持符号形式。</li>
 <li>平面应力 (plane stress) 指 \(\sigma_{zz}=\sigma_{xz}=\sigma_{yz}=0\)，但 \(\varepsilon_{zz}=-\tfrac{\nu}{1-\nu}(\varepsilon_{xx}+\varepsilon_{yy})\neq0\)——薄板会变薄。</li>
 </ul></div>
@@ -48,7 +48,7 @@
 <ul>
 <li>完整的"物理可实现"条件有三条：① 平衡方程；② 应变协调方程 (compatibility)，保证由应力算出的应变能积分出连续的位移场；③ 边界上与外载荷相符。</li>
 <li>本题应力是坐标的线性函数 → 应变也是线性函数 → 协调方程 \(\partial^2\varepsilon_{xx}/\partial y^2+\partial^2\varepsilon_{yy}/\partial x^2=2\partial^2\varepsilon_{xy}/\partial x\partial y\) 中全是二阶导数，自动等于 0。所以只剩平衡方程起约束作用。</li>
-<li>剪应力已经写成对称形式 \(\tau_{xy}=\tau_{yx}\)，切应力互等（力矩平衡）已自动满足。</li>
+<li>切应力已经写成对称形式 \(\tau_{xy}=\tau_{yx}\)，切应力互等（力矩平衡）已自动满足。</li>
 </ul></div>
 </details>
 </article>

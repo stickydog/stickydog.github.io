@@ -1,6 +1,6 @@
 <section class="set" id="l2" data-short="Lecture 2 例题">
 <h2 class="set-title"><span class="set-num">Lecture 2</span>弹性力学基础 · 课堂例题<span class="set-src">Slides 7–9 · 37–38</span></h2>
-<p class="lead">Lecture 2 用同一根单轴拉杆贯穿"应力状态"的三个例题：用 Cauchy 公式求斜截面上的正应力和剪应力、把应力张量旋转到斜截面坐标系、用特征值求主应力。最后用两个弹簧–质量例题复习 Lagrange 方程。</p>
+<p class="lead">Lecture 2 用同一根单轴拉杆贯穿"应力状态"的三个例题：用 Cauchy 公式求斜截面上的正应力和切应力、把应力张量旋转到斜截面坐标系、用特征值求主应力。最后用两个弹簧–质量例题复习 Lagrange 方程。</p>
 
 <article class="task" id="l2-1">
 <h3><span class="tno">例 1</span>单轴拉杆：45° 斜截面上的牵引力</h3>
@@ -18,8 +18,8 @@
 \[\vec t_s=\vec t-\vec t_n=\boldsymbol\sigma\vec n-(\vec n^T\boldsymbol\sigma\vec n)\vec n=\frac{5}{\sqrt2}\begin{Bmatrix}-1\\1\\0\end{Bmatrix},\qquad \tau=|\vec t_s|=5\,\mathrm{MPa}\]
 <div class="note"><span class="lbl">补充说明</span>
 <ul>
-<li>五步法：① 写出应力张量 → ② 乘以截面法向量得牵引力 \(\vec t=\boldsymbol\sigma\vec n\) → ③ 投影到法向得正应力 → ④ 相减得剪切牵引力 → ⑤ 取模得剪应力。</li>
-<li>45° 斜截面面积是横截面的 \(\sqrt2\) 倍，所以截面上合力仍为 10 N，但"摊开"后正应力和剪应力都是 5 MPa。单轴拉伸的最大剪应力 \(\sigma/2\) 就出现在 45° 截面上——延性金属拉伸时沿 45° 滑移就是这个原因。</li>
+<li>五步法：① 写出应力张量 → ② 乘以截面法向量得牵引力 \(\vec t=\boldsymbol\sigma\vec n\) → ③ 投影到法向得正应力 → ④ 相减得剪切牵引力 → ⑤ 取模得切应力。</li>
+<li>45° 斜截面面积是横截面的 \(\sqrt2\) 倍，所以截面上合力仍为 10 N，但"摊开"后正应力和切应力都是 5 MPa。单轴拉伸的最大切应力 \(\sigma/2\) 就出现在 45° 截面上——延性金属拉伸时沿 45° 滑移就是这个原因。</li>
 </ul></div>
 </details>
 </article>
@@ -35,8 +35,8 @@
 \[\boldsymbol\sigma'=\begin{bmatrix}\frac{\sqrt2}{2}&\frac{\sqrt2}{2}&0\\-\frac{\sqrt2}{2}&\frac{\sqrt2}{2}&0\\0&0&1\end{bmatrix}\begin{bmatrix}10&0&0\\0&0&0\\0&0&0\end{bmatrix}\begin{bmatrix}\frac{\sqrt2}{2}&-\frac{\sqrt2}{2}&0\\\frac{\sqrt2}{2}&\frac{\sqrt2}{2}&0\\0&0&1\end{bmatrix}=\begin{bmatrix}5&-5&0\\-5&5&0\\0&0&0\end{bmatrix}\mathrm{MPa}\]
 <div class="note"><span class="lbl">补充说明</span>
 <ul>
-<li>与例 1 一致：\(\sigma'_{x'x'}=5\) 是 45° 截面上的正应力，\(|\tau'_{x'y'}|=5\) 是该截面上的剪应力。张量旋转一次给出了所有方向的分量，是比逐个截面计算更系统的方法。</li>
-<li>剪应力符号取决于坐标轴方向约定，大小不变。旋转前后迹不变：\(10+0=5+5\)（应力不变量）。</li>
+<li>与例 1 一致：\(\sigma'_{x'x'}=5\) 是 45° 截面上的正应力，\(|\tau'_{x'y'}|=5\) 是该截面上的切应力。张量旋转一次给出了所有方向的分量，是比逐个截面计算更系统的方法。</li>
+<li>切应力符号取决于坐标轴方向约定，大小不变。旋转前后迹不变：\(10+0=5+5\)（应力不变量）。</li>
 </ul></div>
 </details>
 </article>

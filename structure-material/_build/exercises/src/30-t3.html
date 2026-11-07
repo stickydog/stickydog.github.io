@@ -1,6 +1,6 @@
 <section class="set" id="t3" data-short="Tutorial 3">
 <h2 class="set-title"><span class="set-num">Tutorial 3</span>结构设计元件 Structural Design Elements<span class="set-src">Lecture 3 · 5 页</span></h2>
-<p class="lead">两道题：一是从"拉伸刚度相同"出发比较铝板与钢板的质量和弯曲刚度，体会轻量化设计中厚度的作用；二是简支梁的完整强度与刚度校核——弯曲正应力 + 轴向应力、剪应力与 von Mises 等效应力、计入剪切变形的挠度。</p>
+<p class="lead">两道题：一是从"拉伸刚度相同"出发比较铝板与钢板的质量和弯曲刚度，体会轻量化设计中厚度的作用；二是简支梁的完整强度与刚度校核——弯曲正应力 + 轴向应力、切应力与 von Mises 等效应力、计入剪切变形的挠度。</p>
 
 <article class="task" id="t3-1">
 <h3><span class="tno">Task 1</span>铝板 vs 钢板</h3>
@@ -24,7 +24,7 @@
 <ul>
 <li>结论：同样的拉伸刚度下，两种材料质量几乎相同（因为钢和铝的比刚度 \(E/\rho\) 都约为 26 GPa·cm³/g），但铝板的弯曲刚度是钢板的 9 倍。这就是航空蒙皮用铝而不用钢的主要原因——薄壁结构更容易受弯曲和屈曲控制。</li>
 <li>推广：屈曲临界应力 \(\sigma_{cr}\propto E(t/b)^2\)，同样是厚度的高次方。材料越轻，在等质量下能做得越厚，对弯曲和稳定越有利。夹层结构、复合材料也都是同一思路。</li>
-<li>轻量化选材指标（Ashby）：等拉伸刚度看 \(E/\rho\)，等弯曲刚度的板看 \(E^{1/3}/\rho\)：铝 \(70^{1/3}/2.7=1.53\)，钢 \(210^{1/3}/7.8=0.76\)，铝约为钢的 2 倍。</li>
+<li>轻量化选材指标 (Ashby)：等拉伸刚度看 \(E/\rho\)，等弯曲刚度的板看 \(E^{1/3}/\rho\)：铝 \(70^{1/3}/2.7=1.53\)，钢 \(210^{1/3}/7.8=0.76\)，铝约为钢的 2 倍。</li>
 </ul></div>
 </details>
 </article>
@@ -54,16 +54,16 @@
 \[\sigma_{\max}=\sigma_N+\sigma_{b,\max}=25+78.125=103.125\,\mathrm{MPa},\qquad SF=\frac{350}{103.125}=3.4\]
 <p><b>B)</b> 平面应力 von Mises：\(\sigma_V=\sqrt{\sigma_x^2-\sigma_x\sigma_y+\sigma_y^2+3\tau_{xy}^2}\)，梁中 \(\sigma_y=\sigma_z=0\)：</p>
 \[\sigma_V=\sqrt{\sigma_x^2+3\tau_{xy}^2}\]
-<p>矩形截面最大剪应力在中性轴处（取最大剪力 \(Q=B_Y=7.5\,\mathrm{kN}\)）：</p>
+<p>矩形截面最大切应力在中性轴处（取最大剪力 \(Q=B_Y=7.5\,\mathrm{kN}\)）：</p>
 \[\tau_{\max}=\frac{Q\,h^2}{8I_z}=\frac{3}{2}\frac{Q}{bh}=\frac{7500\cdot3600}{8\cdot360\,000}=9.375\,\mathrm{MPa}\]
 \[\sigma_V=\sqrt{103.125^2+3\cdot9.375^2}=104.4\,\mathrm{MPa},\qquad SF=\frac{350}{104.4}=3.35\]
-<p>安全系数几乎不变 → 剪应力对这根梁不重要。</p>
+<p>安全系数几乎不变 → 切应力对这根梁不重要。</p>
 <p class="erratum">原解答勘误：幻灯片写作 \(\tau_{\max}=A_Yh^2/(8I_z)\)，但数值 9.375 MPa 实际用的是 \(B_Y=7.5\,\mathrm{kN}\)（用 \(A_Y\) 只得 3.125 MPa）。最大剪力在 B 侧那一段，应取 \(B_Y\)。</p>
 <div class="note"><span class="lbl">补充说明</span>
 <ul>
 <li>B 的做法偏保守：\(\sigma_{\max}\) 出现在上下表面，而 \(\tau_{\max}\) 出现在中性轴，两者不在同一点。严格做法是在截面各点分别计算 \(\sigma_V\) 再取最大；对矩形实心截面，最大值仍在表面，约等于 103.1 MPa。</li>
 <li>工字梁等薄壁截面中，腹板–翼缘交接处 \(\sigma\) 和 \(\tau\) 都较大，这时组合校核才真正起作用。</li>
-<li>\(\tau_{\max}=\tfrac32\,Q/A\) 是矩形截面的常用快捷公式；剪应力沿高度呈抛物线分布。</li>
+<li>\(\tau_{\max}=\tfrac32\,Q/A\) 是矩形截面的常用快捷公式；切应力沿高度呈抛物线分布。</li>
 </ul></div>
 </details>
 <details class="sol"><summary>解答（C 挠度）及勘误</summary>

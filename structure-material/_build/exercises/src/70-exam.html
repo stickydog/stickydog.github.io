@@ -32,7 +32,7 @@
 <ul>
 <li><b>a)</b> 刚体运动（平移 + 转动）不改变任何两点间的距离和夹角 → 无应变 → 由本构关系也无应力。注意：小应变张量在<b>大</b>转动下会给出虚假应变（Tutorial 2 Task 3），这是 d) 的伏笔。</li>
 <li><b>b)</b> 各向同性只有 2 个独立常数（如 \(E,\nu\)，或 Lamé 常数 \(\lambda,\mu\)）；\(G=E/[2(1+\nu)]\) 不独立。81 是四阶张量的分量总数，21 是一般各向异性材料的独立常数个数，正交各向异性为 9，横观各向同性为 5。</li>
-<li><b>c)</b> 三个相互正交的材料对称面使正应力与剪应变之间、不同剪切分量之间的耦合项全部为零，21 → 9 个常数。剪应力本身并不为零。</li>
+<li><b>c)</b> 三个相互正交的材料对称面使正应力与切应变之间、不同剪切分量之间的耦合项全部为零，21 → 9 个常数。切应力本身并不为零。</li>
 <li><b>d)</b> 见 Tutorial 2 Task 3。</li>
 </ul></div>
 </details>
@@ -171,7 +171,7 @@
 <details class="sol"><summary>解答</summary>
 <p><b>a)</b> 支杆 (2) 连接自由度 1 和 3，支杆 (3) 连接自由度 2 和 4，各贡献一个 \(K_S\)：</p>
 \[K_G=K_P+K_S^{(1,3)}+K_S^{(2,4)}=\begin{bmatrix}15+8&-10&-4&0\\-10&15+8&0&-4\\-4&0&5+8&2\\0&-4&2&5+8\end{bmatrix}=\begin{bmatrix}23&-10&-4&0\\-10&23&0&-4\\-4&0&13&2\\0&-4&2&13\end{bmatrix}\]
-<p><b>b)</b> 用备用结果（backup）：</p>
+<p><b>b)</b> 用备用结果 (backup)：</p>
 \[\begin{bmatrix}20&4\\4&20\end{bmatrix}\begin{Bmatrix}U_1\\U_2\end{Bmatrix}=\begin{Bmatrix}F\\0\end{Bmatrix}\ \Rightarrow\ U_1=\frac{20}{384}F=\frac{5}{96}F,\qquad U_2=-\frac{4}{384}F=-\frac{1}{96}F\]
 <div class="note"><span class="lbl">补充说明</span>
 <ul>
