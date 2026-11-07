@@ -104,6 +104,11 @@ table.t tr.enter td{animation:rowIn .5s ease}
 
 /* math typography */
 i{font-family:var(--font-math);font-style:italic;font-size:1.1em;letter-spacing:.01em}
+sub i{font-size:1em}
+.sq{white-space:nowrap;font-family:var(--font-math)}
+.sq .rad{border-top:1px solid currentColor;padding:0 1px 0 1px;margin-left:-.5px}
+.calc{font-family:var(--font-math);background:var(--accent-soft);border-radius:6px;padding:8px 12px;margin:10px 0;font-size:15.5px;line-height:1.9;overflow-x:auto}
+.calc div{white-space:nowrap}
 sub{font-size:.7em;line-height:0;vertical-align:-.28em;font-style:normal;font-family:var(--font-math)}
 .board .mono,.chip,table.t td,ol.deriv li .m,.formula,.mini,.mat,.mgrid,.sys{font-family:var(--font-math)!important}
 .mgrid .c{font-size:14.5px!important}
@@ -330,22 +335,25 @@ ol.deriv li.enter{animation:rowIn .5s ease}
   const N={ "13":2*F, "23":-S2*F, "34":S2*F, "24":0 };
 
   // ---------- math typesetting ----------
-  const SUB={"₀":"0","₁":"1","₂":"2","₃":"3","₄":"4","₅":"5","₆":"6","₇":"7","₈":"8","₉":"9","ₑ":"e"};
-  function prettyText(t){
-    t=t.replace(/[₀-₉ₑ]+/g,m=>"\u0001"+[...m].map(c=>SUB[c]).join("")+"\u0002");
-    t=t.replace(/_(ff|fs|sf|ss|pp|pq|ii|ij|ji|jj|i|j|e|f|s)(?![A-Za-z])/g,"\u0001$1\u0002");
-    t=t.replace(/(?<![A-Za-z\u0001])(EA|FL|cs|[A-Za-zδ])(?![A-Za-z])/g,(m,v,off,str)=>{
+  const SUB={"ₓ":"x","ᵧ":"y","₀":"0","₁":"1","₂":"2","₃":"3","₄":"4","₅":"5","₆":"6","₇":"7","₈":"8","₉":"9","ₑ":"e"};
+  function prettyText(t,svg){
+    t=t.replace(/[₀-₉ₑₓᵧ]+/g,m=>"\u0001"+[...m].map(c=>SUB[c]).join("")+"\u0002");
+    t=t.replace(/_(ff|fs|sf|ss|pp|pq|ii|ij|ji|jj|i|j|e|f|s|x|y)(?![A-Za-z])/g,"\u0005$1\u0006");
+    if(!svg) t=t.replace(/√(\d+|[A-Za-z])/g,"\u0003$1\u0004");
+    t=t.replace(/(?<![A-Za-z\u0001\u0005])(EA|FL|cs|[A-Za-zδ])(?![A-Za-z])/g,(m,v,off,str)=>{
       const pre=str.slice(Math.max(0,off-3),off);
       if(/^[Nm]$/.test(v)&&/[\d⁰-⁹]\s$/.test(pre))return v;
       if(v==="m"&&/N\/$/.test(pre))return v;
       return "<i>"+v+"</i>";
     });
-    return t.replace(/\u0001/g,"<sub>").replace(/\u0002/g,"</sub>");
+    t=t.replace(/\u0001/g,"<sub>").replace(/\u0002/g,"</sub>");
+    t=svg ? t.replace(/\u0005/g,"<sub>").replace(/\u0006/g,"</sub>") : t.replace(/\u0005/g,"<sub><i>").replace(/\u0006/g,"</i></sub>");
+    return t.replace(/\u0003/g,'<span class="sq">√<span class="rad">').replace(/\u0004/g,"</span></span>");
   }
   const prettify=h=>h.split(/(<[^>]+>)/).map(p=>p.startsWith("<")?p:prettyText(p)).join("");
   function svgMath(t,str){
     while(t.firstChild)t.removeChild(t.firstChild);
-    const h=prettyText(str);
+    const h=prettyText(str,true).replace(/<sub>(.*?)<\/sub>/g,(m,c)=>"<sub>"+c.replace(/<\/?i>/g,"")+"</sub>");
     const re=/<i>(.*?)<\/i>|<sub>(.*?)<\/sub>|([^<]+)/g; let m;
     while((m=re.exec(h))){
       const ts=document.createElementNS("http://www.w3.org/2000/svg","tspan");
@@ -563,7 +571,7 @@ ol.deriv li.enter{animation:rowIn .5s ease}
         <ol class="deriv">${shown}</ol>${res}`);
     }},
 
-    {title:"杆力与反力", steps:7, vb:"50 40 620 500", noLoad:true, draw(step,fwd){
+    {title:"杆力与反力", steps:10, vb:"50 40 620 500", noLoad:true, draw(step,fwd){
       gDofs.classList.add("hidden"); gDef.classList.add("hidden"); showEvec(null);
       const g=el("g",{class:"ov-fade"},gOv);
       const DS=78; // px per mm
@@ -595,15 +603,15 @@ ol.deriv li.enter{animation:rowIn .5s ease}
         if(Math.abs(D)>1e-12){ arrow(g,ox,oy,fx,fy,forceColor(Nn),5); label(g,fx+nx*14,fy+ny*14+4,"Δ",forceColor(Nn),"middle"); }
         else { el("circle",{cx:xj,cy:yj,r:6,fill:"none",stroke:"var(--muted)","stroke-width":2},g); label(g,xj-14,yj-18,"Δ = 0","var(--muted)","end"); }
         const rows=bars.slice(0,step).map((x,k)=>{const r=barDelta(x), n=EA/Le(x)*r.D; return `<tr class="${k===step-1?"cur"+(fwd?" enter":""):""}"><td><span class="sw" style="background:${x.color}"></span>${x.i}–${x.j}</td><td>${(mmv(r.D)).toFixed(3).replace("-","−")} mm</td><td>${fmtN(n)} N</td><td>${(n/50).toFixed(1).replace("-","−")} MPa</td></tr>`;}).join("");
-        const expl={
-          "13":"c = 1, s = 0：Δ = u₃ − u₁ = 2δ。竖向位移 v₃ 垂直于杆轴，不影响伸长。",
-          "23":"c = s = 1/√2：Δ = (u₃ + v₃)/√2 = [2 − (2+2√2)]δ/√2 = −2δ。节点 3 向下多于向右，杆被压短。",
-          "34":"c = 1/√2, s = −1/√2：Δ = [(u₄−u₃) − (v₄−v₃)]/√2 = 2δ。节点 4 比节点 3 下沉更多，杆被拉长。",
-          "24":"c = 1, s = 0：Δ = u₄ − u₂ = 0。节点 4 的位移是竖直的，正好垂直于这根水平杆，一阶近似下杆只转动，不伸长。"}[b.id];
+        const X={
+          "13":{calc:["c = 1,　s = 0,　Lₑ = L","Δ = u₃ − u₁ = 2δ = 0.486 mm","N = (EA/L)·Δ = 3500 N/mm × 0.486 mm = +1700 N"],note:"竖向位移 v₃ 垂直于杆轴，不影响伸长。"},
+          "23":{calc:["c = s = 1/√2,　Lₑ = √2 L","Δ = (u₃ + v₃)/√2 = [2 − (2 + 2√2)]·δ/√2 = −2δ = −0.486 mm","N = EA/(√2 L)·Δ = 2475 N/mm × (−0.486 mm) = −1202 N"],note:"节点 3 向下的位移比向右的大，沿杆轴方向是靠近节点 2，所以杆被压短。"},
+          "34":{calc:["c = 1/√2,　s = −1/√2,　Lₑ = √2 L","Δ = [(u₄ − u₃) − (v₄ − v₃)]/√2 = 2δ = 0.486 mm","N = EA/(√2 L)·Δ = 2475 N/mm × 0.486 mm = +1202 N"],note:"节点 4 比节点 3 下沉得多，沿杆轴方向两端远离，杆被拉长。"},
+          "24":{calc:["c = 1,　s = 0,　Lₑ = 2L","Δ = u₄ − u₂ = 0 − 0 = 0","N = 0"],note:"节点 4 的位移是竖直的，正好垂直于这根水平杆。一阶近似下杆只转动、不伸长。"}}[b.id];
         setBoard(`<h2>杆 ${b.i}→${b.j}：N = ${fmtN(Nn)} N ${stateChip(Nn)}</h2>
-          <p>相对位移 u_j − u_i = (${mmv(du).toFixed(3).replace("-","−")}, ${mmv(dv).toFixed(3).replace("-","−")}) mm，Lₑ = ${b.Le}。</p>
-          <p>${expl}</p>
-          <div class="formula"><span>N = (EA/Lₑ)·Δ = ${(EA/Le(b)/1000).toFixed(0)} N/mm × ${mmv(D).toFixed(3).replace("-","−")} mm = ${fmtN(Nn)} N</span></div>
+          <p>相对位移 <span class="mono">u_j − u_i = (${mmv(du).toFixed(3).replace("-","−")}, ${mmv(dv).toFixed(3).replace("-","−")}) mm</span></p>
+          <div class="calc">${X.calc.map(l=>`<div>${l}</div>`).join("")}</div>
+          <p>${X.note}</p>
           <table class="t"><tr><th>杆</th><th>Δ</th><th>N</th><th>σ = N/A</th></tr>${rows}</table>
           ${step===4?'<p class="note">严格按几何算，杆 2–4 其实伸长了一点点，这是二阶小量，见第 7 章。</p>':''}`);
         return;
@@ -630,23 +638,73 @@ ol.deriv li.enter{animation:rowIn .5s ease}
           <p>三个力首尾相接，回到起点（下图空心圆），合力为零 ✓</p><div id="rawslot"></div>`); document.getElementById("rawslot").innerHTML=svgPoly;
         return;
       }
-      // step 6: reactions
-      gLoad.classList.remove("hidden");
-      const R={1:[-1700,0],2:[850,850],4:[850,0]};
-      Object.keys(R).forEach(n=>{const [x,y]=XY(+n); const [Rx,Ry]=R[n];
-        [[Rx,0],[0,Ry]].forEach(([a,b2])=>{ if(!a&&!b2)return; const sx=a*FS, sy=-b2*FS; const L=Math.hypot(sx,sy), ux=sx/L, uy=sy/L;
+      // steps 6-9: reactions by the method of sections
+      const ink="var(--ink)";
+      function cutForce(g,cx,cy,id,towardFB,nodeOther){ // force of a cut bar on the free body
+        const n=N[id]; if(Math.abs(n)<1e-6){ label(g,cx+6,cy-8,"N = 0","var(--muted)"); el("circle",{cx,cy,r:4,fill:"var(--muted)"},g); return; }
+        // unit vector from cut point toward the removed part (screen coords)
+        const [ux,uy]=towardFB; const sx=n*ux*FS, sy=n*uy*FS;
+        const b=bars.find(x=>x.id===id);
+        if(n>0) arrow(g,cx,cy,cx+sx,cy+sy,b.color,4); else arrow(g,cx-sx,cy-sy,cx,cy,b.color,4);
+      }
+      function reac(g,n,Rx,Ry,lab,lx,ly,anchor){ const [x,y]=XY(n);
+        [[Rx,0],[0,Ry]].forEach(([a2,b2])=>{ if(!a2&&!b2)return; const sx=a2*FS, sy=-b2*FS; const L=Math.hypot(sx,sy), ux=sx/L, uy=sy/L;
           arrow(g, x-sx-ux*15, y-sy-uy*15, x-ux*15, y-uy*15, "var(--accent)",4); });
-      });
-      label(g,XY(1)[0]+14,XY(1)[1]+40,"R₁ = (−1700, 0)","var(--accent)","start");
-      label(g,XY(2)[0]+12,XY(2)[1]+60,"R₂ = (850, 850)","var(--accent)","start");
-      label(g,XY(4)[0]-14,XY(4)[1]+36,"R₄ = (850, 0)","var(--accent)","end");
-      setBoard(`<h2>支座反力</h2>
-        <p>支座节点上，反力和杆对节点的力平衡：R = −Σ（各杆对该节点的力）。也可以用划掉的那些行算：R = K_sf·u_f。</p>
-        <table class="t"><tr><th>节点</th><th>来自哪根杆</th><th>反力 R (N)</th></tr>
-        <tr><td>1</td><td>1–3 受拉，把节点 1 往右拉 1700</td><td>(−1700, 0)</td></tr>
-        <tr><td>2</td><td>2–3 受压，把节点 2 往左下推 (850, 850)</td><td>(+850, +850)</td></tr>
-        <tr><td>4</td><td>3–4 受拉 + 载荷 F</td><td>(+850, 0)</td></tr></table>
-        <p>整体检查：水平 −1700 + 850 + 850 = 0；竖直 850 − F = 850 − 850 = 0 ✓</p>`);
+        label(g,lx,ly,lab,"var(--accent)",anchor||"start"); }
+      const u23=[-1/S2, 1/S2]; // screen unit from node 3 toward node 2
+      if(step===6){
+        gLoad.classList.remove("hidden");
+        el("rect",{x:50,y:40,width:200,height:460,fill:"var(--panel)",opacity:.78},g);
+        el("line",{x1:250,y1:70,x2:250,y2:400,stroke:ink,"stroke-width":2,"stroke-dasharray":"9 6"},g);
+        label(g,250,62,"I","var(--ink)","middle"); label(g,250,418,"I","var(--ink)","middle");
+        cutForce(g,250,110,"13",[-1,0]);
+        cutForce(g,250,220,"23",u23);
+        cutForce(g,250,330,"24",[-1,0]);
+        reac(g,4,850,0,"R₄ₓ = ?",XY(4)[0]-14,XY(4)[1]+36,"end");
+        setBoard(`<h2>截面 I–I：取右半部分求 R₄</h2>
+          <p>截断法（method of sections）：用截面把结构切开，取一侧为隔离体，被切断的杆用已知轴力代替，再列平衡方程求支反力。</p>
+          <p>截面 I–I 切断杆 1–3、2–3、2–4，取右边（节点 3、4）为隔离体。受拉杆的力背离隔离体，受压杆的力指向隔离体。</p>
+          <div class="calc"><div>ΣF_x = 0：　−N₁₃ − N₂₃/√2 + R₄ₓ = 0</div><div>　　　−1700 − (−1202)/√2 + R₄ₓ = −1700 + 850 + R₄ₓ = 0</div><div>⇒　R₄ₓ = +850 N（向右）</div><div>ΣF_y = 0：　−N₂₃/√2 − F = 850 − 850 = 0 ✓</div></div>
+          <p class="note">右半部分只有一个支反力 R₄ₓ，所以一个方程就能解出来，竖直方向正好用来校核。</p>`);
+        return;
+      }
+      if(step===7){
+        bars.forEach(b=>{barEls[b.id].classList.add("dim");labelEls[b.id].style.opacity=.25;});
+        const [x1,y1]=XY(1);
+        el("circle",{cx:x1,cy:y1,r:46,fill:"none",stroke:ink,"stroke-width":2,"stroke-dasharray":"9 6"},g);
+        label(g,x1+20,y1-52,"II","var(--ink)","start");
+        cutForce(g,x1+46,y1,"13",[1,0]);
+        reac(g,1,-1700,0,"R₁",x1-60,y1+64,"start");
+        setBoard(`<h2>截面 II：围住节点 1 求 R₁</h2>
+          <p>用一个闭合截面把节点 1 和它的支座单独切出来，只切断杆 1–3。杆 1–3 受拉，力背离隔离体（向右）。</p>
+          <div class="calc"><div>ΣF_x = 0：　N₁₃ + R₁ₓ = 0　⇒　R₁ₓ = −1700 N（向左）</div><div>ΣF_y = 0：　R₁ᵧ = 0</div></div>
+          <p class="note">杆 1–3 是水平的，所以节点 1 只有水平反力。</p>`);
+        return;
+      }
+      if(step===8){
+        bars.forEach(b=>{barEls[b.id].classList.add("dim");labelEls[b.id].style.opacity=.25;});
+        const [x2,y2]=XY(2);
+        el("circle",{cx:x2,cy:y2,r:46,fill:"none",stroke:ink,"stroke-width":2,"stroke-dasharray":"9 6"},g);
+        label(g,x2-60,y2-52,"III","var(--ink)","start");
+        cutForce(g,x2+46/S2,y2-46/S2,"23",[1/S2,-1/S2]);
+        cutForce(g,x2+46,y2,"24",[1,0]);
+        reac(g,2,850,850,"R₂",x2+10,y2+70,"start");
+        setBoard(`<h2>截面 III：围住节点 2 求 R₂</h2>
+          <p>闭合截面切断杆 2–3 和杆 2–4。杆 2–3 受压，力指向节点 2（左下方）；杆 2–4 为零力杆。</p>
+          <div class="calc"><div>ΣF_x = 0：　N₂₃/√2 + N₂₄ + R₂ₓ = 0　⇒　−850 + 0 + R₂ₓ = 0　⇒　R₂ₓ = +850 N</div><div>ΣF_y = 0：　N₂₃/√2 + R₂ᵧ = 0　⇒　R₂ᵧ = +850 N</div></div>
+          <p class="note">注意符号：杆 2–3 从节点 2 指向节点 3 的单位向量是 (1/√2, 1/√2)，杆对节点 2 的力 = N₂₃ × (1/√2, 1/√2) = (−850, −850)。</p>`);
+        return;
+      }
+      // step 9: global check
+      gLoad.classList.remove("hidden");
+      reac(g,1,-1700,0,"R₁ = (−1700, 0)",XY(1)[0]+14,XY(1)[1]+40,"start");
+      reac(g,2,850,850,"R₂ = (850, 850)",XY(2)[0]+12,XY(2)[1]+64,"start");
+      reac(g,4,850,0,"R₄ = (850, 0)",XY(4)[0]-14,XY(4)[1]+36,"end");
+      setBoard(`<h2>整体平衡校核</h2>
+        <p>把整个桁架当作一个隔离体，三个支反力和载荷 F 必须满足三个平衡方程：</p>
+        <div class="calc"><div>ΣF_x：　−1700 + 850 + 850 = 0 ✓</div><div>ΣF_y：　850 − 850 = 0 ✓</div><div>ΣM（对节点 2）：　R₁ₓ·L 产生 +1700 N·m，F·2L 产生 −1700 N·m，合计 0 ✓</div></div>
+        <table class="t"><tr><th>支座</th><th>R_x</th><th>R_y</th></tr><tr><td>节点 1</td><td>−1700 N</td><td>0</td></tr><tr><td>节点 2</td><td>+850 N</td><td>+850 N</td></tr><tr><td>节点 4</td><td>+850 N</td><td>—（滑动方向）</td></tr></table>
+        <p class="note">整体只有 3 个方程，却有 5 个反力分量，所以单靠整体平衡求不出来，必须先有杆力，再用截面逐个求。也可以用矩阵 R = K_sf·u_f 直接算，结果相同。</p>`);
     }},
     {title:"变形动画", steps:1, deform:true, draw(step,fwd){
       gDofs.classList.add("hidden"); showEvec(null);
