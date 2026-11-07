@@ -1,0 +1,129 @@
+<section class="set" id="l7" data-short="Lecture 7 例题">
+<h2 class="set-title"><span class="set-num">Lecture 7</span>结构动力学 · 课堂例题<span class="set-src">Slides 6–23</span></h2>
+<p class="lead">三个例题：机翼两自由度模型（特征值、振型、质量归一化）、两质量串联振子（静变形与模态），以及一个四杆铝桁架的完整 FEM 分析——静力位移、支反力，以及一致质量矩阵和集中质量矩阵下的固有频率。</p>
+
+<article class="task" id="l7-1">
+<h3><span class="tno">例 1</span>弹性机翼：固有频率、振型与质量归一化</h3>
+<div class="q">
+<figure class="fig small"><img src="exercises/L7-wing.png" alt="机翼简化为带两个质量 m1、m2 的梁，自由度 U1、U2"></figure>
+<p><b>Task:</b> Calculate the eigenfrequencies and eigenmodes of the elastic wing, and normalize the modes with respect to the mass matrix.</p>
+\[M=\begin{bmatrix}8&0\\0&5\end{bmatrix},\qquad K=\begin{bmatrix}100&-30\\-30&65\end{bmatrix}\]
+</div>
+<details class="sol"><summary>解答</summary>
+<p><b>固有频率</b>：\(([K]-\lambda[M])\phi\,e^{i\omega t}=0\)：</p>
+\[\det\begin{bmatrix}100-8\lambda&-30\\-30&65-5\lambda\end{bmatrix}=(100-8\lambda)(65-5\lambda)-30^2=0\ \Rightarrow\ \lambda^2-25.5\lambda+140=0\]
+\[\lambda_1=17.5,\quad \lambda_2=8.0,\qquad \omega_i=\sqrt{\lambda_i},\qquad f_i=\frac{\omega_i}{2\pi}\]
+<p><b>振型</b>：</p>
+\[\lambda=17.5:\ \begin{bmatrix}-40&-30\\-30&-22.5\end{bmatrix}\begin{Bmatrix}\phi_{1,1}\\\phi_{1,2}\end{Bmatrix}=0,\quad \phi_{1,1}=1\Rightarrow-40-30\phi_{1,2}=0\Rightarrow\phi_1=\begin{Bmatrix}1\\-\tfrac43\end{Bmatrix}\]
+\[\lambda=8.0:\ \begin{bmatrix}36&-30\\-30&25\end{bmatrix}\begin{Bmatrix}\phi_{2,1}\\\phi_{2,2}\end{Bmatrix}=0,\quad \phi_{2,1}=1\Rightarrow36-30\phi_{2,2}=0\Rightarrow\phi_2=\begin{Bmatrix}1\\\tfrac65\end{Bmatrix}\]
+<p><b>质量归一化</b>：求系数 \(a\) 使 \((a\phi)^T[M](a\phi)=1\)：</p>
+\[8\phi_{1}^2a^2+5\phi_{2}^2a^2=1\ \Rightarrow\ a^2=\frac{1}{8\phi_{\cdot,1}^2+5\phi_{\cdot,2}^2}\]
+\[\phi_1:\ a^2=\frac{1}{8+5\cdot\frac{16}{9}}=\frac{9}{152},\quad \phi_{1,n}=\frac{3}{2\sqrt{38}}\begin{Bmatrix}1\\-\tfrac43\end{Bmatrix};\qquad \phi_2:\ a^2=\frac{1}{8+5\cdot\frac{36}{25}}=\frac{5}{76},\quad \phi_{2,n}=\frac{\sqrt{95}}{38}\begin{Bmatrix}1\\\tfrac65\end{Bmatrix}\]
+<p>检验 \([\theta]^T[m][\theta]=I\)，\([\theta]=[\phi_{1,n}\ \ \phi_{2,n}]\)：</p>
+\[[\theta]^T[m][\theta]=\begin{bmatrix}\frac{3\cdot24}{4\cdot38}+\frac{12\cdot60}{36\cdot38}&\cdots\\\cdots&\frac{8\cdot95}{38^2}+\frac{30\cdot6\cdot95}{190^2}\end{bmatrix}=\begin{bmatrix}1&0\\0&1\end{bmatrix}\]
+<p class="erratum">原解答笔误：\(\lambda_2\) 的振型方程写成 \(-36-30\phi_{2,2}=0\)，应为 \(36-30\phi_{2,2}=0\)（结果 \(6/5\) 是对的）。另外 \(\lambda_1=17.5\gt\lambda_2=8.0\)，编号与"从小到大"的习惯相反，按惯例第 1 阶应为 \(\lambda=8\)。</p>
+<div class="note"><span class="lbl">补充说明</span>
+<ul>
+<li>数值（补充）：\(\omega=\sqrt8=2.83\) 和 \(\sqrt{17.5}=4.18\,\mathrm{rad/s}\)，即 \(f=0.45\) 和 \(0.67\,\mathrm{Hz}\)（数据为无量纲示例）。</li>
+<li>低阶振型 \(\{1,\ 6/5\}\)：两点同向运动，翼尖位移更大——一阶弯曲；高阶振型 \(\{1,\ -4/3\}\)：两点反向——二阶弯曲（有一个节点）。</li>
+<li>对角元验算：\(a^2\cdot(8+5\cdot16/9)=\frac{9}{152}\cdot\frac{152}{9}=1\) ✓；非对角元为零来自振型对 \(M\) 的正交性：\(8\cdot1\cdot1+5\cdot(-\tfrac43)(\tfrac65)=8-8=0\) ✓。</li>
+<li>归一化后 \([\theta]^T[K][\theta]=\mathrm{diag}(\lambda_i)\)，运动方程解耦为 \(\ddot q_i+\omega_i^2q_i=Q_i\)（Slide 10–12）。</li>
+</ul></div>
+</details>
+</article>
+
+<article class="task" id="l7-2">
+<h3><span class="tno">例 2</span>两质量串联振子</h3>
+<div class="q">
+<figure class="fig small"><img src="exercises/L7-2mass.png" alt="墙–k–m1–k–m2"></figure>
+<p><b>Task 1:</b> Calculate the static deflection under the load \(F=\{1.5\ \ 2\}^T\,\mathrm N\). <b>Task 2:</b> Calculate the eigenfrequencies and eigenmodes of the elastic system. (\(k=0.1\,\mathrm{N/mm}\), \(m=m_1=m_2=0.2\,\mathrm{kg}\).)</p>
+</div>
+<details class="sol"><summary>解答</summary>
+<p>运动方程（<a href="#l2-5">Lecture 2 例 5</a>，\(k_1=k_2=k\)）：</p>
+\[\begin{bmatrix}m_1&0\\0&m_2\end{bmatrix}\begin{Bmatrix}\ddot x_1\\\ddot x_2\end{Bmatrix}+\begin{bmatrix}2k&-k\\-k&k\end{bmatrix}\begin{Bmatrix}x_1\\x_2\end{Bmatrix}=\begin{Bmatrix}f_1\\f_2\end{Bmatrix},\qquad k=100\,\mathrm{N/m}\]
+<p><b>Task 1</b>：</p>
+\[\begin{bmatrix}200&-100\\-100&100\end{bmatrix}\begin{Bmatrix}x_1\\x_2\end{Bmatrix}=\begin{Bmatrix}1.5\\2.0\end{Bmatrix}\ \Rightarrow\ \begin{Bmatrix}x_1\\x_2\end{Bmatrix}=\begin{Bmatrix}35\\55\end{Bmatrix}\mathrm{mm}\]
+<p><b>Task 2a</b>：</p>
+\[\det\begin{bmatrix}200-0.2\lambda&-100\\-100&100-0.2\lambda\end{bmatrix}=(200-0.2\lambda)(100-0.2\lambda)-100^2=0\]
+\[\lambda_1=191,\ f_1=\frac{\sqrt{191}}{2\pi}=2.2\,\mathrm{Hz};\qquad \lambda_2=1309,\ f_2=5.8\,\mathrm{Hz}\]
+<p><b>Task 2b</b>：</p>
+\[\lambda_1=191:\ \begin{bmatrix}161.8&-100\\-100&61.8\end{bmatrix}\phi=0\ \Rightarrow\ 161.8-100\phi_{1,2}=0,\quad \phi_1=\begin{Bmatrix}1.0\\1.618\end{Bmatrix}\]
+\[\lambda_2=1309:\ \begin{bmatrix}-61.8&-100\\-100&-161.8\end{bmatrix}\phi=0\ \Rightarrow\ -61.8-100\phi_{2,2}=0,\quad \phi_2=\begin{Bmatrix}1.0\\-0.618\end{Bmatrix}\]
+<p class="erratum">原解答笔误：第二个振型也标成了 \(\phi_1\)，应为 \(\phi_2\)。</p>
+<div class="note"><span class="lbl">补充说明</span>
+<ul>
+<li>静力验算：弹簧 2 受力 \(f_2=2\,\mathrm N\)，伸长 \(20\,\mathrm{mm}\)；弹簧 1 受力 \(f_1+f_2=3.5\,\mathrm N\)，伸长 35 mm → \(x_1=35\)，\(x_2=35+20=55\) ✓。</li>
+<li>单位：\(k=0.1\,\mathrm{N/mm}=100\,\mathrm{N/m}\)，配合 kg 得 \(\lambda\) 单位 s⁻²，直接开方即为 rad/s。</li>
+<li>振型比 1.618 和 −0.618 是黄金分割数 \(\frac{1\pm\sqrt5}{2}\)（两个相同质量、相同弹簧串联时的经典结果）。低阶两质量同向运动，高阶反向运动。</li>
+</ul></div>
+</details>
+</article>
+
+<article class="task" id="l7-3">
+<h3><span class="tno">例 3</span>四杆铝桁架：静力位移场</h3>
+<div class="q">
+<figure class="fig"><img src="exercises/L7-truss.png" alt="四杆桁架：上弦 L、下弦 2L、两根斜杆，右下节点受向下力 F"></figure>
+<p>Given is a framework made of aluminium (\(E=70\,\mathrm{GPa},\ \nu=0.3\)) with a constant cross-section \(A=50\,\mathrm{mm^2}\) and density \(\rho=2.7\,\mathrm{t/m^3}\); \(L=1\,\mathrm m\).</p>
+<p><b>Task 1:</b> Calculate the displacement field of the structure under the load \(F=850\,\mathrm N\).</p>
+</div>
+<details class="sol"><summary>解答</summary>
+<figure class="fig"><img src="exercises/L7-truss-dof.png" alt="自由度编号 1–7 与单元编号 1–4"></figure>
+<p>单元长度 \(L_1=L,\ L_2=2L,\ L_3=L_4=\sqrt2L\)；单元刚度（单位 N/mm）：</p>
+\[[k]_1=\frac{EA}{L_1}=3.5\cdot10^3,\quad [k]_2=1.75\cdot10^3,\quad [k]_3=[k]_4=\frac{EA}{\sqrt2L}=2.475\cdot10^3\ \ (\times\begin{bmatrix}1&-1\\-1&1\end{bmatrix})\]
+<p>斜杆转到全局坐标，\(K_e=[\tau]^T[k_t][\tau]\)：</p>
+\[[k]_{G3}=2.475\cdot10^3\begin{bmatrix}0.5&0.5&-0.5&-0.5\\0.5&0.5&-0.5&-0.5\\-0.5&-0.5&0.5&0.5\\-0.5&-0.5&0.5&0.5\end{bmatrix}_{(4,5,2,3)},\quad [k]_{G4}=2.475\cdot10^3\begin{bmatrix}0.5&-0.5&-0.5&0.5\\-0.5&0.5&0.5&-0.5\\-0.5&0.5&0.5&-0.5\\0.5&-0.5&-0.5&0.5\end{bmatrix}_{(2,3,6,7)}\]
+<p>（单元 3：\(\alpha=45^\circ\)；单元 4：\(\alpha=-45^\circ\)。）组装 7×7 总刚度矩阵，边界条件 \(D_1=D_4=D_5=D_6=0\)，剩余自由度 \(D_2,D_3,D_7\)：</p>
+\[10^3\begin{bmatrix}5.975&0&1.2375\\0&2.475&-1.2375\\1.2375&-1.2375&1.2375\end{bmatrix}\begin{Bmatrix}D_2\\D_3\\D_7\end{Bmatrix}=\begin{Bmatrix}0\\0\\-F\end{Bmatrix}\]
+\[\begin{Bmatrix}D_2\\D_3\\D_7\end{Bmatrix}=10^{-3}\begin{bmatrix}0.286&-0.286&-0.571\\-0.286&1.094&1.380\\-0.571&1.38&2.759\end{bmatrix}\begin{Bmatrix}0\\0\\-850\end{Bmatrix}=\begin{Bmatrix}0.485\\-1.173\\-2.345\end{Bmatrix}\mathrm{mm}\]
+<figure class="fig"><img src="exercises/L7-truss-def.png" alt="变形后的桁架（黄色，放大显示）"></figure>
+<div class="note"><span class="lbl">补充说明</span>
+<ul>
+<li>对角元的来源：\(K_{22}=3500+1237.5+1237.5=5975\)（上节点水平：杆 1 + 两根斜杆的 \(c^2\) 分量）；\(K_{23}=+1237.5-1237.5=0\)（两根斜杆的 \(sc\) 符号相反，抵消）；\(K_{77}=1237.5\)（右下节点竖向只有杆 4 的 \(s^2\) 分量，杆 2 水平没有贡献）。</li>
+<li>单位体系：长度 mm、力 N、刚度 N/mm，位移直接得到 mm。</li>
+<li>右下节点是竖向可滑动的支座（只约束水平 \(D_6\)），所以竖向载荷完全依靠两根斜杆和上弦的三角形传递，竖向位移 2.3 mm 最大。</li>
+</ul></div>
+</details>
+</article>
+
+<article class="task" id="l7-4">
+<h3><span class="tno">例 4</span>四杆铝桁架：支反力</h3>
+<div class="q"><p><b>Task 2:</b> Calculate all reaction forces.</p></div>
+<details class="sol"><summary>解答</summary>
+<p>用总方程中被约束自由度对应的行乘以已求出的位移：</p>
+\[f_1=10^3(3.5D_1-3.5D_2)=-3.5\cdot10^3\cdot0.485=-1697.5\,\mathrm N\]
+\[f_4=10^3(-1.2375D_2-1.2375D_3)=10^3(-1.2375\cdot0.485-1.2375\cdot(-1.173))=851.4\,\mathrm N\]
+\[f_5=10^3(-1.2375D_2-1.2375D_3)=851.4\,\mathrm N\]
+\[f_6=10^3(-1.2375D_2+1.2375D_3-1.2375D_7)=10^3(-0.600-1.452+2.902)=850.2\,\mathrm N\]
+<p>快速检查 \(\sum F_x=0,\ \sum F_y=0\)：用舍入后的位移会有几 N 的误差；用更精确的位移 \(\{0.48571,\ -1.17258,\ -2.34517\}\) 得 \(\{f_1,f_4,f_5,f_6\}=\{-1700,\ 850,\ 850,\ 850\}\,\mathrm N\)。</p>
+<div class="note"><span class="lbl">补充说明</span>
+<ul>
+<li>平衡验算：\(\sum F_x=-1700+850+850=0\) ✓；\(\sum F_y=850-850=0\) ✓；对左下节点取矩：上支座水平力 \(-1700\,\mathrm N\) 力臂 1 m，\(F\) 力臂 2 m：\(1700\cdot1-850\cdot2=0\) ✓。</li>
+<li>这些反力也可以直接用静力学（节点法）求出，因为这个桁架是静定的——用来验证 FEM 结果非常方便。舍入误差的提醒（Slide 20 右侧）：中间结果保留足够有效数字。</li>
+</ul></div>
+</details>
+</article>
+
+<article class="task" id="l7-5">
+<h3><span class="tno">例 5</span>四杆铝桁架：一致质量 vs 集中质量的固有频率</h3>
+<div class="q"><p><b>Task 3:</b> Calculate the eigenfrequencies of the system using a consistent mass matrix. <b>Task 4:</b> Calculate the eigenfrequencies of the system using a lumped mass matrix.</p></div>
+<details class="sol"><summary>解答</summary>
+<p><b>单元质量矩阵</b>（\(\rho=2.7\times10^{-9}\,\mathrm{t/mm^3}\)，质量单位 t，配合 N/mm 得 \(\lambda\) 单位 s⁻²）：</p>
+\[[m]_1=\frac{\rho AL_1}{6}\begin{bmatrix}2&1\\1&2\end{bmatrix}=2.25\cdot10^{-5}\begin{bmatrix}2&1\\1&2\end{bmatrix},\quad [m]_2=4.5\cdot10^{-5}[\cdots],\quad [m]_3=[m]_4=\sqrt2\cdot2.25\cdot10^{-5}[\cdots]\]
+<p><b>原解答</b>：组装后（自由度 \(D_2,D_3,D_7\)）</p>
+\[[M]=\sqrt2\cdot2.25\cdot10^{-5}\begin{bmatrix}\sqrt2+\frac16+\frac16&\frac16+\frac16&\frac1{12}\\\frac16+\frac16&\frac16+\frac16&\frac1{12}\\\frac1{12}&\frac1{12}&\frac16\end{bmatrix},\qquad f_1=303.4,\ f_2=1551.3,\ f_3=4283.3\,\mathrm{Hz}\]
+<p>集中质量（Task 4）：</p>
+\[[M]=10^{-5}\begin{bmatrix}3.375+2\cdot3.375\sqrt2&0&0\\0&3.375+2\cdot3.375\sqrt2&0\\0&0&6.75+3.375\sqrt2\end{bmatrix},\qquad f_1=219.5,\ f_2=770.4,\ f_3=1106.9\,\mathrm{Hz}\]
+<p>特征多项式为三次 → 3 个特征值、3 个固有频率。</p>
+<p class="erratum">这两页的数值有问题，复习时以方法为准：
+① 一致质量矩阵：斜杆旋转后的质量矩阵应为 \(\rho AL_3\left[\tfrac13c^2,\ \tfrac13sc,\ \tfrac16c^2,\ldots\right]=\sqrt2\cdot2.25\cdot10^{-5}\left[1,\ 1,\ \tfrac12,\ldots\right]\)，幻灯片中的 \(\tfrac16,\ \tfrac1{12}\) 少乘了 6；另外单元 4 的 \(sc\) 为负，对应耦合项应带负号。用幻灯片自己的矩阵也只能复现 \(f_2,f_3\)，\(f_1\) 得 944 Hz 而非 303.4 Hz。
+② 集中质量：每个节点应分到 \(\rho AL/2\)（单元 1 为 \(6.75\cdot10^{-5}\)），幻灯片取的是一半（3.375）。
+按 Lecture 7 Slide 3 的公式重新计算（补充）：一致质量（只计轴向，与幻灯片做法相同）\(f\approx337,\ 1112,\ 1874\,\mathrm{Hz}\)；集中质量 \(\rho AL/2\)：\(f\approx171,\ 559,\ 789\,\mathrm{Hz}\)。</p>
+<div class="note"><span class="lbl">补充说明</span>
+<ul>
+<li>一致质量矩阵 \([m]=\rho A\int\Phi\Phi^Tdx\) 与刚度矩阵用同一套形函数，给出的频率是精确值的上界（偏高）；集中质量矩阵是对角阵，计算简单，频率通常偏低。两者随网格加密都收敛到精确解。</li>
+<li>只有 3 个自由自由度，所以只能求出 3 阶频率；真实杆件还有无数阶局部振动，需要把每根杆分成多个单元才能捕捉。</li>
+<li>做法与 <a href="#t6-10">Tutorial 6 Task 10</a> 完全相同，那里的数值是自洽的，可以用来练习。</li>
+</ul></div>
+</details>
+</article>
+</section>

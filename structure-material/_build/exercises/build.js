@@ -10,13 +10,13 @@ content=content.replace(/\\\(([\s\S]+?)\\\)/g,(m,t)=>render(t.trim(),false));
 content=content.replace(/@@PRE(\d+)@@/g,(m,i)=>pres[+i]);
 if(errs.length){console.error(errs.join('\n'));process.exit(1)}
 // nav + cards
-const groups={t:'课堂习题 Tutorials',h:'课后作业 Home Exercises',e:'模拟考试 Trial Exam'};
+const groups={l:'课堂例题 Lecture Examples',t:'课堂习题 Tutorials',h:'课后作业 Home Exercises',e:'模拟考试 Trial Exam'};
 let nav='',cards='',lastg='';
 const secRe=/<section class="set" id="([^"]+)" data-short="([^"]+)">([\s\S]*?)<\/section>/g;let m;
 const strip=s=>s.replace(/<span class="katex">[\s\S]*?<\/annotation><\/semantics><\/math><\/span>/g,'').replace(/<[^>]+>/g,'').replace(/\s+/g,' ').trim();
 const ann=s=>s.replace(/<span class="katex"><span class="katex-html"[\s\S]*?<\/span><\/span><\/span>/g,'');
 while((m=secRe.exec(content))){const [_,id,short,body]=m;
-  const g=id[0]==='t'?'t':id[0]==='h'?'h':'e'; if(g!==lastg){nav+=`<li class="grp">${groups[g]}</li>`;lastg=g}
+  const g=id[0]==='l'?'l':id[0]==='t'?'t':id[0]==='h'?'h':'e'; if(g!==lastg){nav+=`<li class="grp">${groups[g]}</li>`;lastg=g}
   const tm=/<h2 class="set-title"><span class="set-num">[^<]*<\/span>([\s\S]*?)<span class="set-src">/.exec(body);
   const title=tm[1].trim();
   let sub='';const tr=/<article class="task" id="([^"]+)">\s*<h3><span class="tno">([\s\S]*?)<\/span>([\s\S]*?)<\/h3>/g;let a,cnt=0;

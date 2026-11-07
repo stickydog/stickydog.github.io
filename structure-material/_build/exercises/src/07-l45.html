@@ -1,0 +1,85 @@
+<section class="set" id="l4" data-short="Lecture 4 例题">
+<h2 class="set-title"><span class="set-num">Lecture 4</span>材料 · 课堂例题<span class="set-src">Slides 22–23</span></h2>
+<p class="lead">疲劳寿命估算：用 S–N 曲线读出各应力水平的寿命，Miner 准则累加损伤，安全系数作用在允许损伤上。（复合材料部分的计算例题见 <a href="#t4">Tutorial 4</a> 和 <a href="#h3">Home Exercise 3</a>。）</p>
+
+<article class="task" id="l4-1">
+<h3><span class="tno">例 1</span>Miner 准则：允许的运行循环数</h3>
+<div class="q">
+<p>A structural component is loaded per operating cycle by the following load cycles:</p>
+\[\sigma_1=100\,\mathrm{MPa},\ n_1=2000;\qquad \sigma_2=200\,\mathrm{MPa},\ n_2=100;\qquad \sigma_3=400\,\mathrm{MPa},\ n_3=150;\qquad \sigma_m=0\,\mathrm{MPa}\]
+<p>Material: Aluminium Alloy AlCu4Mg1.5 (3.1354).</p>
+<p><b>Task:</b> How many operating cycles are possible due to the safety factor of 2?<br><b>Step 1:</b> Calculate the damage due to one operating cycle. <b>Step 2:</b> Determine the overall operating cycles \(N_z\).</p>
+</div>
+<details class="sol"><summary>解答</summary>
+<figure class="fig"><img src="exercises/L4-miner.png" alt="AlCu4Mg1.5 的 S–N 曲线，σm = 0 曲线上读出 200 MPa → 2.9e5，400 MPa → 3.4e3"></figure>
+<p>在 \(\sigma_m=0\) 曲线上读寿命：\(\sigma_1=100\,\mathrm{MPa}\) 低于疲劳极限 → \(N_1=\infty\)；\(\sigma_2=200\,\mathrm{MPa}\to N_2=2.9\cdot10^5\)；\(\sigma_3=400\,\mathrm{MPa}\to N_3=3.4\cdot10^3\)。</p>
+<p>安全系数 2 → 允许总损伤 \(D=0.5\)：</p>
+\[N_z\sum_i\frac{n_i}{N_i}=0.5\]
+<p><b>Step 1</b> 一个运行循环的损伤：</p>
+\[\frac{2000}{\infty}+\frac{100}{2.9\cdot10^5}+\frac{150}{3.4\cdot10^3}=0+0.000345+0.0441=0.0447\]
+<p><b>Step 2</b>：</p>
+\[N_z=\frac{0.5}{0.0447}=11.24\ \Rightarrow\ N_{z,operation}=11\]
+<div class="note"><span class="lbl">补充说明</span>
+<ul>
+<li>结果向下取整（11 而不是 12），否则就超过了允许损伤。</li>
+<li>损伤几乎全部来自 150 次 400 MPa 的高载循环（99%）；2000 次 100 MPa 的低载循环因为低于疲劳极限完全不计入。这说明载荷谱中的少量高载对寿命起决定作用——但 Miner 准则"低于疲劳极限不造成损伤"的假设在变幅加载下偏不保守（高载会降低后续的疲劳极限），所以工程上常用修正 Miner 准则（Slide 24）。</li>
+<li>对比 Home Exercise 2：那里同样把安全系数作用在损伤（寿命）上。</li>
+</ul></div>
+</details>
+</article>
+</section>
+
+<section class="set" id="l5" data-short="Lecture 5 例题">
+<h2 class="set-title"><span class="set-num">Lecture 5</span>弹性稳定性 · 课堂例题<span class="set-src">Slides 22–24</span></h2>
+<p class="lead">用 HSB 屈曲图表评估一块薄钢板在受压和受剪两种工况下是否屈曲，并把手算、FEM 和试验结果对比。方法与 <a href="#h4">Home Exercise 4</a> 相同：定义几何参数 → 查屈曲系数 → 计算临界应力 → 与工作应力比较。</p>
+
+<article class="task" id="l5-1">
+<h3><span class="tno">例 1</span>受压薄钢板的屈曲</h3>
+<div class="q">
+<figure class="fig"><img src="exercises/L5-comp.png" alt="H = 400、B = 600 mm 的钢板，右边受线载荷 f = 40 N/m"></figure>
+<p>Panel details: \(H=400\,\mathrm{mm}\), \(B=600\,\mathrm{mm}\), \(f=40\,\mathrm{N/m}\) (line load on the edge of length \(H\)); panel thickness \(t=0.15\,\mathrm{mm}\); material steel (\(E=210\,000\,\mathrm{MPa}\), \(G=70\,000\,\mathrm{MPa}\), \(\nu=0.3\)). Check the panel for buckling using the HSB buckling tables.</p>
+</div>
+<details class="sol"><summary>解答</summary>
+<p>HSB 形式的临界应力（\(b\) 为加载边长度 = \(H\)）：</p>
+\[\sigma_{cr}=k^*E\left(\frac tb\right)^2,\qquad k^*=\frac{\pi^2}{12(1-\nu^2)}k\]
+\[\alpha=\frac ab=\frac BH=1.5\ \xrightarrow{\text{图表}}\ k^*\approx7.8\]
+<figure class="fig"><img src="exercises/L5-comp-chart.png" alt="HSB 受压屈曲图表"></figure>
+\[\sigma_{cr}=7.8\cdot210\,000\cdot\left(\frac{0.15}{400}\right)^2=0.23\,\mathrm{MPa}\]
+<p>工作应力：\(\sigma=\dfrac FA=\dfrac{f\cdot H}{H\cdot t}=\dfrac ft\)。原解答给出 \(\sigma=0.6\,\mathrm{MPa}\)，结论 \(\sigma\gt\sigma_{cr}\) → 板屈曲。</p>
+<p class="erratum">按题给数据 \(\sigma=f/t=0.04\,\mathrm{N/mm}\,/\,0.15\,\mathrm{mm}=0.27\,\mathrm{MPa}\)，不是 0.6 MPa；结论不变（\(0.27\gt0.23\)，安全系数约 0.86，板屈曲）。</p>
+<div class="note"><span class="lbl">补充说明</span>
+<ul>
+<li>由 \(N_{cr}=k\dfrac{\pi^2K}{b^2}\)、\(K=\dfrac{Et^3}{12(1-\nu^2)}\) 除以 \(t\) 即得 \(\sigma_{cr}=k\dfrac{\pi^2E}{12(1-\nu^2)}(t/b)^2\)；HSB 图表直接给出已乘入常数的 \(k^*\)。</li>
+<li>0.15 mm 的钢板临界应力只有 0.23 MPa（\(t/b\) 平方的威力：\((0.15/400)^2=1.4\times10^{-7}\)）。这类超薄板几乎一受压就屈曲，所以实际结构中需要加筋，或设计成允许屈曲后承载。</li>
+<li>\(k^*\) 要读对曲线：不同曲线对应不同的边界条件（图上方编号 8–15 的小图），先确定支承方式再查表。</li>
+</ul></div>
+</details>
+</article>
+
+<article class="task" id="l5-2">
+<h3><span class="tno">例 2</span>受剪薄钢板的屈曲</h3>
+<div class="q">
+<figure class="fig small"><img src="exercises/L5-shear.png" alt="同一块板上边受水平力 F = 10 N"></figure>
+<p>The same panel (\(H=400\,\mathrm{mm}\), \(B=600\,\mathrm{mm}\), \(t=0.15\,\mathrm{mm}\), steel) is loaded in shear by \(F=10\,\mathrm N\) on the top edge. Check the panel for shear buckling.</p>
+</div>
+<details class="sol"><summary>解答</summary>
+\[q=\frac FB=\frac{10\,\mathrm N}{0.6\,\mathrm m}=16.67\,\mathrm{N/m},\qquad \tau=\frac qt=\frac{16.67\,\mathrm{N/m}}{0.15\,\mathrm{mm}}=0.111\,\mathrm{MPa}\]
+\[\frac ab=\frac HB=0.66\ \xrightarrow{\text{图表}}\ k^*=10.5,\qquad \tau_{cr}=10.5\cdot210\,000\cdot\left(\frac{0.15}{400}\right)^2=0.31\,\mathrm{MPa}\]
+<figure class="fig"><img src="exercises/L5-shear-chart.png" alt="HSB 受剪屈曲图表"></figure>
+<p>\(\tau\lt\tau_{cr}\) → 不屈曲，安全系数 \(\lambda=\tau_{cr}/\tau\approx2.8\)，临界载荷 \(F_{cr}=\lambda F\approx28\,\mathrm N\)。</p>
+<p><b>与 FEM 和试验对比</b>（Slide 24）：</p>
+<figure class="fig"><img src="exercises/L5-compare.png" alt="HSB 计算、FEM 和试验的临界载荷对比"></figure>
+<table class="tbl"><thead><tr><th></th><th>HSB 计算</th><th>FEM</th><th>试验</th></tr></thead>
+<tbody><tr><td>\(\tau\)</td><td>0.111 MPa</td><td>0.12 MPa</td><td></td></tr>
+<tr><td>\(\lambda\)</td><td>2.89</td><td>2.86</td><td></td></tr>
+<tr><td>\(F_{cr}\)</td><td>28.9 N</td><td>28.6 N</td><td>26 N</td></tr></tbody></table>
+<p class="erratum">小误差：\(0.31/0.111=2.79\)，对应 \(F_{cr}=27.9\,\mathrm N\)；表中 2.89 / 28.9 N 应为笔误。</p>
+<div class="note"><span class="lbl">补充说明</span>
+<ul>
+<li>剪切屈曲图表的横坐标是短边/长边 \(b/a\)，公式中的 \(b\) 始终取<b>短边</b>（这里是 \(H=400\)）。</li>
+<li>试验值（26 N）比两种理论值低约 10%：真实板有初始缺陷、边界不是理想支承——这正是 Slide 15"缺陷影响"所讲的内容，也是设计中需要安全系数和试验验证的原因。</li>
+<li>剪切屈曲表现为斜向的褶皱（FEM 云图中倾斜的波形），因为剪切等价于一个方向受拉、另一个方向受压（主应力 ±τ）。</li>
+</ul></div>
+</details>
+</article>
+</section>
