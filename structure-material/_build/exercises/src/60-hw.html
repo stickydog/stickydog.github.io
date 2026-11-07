@@ -1,6 +1,6 @@
 <section class="set" id="h1" data-short="Home Exercise 1">
 <h2 class="set-title"><span class="set-num">Home Exercise 1</span>Lagrange 方程 Elementary Concepts of Elasticity<span class="set-src">5 页</span></h2>
-<p class="lead">用能量法（Lagrange 方程）建立运动方程：\(\mathcal L=T-\Pi\)，\(\dfrac{d}{dt}\dfrac{\partial\mathcal L}{\partial\dot q}-\dfrac{\partial\mathcal L}{\partial q}=Q\)。两道题的题号沿用课件（3、4/5）。</p>
+<p class="lead">用能量法 (Lagrange 方程) 建立运动方程：\(\mathcal L=T-\Pi\)，\(\dfrac{d}{dt}\dfrac{\partial\mathcal L}{\partial\dot q}-\dfrac{\partial\mathcal L}{\partial q}=Q\)。两道题的题号沿用课件 (3、4/5)。</p>
 
 <article class="task" id="h1-1">
 <h3><span class="tno">3</span>弹性摆 Elastic Pendulum</h3>
@@ -10,9 +10,9 @@
 </div>
 <details class="sol"><summary>解答</summary>
 <p>广义坐标：弹簧伸长 \(x\)、摆角 \(\theta\)；摆长 \(l(t)=l_0+x\)。</p>
-<p><b>动能</b>（径向速度 \(\dot x\) + 切向速度 \(l\dot\theta\)）：</p>
+<p><b>动能</b> (径向速度 \(\dot x\) + 切向速度 \(l\dot\theta\))：</p>
 \[T=\tfrac12m\vec v^2=\tfrac12m\left(\dot x^2+(l_0+x)^2\dot\theta^2\right)\]
-<p><b>势能</b>（重力势能以悬挂点为零点，向下为负 + 弹簧势能）：</p>
+<p><b>势能</b> (重力势能以悬挂点为零点，向下为负 + 弹簧势能)：</p>
 \[\Pi=-mg(l_0+x)\cos\theta+\tfrac12kx^2\]
 <p><b>Lagrange 函数</b>：</p>
 \[\mathcal L=\tfrac12m\left(\dot x^2+(l_0+x)^2\dot\theta^2\right)+mg(l_0+x)\cos\theta-\tfrac12kx^2\]
@@ -21,10 +21,10 @@
 \[\theta:\quad 2m(l_0+x)\dot x\dot\theta+m(l_0+x)^2\ddot\theta+mg(l_0+x)\sin\theta=0\]
 <p>写成状态形式：</p>
 \[\begin{Bmatrix}\ddot x\\\ddot\theta\end{Bmatrix}=\begin{Bmatrix}(l_0+x)\dot\theta^2-\dfrac km x+g\cos\theta\\[2mm]-\dfrac{2}{l_0+x}\dot x\dot\theta-\dfrac{g}{l_0+x}\sin\theta\end{Bmatrix}\]
-<p class="erratum">原解答笔误：\(\theta\) 方程第二项写成了 \(m(l_0+x)^2\ddot\theta^2\)，应为 \(\ddot\theta\)（一次方）。</p>
+<p class="erratum">原解答笔误：\(\theta\) 方程第二项写成了 \(m(l_0+x)^2\ddot\theta^2\)，应为 \(\ddot\theta\) (一次方)。</p>
 <div class="note"><span class="lbl">补充说明</span>
 <ul>
-<li>各项的物理含义：\(m(l_0+x)\dot\theta^2\) 是离心力；\(2m(l_0+x)\dot x\dot\theta\) 是 Coriolis 项（摆长变化时角动量守恒带来的加速/减速）。</li>
+<li>各项的物理含义：\(m(l_0+x)\dot\theta^2\) 是离心力；\(2m(l_0+x)\dot x\dot\theta\) 是 Coriolis 项 (摆长变化时角动量守恒带来的加速/减速)。</li>
 <li>这里 \(x\) 是从弹簧<b>原长</b>量起的伸长，所以静平衡位置不在 \(x=0\)，而在 \(x_0=mg/k\)。若改从静平衡位置量起，重力和预伸长项会抵消。</li>
 <li>这是非线性耦合方程组，一般只能数值积分；在 \(\theta\) 和 \(\dot x\) 都很小时，线性化为两个独立的振子：弹簧振动 \(\omega=\sqrt{k/m}\) 和单摆 \(\omega=\sqrt{g/(l_0+x_0)}\)。</li>
 </ul></div>
@@ -44,25 +44,25 @@
 <p>小转角 \(\sin\theta\approx\theta\to\) 一阶小量，\(\cos\theta\approx1\)，略去高阶项：</p>
 \[\vec V_G\approx\begin{bmatrix}0\\s\dot\theta+\dot h\end{bmatrix},\qquad v_G^2=(s\dot\theta+\dot h)^2\]
 \[T=\tfrac12m(s\dot\theta+\dot h)^2+\tfrac12I_G\dot\theta^2=\tfrac12m\dot h^2+ms\,\dot h\dot\theta+\tfrac12\underbrace{(I_G+ms^2)}_{I_E}\dot\theta^2\]
-<p><b>外力虚功</b>：\(W_e=M\theta+Lh+Le\theta\) → 广义力 \(Q_h=L\)，\(Q_\theta=M+eL\)。</p>
+<p><b>外力 virtual work</b>：\(W_e=M\theta+Lh+Le\theta\) → 广义力 \(Q_h=L\)，\(Q_\theta=M+eL\)。</p>
 <p><b>运动方程</b>：</p>
 \[h:\quad m(\ddot h+s\ddot\theta)+K_hh=L\]
 \[\theta:\quad I_E\ddot\theta+ms\ddot h+K_\theta\theta=M+eL\]
 \[\begin{bmatrix}m&ms\\ms&I_E\end{bmatrix}\begin{Bmatrix}\ddot h\\\ddot\theta\end{Bmatrix}+\begin{bmatrix}K_h&0\\0&K_\theta\end{bmatrix}\begin{Bmatrix}h\\\theta\end{Bmatrix}=\begin{Bmatrix}L\\M+eL\end{Bmatrix}\]
-<p class="erratum">原解答小笔误：小角度近似写成了 "\(\sin\theta\approx0\)"，应为 \(\sin\theta\approx\theta\)（在速度表达式中 \(s\sin\theta\,\dot\theta\) 是二阶小量才被略去）。</p>
+<p class="erratum">原解答小笔误：小角度近似写成了 "\(\sin\theta\approx0\)"，应为 \(\sin\theta\approx\theta\) (在速度表达式中 \(s\sin\theta\,\dot\theta\) 是二阶小量才被略去)。</p>
 <div class="note"><span class="lbl">补充说明</span>
 <ul>
-<li>耦合出现在<b>质量矩阵</b>（\(ms\)，惯性耦合），因为自由度取在剪心而不是重心；如果 \(s=0\)（重心与剪心重合），沉浮和扭转就解耦了。</li>
+<li>耦合出现在 <b>mass matrix</b> (\(ms\)，惯性耦合)，因为自由度取在剪心而不是重心；如果 \(s=0\) (重心与剪心重合)，沉浮和扭转就解耦了。</li>
 <li>\(I_E=I_G+ms^2\) 是平行轴定理 (parallel axis theorem)。</li>
-<li>这就是颤振 (flutter) 分析的经典二元机翼模型（典型截面，typical section）。气动力 \(L\)、\(M\) 若依赖于 \(h,\theta\) 及其导数，就会改变系统的等效刚度和阻尼。重心越靠后（\(s\) 越大，且在剪心之后），越容易颤振——这就是机翼前缘配重的原因。Trial Exam 题 6 的发动机–机翼模型也是同一结构。</li>
+<li>这就是颤振 (flutter) 分析的经典二元机翼模型 (典型截面，typical section)。气动力 \(L\)、\(M\) 若依赖于 \(h,\theta\) 及其导数，就会改变系统的等效刚度和阻尼。重心越靠后 (\(s\) 越大，且在剪心之后)，越容易颤振——这就是机翼前缘配重的原因。Trial Exam 题 6 的发动机–机翼模型也是同一结构。</li>
 </ul></div>
 </details>
 </article>
 </section>
 
 <section class="set" id="h2" data-short="Home Exercise 2">
-<h2 class="set-title"><span class="set-num">Home Exercise 2</span>疲劳 Fatigue<span class="set-src">2 页</span></h2>
-<p class="lead">由 S–N 曲线 (Wöhler curve) 读寿命，用 Palmgren–Miner 线性累积损伤准则 \(D=\sum n_i/N_i\) 判断是否失效（\(D\ge1\) 失效）。</p>
+<h2 class="set-title"><span class="set-num">Home Exercise 2</span>fatigue<span class="set-src">2 页</span></h2>
+<p class="lead">由 S–N 曲线 (Wöhler curve) 读寿命，用 Palmgren–Miner 线性累积损伤准则 \(D=\sum n_i/N_i\) 判断是否失效 (\(D\ge1\) 失效)。</p>
 
 <article class="task" id="h2-1">
 <h3><span class="tno">Task 1</span>两级载荷的累积损伤</h3>
@@ -75,11 +75,11 @@
 <p>从曲线读出：\(\sigma_1=400\,\mathrm{MPa}\to N_1=80\,000\)；\(\sigma_2=200\,\mathrm{MPa}\to N_2=6\cdot10^6\)。</p>
 \[\sum_i\frac{n_i}{N_i}=\frac{n_1}{N_1}+\frac{n_2}{N_2}=\frac{80\,000}{80\,000}+\frac{6\cdot10^6}{6\cdot10^6}=2.0\]
 \[N_z\sum_i\frac{n_i}{N_i}=1\ \Rightarrow\ N_z=\frac12\]
-<p>按 Miner 准则损伤为 200%，因此（两级载荷按相同比例）循环次数必须减少到原来的 0.5 倍。</p>
+<p>按 Miner 准则损伤为 200%，因此 (两级载荷按相同比例) 循环次数必须减少到原来的 0.5 倍。</p>
 <div class="note"><span class="lbl">补充说明</span>
 <ul>
 <li>"by how much"：减少到 1/2，即减少 50%。</li>
-<li>Miner 准则假设损伤线性累加、与加载顺序无关。实际上先高后低 (high–low) 的顺序通常更危险（\(D_{fail}\lt1\)），先低后高可能 \(\gt1\)，所以工程中常要求 \(D\le0.5\) 甚至更低。</li>
+<li>Miner 准则假设损伤线性累加、与加载顺序无关。实际上先高后低 (high–low) 的顺序通常更危险 (\(D_{fail}\lt1\))，先低后高可能 \(\gt1\)，所以工程中常要求 \(D\le0.5\) 甚至更低。</li>
 <li>本题巧妙之处：两级载荷都正好各自达到寿命，单独任何一级都会失效。</li>
 </ul></div>
 </details>
@@ -89,21 +89,21 @@
 <h3><span class="tno">Task 2</span>带安全系数的许用应力幅</h3>
 <div class="q"><p>What is the maximum stress amplitude, so that another part, made of the same material, can withstand \(n=100\,000\) cycles using a factor of safety of 5?</p></div>
 <details class="sol"><summary>解答</summary>
-<p>安全系数 5 作用在寿命（损伤）上：</p>
+<p>安全系数 5 作用在寿命 (损伤) 上：</p>
 \[\frac nN=\frac15=0.2\ \Rightarrow\ N=\frac{n}{0.2}=500\,000\]
 <figure class="fig"><img src="exercises/hw2-sn2.png" alt="在 S–N 曲线上 N = 500000 对应 σa ≈ 300 MPa"></figure>
 <p>从 S–N 曲线读出 \(N=5\times10^5\) 对应 \(\sigma_a=300\,\mathrm{MPa}\)。</p>
-<div class="note"><span class="lbl">补充说明</span><p>注意安全系数加在哪里：这里加在<b>寿命</b>上（\(D=0.2\)）。如果加在<b>应力</b>上，则是先读出 \(n=10^5\) 对应的 \(\sigma\approx390\,\mathrm{MPa}\)，再除以 5 得约 78 MPa，结果完全不同。S–N 曲线很平缓，寿命上的安全系数 5 只对应应力上的一个很小的余量（约 390 → 300 MPa）。题目没明说时应写清楚采用的是哪一种。</p></div>
+<div class="note"><span class="lbl">补充说明</span><p>注意安全系数加在哪里：这里加在<b>寿命</b>上 (\(D=0.2\))。如果加在<b>应力</b>上，则是先读出 \(n=10^5\) 对应的 \(\sigma\approx390\,\mathrm{MPa}\)，再除以 5 得约 78 MPa，结果完全不同。S–N 曲线很平缓，寿命上的安全系数 5 只对应应力上的一个很小的余量 (约 390 → 300 MPa)。题目没明说时应写清楚采用的是哪一种。</p></div>
 </details>
 </article>
 </section>
 
 <section class="set" id="h3" data-short="Home Exercise 3">
 <h2 class="set-title"><span class="set-num">Home Exercise 3</span>复合材料单层 Composites UD Ply<span class="set-src">3 页</span></h2>
-<p class="lead">C-AS4/EP 单向层的柔度矩阵 \([S]\)、刚度矩阵 \([Q]\)（两种方法），以及 45° 层的转换刚度矩阵 \([\bar Q]_{45}\)。用于 \([0/45]_S\) 层合板。</p>
+<p class="lead">C-AS4/EP 单向层的柔度矩阵 \([S]\)、刚度矩阵 \([Q]\) (两种方法)，以及 45° 层的转换刚度矩阵 \([\bar Q]_{45}\)。用于 \([0/45]_S\) 层合板。</p>
 
 <article class="task" id="h3-1">
-<h3><span class="tno">Task 1</span>UD 单层的柔度与刚度矩阵</h3>
+<h3><span class="tno">Task 1</span>UD 单层的柔度与 stiffness matrix</h3>
 <div class="q">
 <p>Given are the material properties of a UD ply made of C-AS4 EP: \(E_1=142\,\mathrm{GPa}\), \(E_2=10.3\,\mathrm{GPa}\), \(G_{12}=7200\,\mathrm{MPa}\), \(\nu_{12}=0.27\).</p>
 <ol class="parts">
@@ -116,14 +116,14 @@
 \[[S]=\begin{bmatrix}\frac{1}{E_1}&-\frac{\nu_{21}}{E_2}&0\\-\frac{\nu_{12}}{E_1}&\frac{1}{E_2}&0\\0&0&\frac{1}{G_{12}}\end{bmatrix}=\begin{bmatrix}\frac{1}{142\,000}&-\frac{0.27}{142\,000}&0\\-\frac{0.27}{142\,000}&\frac{1}{10\,300}&0\\0&0&\frac{1}{7200}\end{bmatrix}\ \mathrm{MPa^{-1}}\]
 <p><b>B.1)</b> \(\nu_{21}=\dfrac{\nu_{12}E_2}{E_1}=\dfrac{0.27\cdot10.3}{142}=0.0196\)</p>
 \[[Q]=\begin{bmatrix}\frac{E_1}{1-\nu_{12}\nu_{21}}&\frac{\nu_{12}E_2}{1-\nu_{12}\nu_{21}}&0\\\frac{\nu_{21}E_1}{1-\nu_{12}\nu_{21}}&\frac{E_2}{1-\nu_{12}\nu_{21}}&0\\0&0&G_{12}\end{bmatrix}=\begin{bmatrix}142\,755.5&2795.8&0\\2795.8&10\,354.8&0\\0&0&7200\end{bmatrix}\mathrm{MPa}\]
-<p><b>B.2)</b> \([Q]=[S]^{-1}\)（用计算器 CASIO fx-991 ES 数值求逆）：\(\begin{bmatrix}142\,754.9&2795.8&0\\2795.8&10\,354.8&0\\0&0&7200\end{bmatrix}\)，与 B.1 一致（差别是舍入误差）。</p>
+<p><b>B.2)</b> \([Q]=[S]^{-1}\) (用计算器 CASIO fx-991 ES 数值求逆)：\(\begin{bmatrix}142\,754.9&2795.8&0\\2795.8&10\,354.8&0\\0&0&7200\end{bmatrix}\)，与 B.1 一致 (差别是舍入误差)。</p>
 <p><b>B.3)</b> 在 eLamX² 中建立材料后查看单层刚度，结果相同。</p>
 <div class="note"><span class="lbl">补充说明</span><p>\(1-\nu_{12}\nu_{21}=1-0.27\cdot0.0196=0.9947\)，非常接近 1，所以 \(Q_{11}\approx E_1\)、\(Q_{22}\approx E_2\)。这是检查数量级的好办法。平面应力下 \([S]\) 只需 4 个独立常数 \(E_1,E_2,G_{12},\nu_{12}\)。</p></div>
 </details>
 </article>
 
 <article class="task" id="h3-2">
-<h3><span class="tno">Task 2</span>[0/45]<sub>s</sub> 层合板中 45° 层的刚度</h3>
+<h3><span class="tno">Task 2</span>[0/45]<sub>s</sub> laminate 中 45° 层的刚度</h3>
 <div class="q">
 <p>The UD ply from Task 1 is used to set up a laminate with the stacking sequence \([0/45]_S\). The ply thickness is \(t=0.125\,\mathrm{mm}\).</p>
 <ol class="parts">
@@ -135,27 +135,27 @@
 \[[T]=\begin{bmatrix}\cos^2&\sin^2&-2\sin\cos\\\sin^2&\cos^2&2\sin\cos\\\sin\cos&-\sin\cos&\cos^2-\sin^2\end{bmatrix}_{45^\circ}=\begin{bmatrix}\frac12&\frac12&-1\\\frac12&\frac12&1\\\frac12&-\frac12&0\end{bmatrix},\qquad [\bar Q]=[T][Q][T]^T\]
 \[[\bar Q]_{45}=\begin{bmatrix}46\,875.5&32\,475.5&33\,100.2\\32\,475.5&46\,875.5&33\,100.2\\33\,100.2&33\,100.2&36\,879.7\end{bmatrix}\mathrm{MPa}\]
 <div class="note"><span class="lbl">补充说明</span>
-<p>直接用显式公式验算（\(c=\cos\theta,\ s=\sin\theta\)）：</p>
+<p>直接用显式公式验算 (\(c=\cos\theta,\ s=\sin\theta\))：</p>
 \[\bar Q_{11}=Q_{11}c^4+2(Q_{12}+2Q_{66})s^2c^2+Q_{22}s^4=\tfrac14(142\,755.5+2\cdot17\,195.8+10\,354.8)=46\,875.5\]
 \[\bar Q_{12}=(Q_{11}+Q_{22}-4Q_{66})s^2c^2+Q_{12}(s^4+c^4)=32\,475.5\]
 \[\bar Q_{16}=(Q_{11}-Q_{12}-2Q_{66})sc^3-(Q_{22}-Q_{12}-2Q_{66})s^3c=33\,100.2\]
 \[\bar Q_{66}=(Q_{11}+Q_{22}-2Q_{12}-2Q_{66})s^2c^2+Q_{66}(s^4+c^4)=36\,879.7\]
 <ul>
-<li>45° 层出现 \(\bar Q_{16},\bar Q_{26}\neq0\)：单独一层 45° 受拉会产生剪切变形（拉剪耦合）。\([0/45]_S\) 不是均衡铺层，所以层合板的 \(A_{16}\neq0\)；改成 \([0/\pm45]_S\) 才能消除。</li>
-<li>45° 层的 \(\bar Q_{66}\) 远大于 \(G_{12}\)（36 880 vs 7200）：±45° 层把剪切转化为沿纤维的拉压，所以抗剪蒙皮（如翼梁腹板）用 ±45° 铺层。</li>
-<li>变换矩阵 \([T]\) 的写法（符号、是否带因子 2）因教材而异，关键是与 \(\bar Q=TQT^T\) 还是 \(T^{-1}QT^{-T}\) 配套。不确定时用 \(\theta=0\) 检验（应得 \(\bar Q=Q\)）以及上面的显式公式核对。</li>
+<li>45° 层出现 \(\bar Q_{16},\bar Q_{26}\neq0\)：单独一层 45° 受拉会产生剪切变形 (拉剪耦合)。\([0/45]_S\) 不是均衡铺层，所以层合板的 \(A_{16}\neq0\)；改成 \([0/\pm45]_S\) 才能消除。</li>
+<li>45° 层的 \(\bar Q_{66}\) 远大于 \(G_{12}\) (36 880 vs 7200)：±45° 层把剪切转化为沿纤维的拉压，所以抗剪蒙皮 (如翼梁腹板) 用 ±45° 铺层。</li>
+<li>变换矩阵 \([T]\) 的写法 (符号、是否带因子 2) 因教材而异，关键是与 \(\bar Q=TQT^T\) 还是 \(T^{-1}QT^{-T}\) 配套。不确定时用 \(\theta=0\) 检验 (应得 \(\bar Q=Q\)) 以及上面的显式公式核对。</li>
 </ul></div>
 </details>
 </article>
 </section>
 
 <section class="set" id="h4" data-short="Home Exercise 4">
-<h2 class="set-title"><span class="set-num">Home Exercise 4</span>屈曲 Buckling<span class="set-src">10 页 · HSB 图表</span></h2>
-<p class="lead">用 HSB（Handbuch Strukturberechnung，航空结构计算手册）的屈曲图表做工程屈曲评估：确定边界条件 → 计算长宽比 → 从图表读屈曲系数 \(k\) → 求临界应力 → 与工作应力比较得到安全系数。配套图表：<a href="homework/hsb-45111-01-buckling-diagrams.pdf">HSB 45111-01 屈曲图表 (PDF)</a>。</p>
-<p class="note-inline">两道题均未直接给出 \(E\)；由解答数值反推，使用的是 \(E=70\,\mathrm{GPa}\)（铝）。</p>
+<h2 class="set-title"><span class="set-num">Home Exercise 4</span>buckling<span class="set-src">10 页 · HSB 图表</span></h2>
+<p class="lead">用 HSB (Handbuch Strukturberechnung，航空结构计算手册) 的屈曲图表做工程屈曲评估：确定边界条件 → 计算长宽比 → 从图表读屈曲系数 \(k\) → 求临界应力 → 与工作应力比较得到安全系数。配套图表：<a href="homework/hsb-45111-01-buckling-diagrams.pdf">HSB 45111-01 屈曲图表 (PDF)</a>。</p>
+<p class="note-inline">两道题均未直接给出 \(E\)；由解答数值反推，使用的是 \(E=70\,\mathrm{GPa}\) (铝)。</p>
 
 <article class="task" id="h4-1">
-<h3><span class="tno">Task 1</span>机身铝蒙皮板的单向压缩屈曲</h3>
+<h3><span class="tno">Task 1</span>机身铝蒙皮板的单向压缩 buckling</h3>
 <div class="q">
 <figure class="fig small"><img src="exercises/hw4-panel.png" alt="l = 500 mm、w = 200 mm 的矩形板"></figure>
 <p>Given is an aluminum panel of an aircraft fuselage with the thickness \(t\), framed by stringers and frames on all four sides. They all have a low torsional stiffness. \(l=500\,\mathrm{mm}\), \(w=200\,\mathrm{mm}\), \(t=2\,\mathrm{mm}\), \(\nu=0.33\). For all following tasks, a constant uniaxial compression load is applied to the shorter sides: \(\sigma_c=30\,\mathrm{N/mm^2}\).</p>
@@ -166,9 +166,9 @@
 </ol>
 </div>
 <details class="sol"><summary>解答</summary>
-<p>HSB 公式（\(b\) 为加载边的宽度）：</p>
+<p>HSB 公式 (\(b\) 为加载边的宽度)：</p>
 \[\sigma_{crit}=k^*E\left(\frac tb\right)^2,\qquad k^*=\frac{\pi^2}{12(1-\nu^2)}k=0.923\,k\quad(\nu=0.33)\]
-<p><b>a)</b> HSB 45111-01，边界条件 Case 12（四边简支，低扭转刚度）：</p>
+<p><b>a)</b> HSB 45111-01，边界条件 Case 12 (四边简支，低扭转刚度)：</p>
 <figure class="fig"><img src="exercises/hw4-1a.png" alt="Case 12 四边简支边界条件"></figure>
 \[\alpha=\frac lw=2.5\ \xrightarrow{\text{p.4}}\ k=4.1,\qquad k^*=3.784,\qquad \sigma_{crit}=3.784\cdot70\,000\cdot\left(\tfrac{2}{200}\right)^2=26.5\,\mathrm{MPa}\]
 \[SF=\frac{\sigma_{crit}}{\sigma_c}=\frac{26.5}{30}=0.88\lt1\quad\Rightarrow\ \text{不满足屈曲稳定性}\]
@@ -177,19 +177,19 @@
 \[\alpha=\frac{l}{w/2}=5\ \Rightarrow\ k\to k_\infty=4.0,\qquad k^*=3.692,\qquad \sigma_{crit}=3.692\cdot70\,000\cdot\left(\tfrac{2}{100}\right)^2=103.4\,\mathrm{MPa}\]
 \[SF=\frac{103.4}{30}=3.45\gt1\quad\Rightarrow\ \text{稳定，安全系数很高}\]
 <p><b>c)</b> 中间加 Ω 形框，平行于短边，板被分成两块 \(250\times200\)，\(b\) 仍为 200 mm。</p>
-<p><i>保守做法</i>：HSB 中没有恰好对应的边界条件，取 Case 12（四边简支）：</p>
+<p><i>保守做法</i>：HSB 中没有恰好对应的边界条件，取 Case 12 (四边简支)：</p>
 <figure class="fig"><img src="exercises/hw4-1c.png" alt="中间加 Ω 形框，平行于短边，按 Case 12 计算"></figure>
 \[\alpha=\frac{l/2}{w}=1.25\ \Rightarrow\ k=4.2,\qquad k^*=3.877,\qquad \sigma_{crit}=27.1\,\mathrm{MPa},\qquad SF=0.90\lt1\]
-<p><i>非保守做法</i>：Ω 形闭口截面扭转刚度高，把框处视为固支（Case 11）：</p>
+<p><i>非保守做法</i>：Ω 形闭口截面扭转刚度高，把框处视为固支 (Case 11)：</p>
 <figure class="fig"><img src="exercises/hw4-1c-nc.png" alt="非保守做法：框处按固支 Case 11"></figure>
 \[k=5.5,\qquad k^*=5.077,\qquad \sigma_{crit}=35.5\,\mathrm{MPa},\qquad SF=1.18\gt1\]
 <p>真实临界应力介于两者之间，安全余量很低 → 整体评估：该构件抗屈曲能力不足。</p>
 <div class="note"><span class="lbl">补充说明</span>
 <ul>
 <li>\(k^*\) 的来源：经典板屈曲公式 \(\sigma_{cr}=k\dfrac{\pi^2E}{12(1-\nu^2)}\left(\dfrac tb\right)^2\)，把常数并入后 \(k^*=\pi^2k/[12(1-\nu^2)]=0.923k\)。</li>
-<li>四边简支板的 \(k=\left(\frac{m}{\alpha}+\frac{\alpha}{m}\right)^2\)（\(m\) 为纵向半波数，取使 \(k\) 最小者）：\(\alpha=2.5\) 时 \(m=3\) 得 4.13；\(\alpha=1.25\) 时 \(m=1\) 得 4.20；\(\alpha\to\infty\) 时 \(k\to4\)，与图表一致。</li>
-<li>为什么 b) 效果好得多？\(\sigma_{cr}\propto(t/b)^2\)：加载边宽度 \(b\) 减半，临界应力变成 4 倍。c) 只缩短了板的长度，\(b\) 不变，而长度对 \(k\) 的影响很小（\(k\) 始终约为 4），所以几乎没用。结论：<b>加筋要平行于载荷方向</b>，把受压板分窄。</li>
-<li>前提是长桁本身足够刚、不会整体失稳（只发生局部屈曲），这也是 Trial Exam 题 4 a) 局部 / 整体屈曲的区别。</li>
+<li>四边简支板的 \(k=\left(\frac{m}{\alpha}+\frac{\alpha}{m}\right)^2\) (\(m\) 为纵向半波数，取使 \(k\) 最小者)：\(\alpha=2.5\) 时 \(m=3\) 得 4.13；\(\alpha=1.25\) 时 \(m=1\) 得 4.20；\(\alpha\to\infty\) 时 \(k\to4\)，与图表一致。</li>
+<li>为什么 b) 效果好得多？\(\sigma_{cr}\propto(t/b)^2\)：加载边宽度 \(b\) 减半，临界应力变成 4 倍。c) 只缩短了板的长度，\(b\) 不变，而长度对 \(k\) 的影响很小 (\(k\) 始终约为 4)，所以几乎没用。结论：<b>加筋要平行于载荷方向</b>，把受压板分窄。</li>
+<li>前提是长桁本身足够刚、不会整体失稳 (只发生局部屈曲)，这也是 Trial Exam 题 4 a) 局部 / 整体屈曲的区别。</li>
 </ul></div>
 </details>
 </article>
@@ -207,7 +207,7 @@
 <table class="tbl"><thead><tr><th>工况</th><th>HSB 图表</th><th>参数</th><th>\(k\)</th><th>临界应力</th></tr></thead>
 <tbody>
 <tr><td>a) 压缩，平板</td><td>45111-01，Case 12，p.4</td><td>\(\alpha=a/b=1.9\)</td><td>4.0</td><td>\(\sigma_{crit}=2.76\,\mathrm{MPa}\)</td></tr>
-<tr><td>b) 压缩，曲板</td><td>45411-01，\(a\gt b\)，p.3（适用于所有边界条件）</td><td>\(\alpha=1.9,\ r/t=710,\ 11.318\)</td><td>36</td><td>\(\sigma_{crit}=24.9\,\mathrm{MPa}\)</td></tr>
+<tr><td>b) 压缩，曲板</td><td>45411-01，\(a\gt b\)，p.3 (适用于所有边界条件)</td><td>\(\alpha=1.9,\ r/t=710,\ 11.318\)</td><td>36</td><td>\(\sigma_{crit}=24.9\,\mathrm{MPa}\)</td></tr>
 <tr><td>c) 剪切，平板</td><td>45112-01，低扭转刚度，p.4</td><td>\(b/a=0.525\)</td><td>6.5</td><td>\(\tau_{crit}=4.49\,\mathrm{MPa}\)</td></tr>
 <tr><td>d) 剪切，曲板</td><td>45412-01，\(a\gt b\)，configuration A，p.3</td><td>\(a/b=1.9,\ 11.318\)</td><td>29</td><td>\(\tau_{crit}=20.03\,\mathrm{MPa}\)</td></tr>
 </tbody></table>
@@ -215,9 +215,9 @@
 <p class="erratum">原解答小笔误：曲板剪切一页的标题也写成了 "2 c)"，应为 2 d)。</p>
 <div class="note"><span class="lbl">补充说明</span>
 <ul>
-<li>曲板加强的原因：平板屈曲时可以纯弯曲地鼓出；曲板鼓出时必须同时伸长或缩短中面（产生膜应力），需要更多能量。曲率越大（\(r\) 越小）、板越宽，效果越明显，所以图表用参数 \(b/\sqrt{rt}\)（Batdorf 参数 \(Z=\tfrac{b^2}{rt}\sqrt{1-\nu^2}\) 的平方根）表示。</li>
+<li>曲板加强的原因：平板屈曲时可以纯弯曲地鼓出；曲板鼓出时必须同时伸长或缩短中面 (产生膜应力)，需要更多能量。曲率越大 (\(r\) 越小)、板越宽，效果越明显，所以图表用参数 \(b/\sqrt{rt}\) (Batdorf 参数 \(Z=\tfrac{b^2}{rt}\sqrt{1-\nu^2}\) 的平方根) 表示。</li>
 <li>曲板的屈曲对初始缺陷很敏感，HSB 图表中已包含经验折减；直接用经典理论值会严重高估。</li>
-<li>这些临界应力（几 MPa 到几十 MPa）远低于铝的屈服强度——薄壁机身蒙皮的设计往往由稳定性控制，而且允许蒙皮在使用载荷下屈曲，靠后屈曲（张力场）承载。</li>
+<li>这些临界应力 (几 MPa 到几十 MPa) 远低于铝的屈服强度——薄壁机身蒙皮的设计往往由稳定性控制，而且允许蒙皮在使用载荷下屈曲，靠后屈曲 (张力场) 承载。</li>
 </ul></div>
 </details>
 </article>
@@ -245,29 +245,29 @@
 </ol>
 </div>
 <details class="sol"><summary>解答</summary>
-<figure class="fig small"><img src="exercises/hw5-dof.png" alt="手写自由度编号：端部 1、2、3，梁根部 4、5，杆支座 6、7"><figcaption>自由度编号：梁端 1（水平）、2（竖直）、3（转角）；梁根部 4（竖直）、5（转角）；杆的墙上铰点 6（水平）、7（竖直）</figcaption></figure>
-<p><b>a)</b> 杆从端部指向墙上铰点的方向与水平成 30°，\(c=\cos30^\circ=\tfrac{\sqrt3}{2}\)，\(s=\tfrac12\)，杆长 \(l=a/\cos30^\circ\)。梁只提供竖向和转动刚度（不计梁的轴向刚度）：</p>
+<figure class="fig small"><img src="exercises/hw5-dof.png" alt="手写自由度编号：端部 1、2、3，梁根部 4、5，杆支座 6、7"><figcaption>自由度编号：梁端 1 (水平)、2 (竖直)、3 (转角)；梁根部 4 (竖直)、5 (转角)；杆的墙上铰点 6 (水平)、7 (竖直)</figcaption></figure>
+<p><b>a)</b> 杆从端部指向墙上铰点的方向与水平成 30°，\(c=\cos30^\circ=\tfrac{\sqrt3}{2}\)，\(s=\tfrac12\)，杆长 \(l=a/\cos30^\circ\)。梁只提供竖向和转动刚度 (不计梁的轴向刚度)：</p>
 \[K=\begin{bmatrix}\frac34\frac{EA}{l}&-\frac{\sqrt3}{4}\frac{EA}{l}&0\\-\frac{\sqrt3}{4}\frac{EA}{l}&\frac14\frac{EA}{l}+12\frac{EI}{a^3}&-6a\frac{EI}{a^3}\\0&-6a\frac{EI}{a^3}&4a^2\frac{EI}{a^3}\end{bmatrix}=\begin{bmatrix}454.73&-262.54&0\\-262.54&991.58&-420.0\\0&-420.0&280.0\end{bmatrix}\]
-<p>（由 \(4EI/a=280\) 可知 \(a=1\,\mathrm m\)，\(l=2/\sqrt3=1.155\,\mathrm m\)，\(EA/l=606.2\,\mathrm{N/m}\)。）</p>
+<p>(由 \(4EI/a=280\) 可知 \(a=1\,\mathrm m\)，\(l=2/\sqrt3=1.155\,\mathrm m\)，\(EA/l=606.2\,\mathrm{N/m}\)。)</p>
 \[F=\begin{Bmatrix}\frac{\sqrt2}{2}\\-\frac{\sqrt2}{2}\\0\end{Bmatrix}\ \Rightarrow\ U=K^{-1}F=\begin{Bmatrix}U_1\\U_2\\U_3\end{Bmatrix}=\begin{Bmatrix}0.000733\\-0.001423\\-0.002135\end{Bmatrix}\ (\mathrm m,\ \mathrm m,\ \mathrm{rad})\]
-<p><b>b)</b> 杆的伸长 = 端部位移在杆轴方向（从墙指向端部，\((\cos30^\circ,-\sin30^\circ)\)）上的投影：</p>
+<p><b>b)</b> 杆的伸长 = 端部位移在杆轴方向 (从墙指向端部，\((\cos30^\circ,-\sin30^\circ)\)) 上的投影：</p>
 \[\sigma=\frac El\left(\frac{\sqrt3}{2}U_1-\frac12U_2\right)\]
-<p>代入数值：伸长 \(=0.866\cdot0.000733+0.5\cdot0.001423=0.001347\,\mathrm m\)，杆轴力 \(N=\dfrac{EA}{l}\cdot0.001347=0.816\,\mathrm N\)（拉），\(\sigma=N/A\)（题目未单独给出 \(A\)）。</p>
+<p>代入数值：伸长 \(=0.866\cdot0.000733+0.5\cdot0.001423=0.001347\,\mathrm m\)，杆轴力 \(N=\dfrac{EA}{l}\cdot0.001347=0.816\,\mathrm N\) (拉)，\(\sigma=N/A\) (题目未单独给出 \(A\))。</p>
 <p><b>c)</b> 用总刚度矩阵中约束自由度对应的行乘以已求出的位移：</p>
 \[\begin{Bmatrix}F_4\\F_5\\F_6\\F_7\end{Bmatrix}=\begin{bmatrix}0&-12\frac{EI}{a^3}&6a\frac{EI}{a^3}\\0&-6a\frac{EI}{a^3}&2a^2\frac{EI}{a^3}\\-\frac34\frac{EA}{l}&\frac{\sqrt3}{4}\frac{EA}{l}&0\\\frac{\sqrt3}{4}\frac{EA}{l}&-\frac14\frac{EA}{l}&0\end{bmatrix}\begin{Bmatrix}U_1\\U_2\\U_3\end{Bmatrix}=\begin{Bmatrix}0.299\\0.299\\-0.707\\0.408\end{Bmatrix}\]
 <p>即梁根部竖向力 0.299 N、根部弯矩 0.299 Nm；杆铰点水平力 −0.707 N、竖向力 0.408 N。</p>
 <p><b>d)</b> 梁端弯矩为 0、根部弯矩最大 \(M_{\max}=0.299\,\mathrm{Nm}\)：</p>
 \[\sigma_{\max}=\frac{M_{\max}}{I}z_{\max}=\frac{0.299\,\mathrm{Nm}}{0.001\,\mathrm{m^4}}\cdot0.001\,\mathrm m=0.299\,\mathrm{N/m^2}=2.99\times10^{-7}\,\mathrm{MPa}\]
-<p class="erratum">原解答勘误：结果写成 \(2.99\times10^{-4}\,\mathrm{MPa}\)，单位换算差了 1000 倍（1 MPa = 10⁶ N/m²）。另外题给 \(I=0.001\,\mathrm{m^4}\) 与 0.002 m 的截面高度并不相容（需要约 1.5×10⁶ m 宽），这里只是按给定数据演示公式。</p>
+<p class="erratum">原解答勘误：结果写成 \(2.99\times10^{-4}\,\mathrm{MPa}\)，单位换算差了 1000 倍 (1 MPa = 10⁶ N/m²)。另外题给 \(I=0.001\,\mathrm{m^4}\) 与 0.002 m 的截面高度并不相容 (需要约 1.5×10⁶ m 宽)，这里只是按给定数据演示公式。</p>
 <p><b>e)</b> 位移沿 30° 斜向上，\(U=0.5\)：\(U_1=0.5\cos30^\circ=\tfrac{\sqrt3}{4}\)，\(U_2=0.5\sin30^\circ=\tfrac14\)；转角 \(U_3\) 未知，但该自由度上无外力矩：</p>
 \[\begin{bmatrix}\frac34\frac{EA}{l}&-\frac{\sqrt3}{4}\frac{EA}{l}&0\\-\frac{\sqrt3}{4}\frac{EA}{l}&\frac14\frac{EA}{l}+12\frac{EI}{a^3}&-6a\frac{EI}{a^3}\\0&-6a\frac{EI}{a^3}&4a^2\frac{EI}{a^3}\end{bmatrix}\begin{Bmatrix}\frac{\sqrt3}{4}\\\frac14\\U_3\end{Bmatrix}=\begin{Bmatrix}F_1\\F_2\\0\end{Bmatrix}\]
 <p>第三行：\(0=-6a\dfrac{EI}{a^3}\cdot\dfrac14+4a^2\dfrac{EI}{a^3}U_3\ \Rightarrow\ U_3=\dfrac{3}{8a}=0.375\,\mathrm{rad}\)</p>
 \[F_1=\frac34\frac{EA}{l}\frac{\sqrt3}{4}-\frac{\sqrt3}{4}\frac{EA}{l}\frac14=\frac{\sqrt3}{8}\frac{EA}{l}\approx131.3\,\mathrm N\]
 \[F_2=-\frac{\sqrt3}{4}\frac{EA}{l}\frac{\sqrt3}{4}+\left(\frac14\frac{EA}{l}+12\frac{EI}{a^3}\right)\frac14-6a\frac{EI}{a^3}U_3\approx-23.3\,\mathrm N\]
-<p>（原解答只列出了公式，数值为补充计算：\(F'=[131.3,\ -23.3,\ 0]^T\,\mathrm N\)。）</p>
+<p>(原解答只列出了公式，数值为补充计算：\(F'=[131.3,\ -23.3,\ 0]^T\,\mathrm N\)。)</p>
 <div class="note"><span class="lbl">补充说明</span>
 <ul>
-<li>检查整体平衡（工况 1）：\(x\)：\(0.707-0.707=0\)；\(y\)：\(-0.707+0.299+0.408=0\) ✓。</li>
+<li>检查整体平衡 (工况 1)：\(x\)：\(0.707-0.707=0\)；\(y\)：\(-0.707+0.299+0.408=0\) ✓。</li>
 <li>为什么 \(U_3\) 不是 0？悬臂梁端部只给定了平动，没有约束转角，梁端会自由转动到使端部弯矩为零的位置——"零力矩"这个条件正好提供了求 \(U_3\) 的第三个方程。</li>
 <li>e) 中 0.5 m 的位移对于 1 m 长的梁来说已经远超小变形范围，结果仅用于练习线性 FEM 的求解步骤。</li>
 <li>杆单元刚度在全局坐标下 \(k=\frac{EA}{l}\begin{bmatrix}c^2&cs\\cs&s^2\end{bmatrix}\)：这里杆方向 \((c,s)=(\tfrac{\sqrt3}{2},-\tfrac12)\)，所以耦合项 \(cs=-\tfrac{\sqrt3}{4}\) 为负。</li>
@@ -281,7 +281,7 @@
 <p class="lead">卫星天线支架：三根刚度为 \(k\) 的支杆在一点汇交，汇交点集中质量 \(m\)，两个平动自由度。用 Lagrange 法建立运动方程，然后求固有频率、振型、质量归一化模态矩阵和模态坐标方程。</p>
 
 <article class="task" id="h6-1">
-<h3><span class="tno">Task 1</span>卫星天线桁架</h3>
+<h3><span class="tno">Task 1</span>卫星天线 truss</h3>
 <div class="q">
 <figure class="fig small"><img src="exercises/hw6-sat.png" alt="卫星天线：三根刚度 k 的支杆，两侧斜杆与竖直方向夹角 α，节点质量 m，水平测试力 F"></figure>
 <p>A satellite structure with a parabolic antenna mounted on a truss (see sketch) shall be analyzed with respect to its dynamic behavior. The system is composed of three struts, each with a stiffness \(k\). The mass is lumped into one single mass \(m\) in the connecting node. Two translational degrees of freedom shall be examined. There is an external test load \(F\) acting. \(k=1\), \(m=\tfrac32\), \(\alpha=30^\circ\), \(l=1\).</p>
@@ -293,10 +293,10 @@
 </ol>
 </div>
 <details class="sol"><summary>解答</summary>
-<p><b>a)</b> 广义坐标 \(q_1=u_1\)（竖直）、\(q_2=u_2\)（水平）。</p>
+<p><b>a)</b> 广义坐标 \(q_1=u_1\) (竖直)、\(q_2=u_2\) (水平)。</p>
 \[\frac{d}{dt}\left(\frac{\partial K}{\partial\dot q_j}-\frac{\partial P}{\partial\dot q_j}\right)-\left(\frac{\partial K}{\partial q_j}-\frac{\partial P}{\partial q_j}\right)=Q_j=\frac{\partial(\delta W)}{\partial(\delta q_j)}\]
 \[K=\tfrac12m\dot u_1^2+\tfrac12m\dot u_2^2\]
-<p>势能：每根杆的伸长 = 节点位移在杆轴方向上的投影（见下方附录图）。竖杆伸长 \(u_1\)；斜杆伸长 \(u_1\cos\alpha\pm u_2\sin\alpha\)：</p>
+<p>势能：每根杆的伸长 = 节点位移在杆轴方向上的投影 (见下方附录图)。竖杆伸长 \(u_1\)；斜杆伸长 \(u_1\cos\alpha\pm u_2\sin\alpha\)：</p>
 \[P=\tfrac12ku_1^2+\tfrac12k(u_1\cos30^\circ)^2\cdot2+\tfrac12k(u_2\sin30^\circ)^2\cdot2=\tfrac12ku_1^2+\tfrac34ku_1^2+\tfrac14ku_2^2=\tfrac54ku_1^2+\tfrac14ku_2^2\]
 <p>外力虚功：\(\delta W=F\delta u_2\)。求导：</p>
 \[\frac{\partial P}{\partial u_1}=\tfrac52ku_1,\quad \frac{\partial P}{\partial u_2}=\tfrac12ku_2,\quad \frac{d}{dt}\frac{\partial K}{\partial\dot u_i}=m\ddot u_i,\quad Q_1=0,\ Q_2=F\]
@@ -310,7 +310,7 @@
 <p><b>c)</b> \(\lambda_1=\tfrac13\)：</p>
 \[\begin{bmatrix}\frac52-\frac32\cdot\frac13&0\\0&\frac12-\frac32\cdot\frac13\end{bmatrix}=\begin{bmatrix}2&0\\0&0\end{bmatrix}\ \Rightarrow\ \{\Phi_1\}=\begin{Bmatrix}0\\1\end{Bmatrix}\ (\text{水平摆动}),\qquad \{\Phi_2\}=\begin{Bmatrix}1\\0\end{Bmatrix}\ (\text{竖直振动})\]
 \[\Phi=[\Phi_1\ \Phi_2]=\begin{bmatrix}0&1\\1&0\end{bmatrix}\]
-<figure class="fig small"><img src="exercises/hw6-mode.png" alt="振型：蓝色虚线为水平振型，绿色虚线为竖直振型"><figcaption>深蓝：第 1 阶（水平）；绿：第 2 阶（竖直）</figcaption></figure>
+<figure class="fig small"><img src="exercises/hw6-mode.png" alt="振型：蓝色虚线为水平振型，绿色虚线为竖直振型"><figcaption>深蓝：第 1 阶 (水平)；绿：第 2 阶 (竖直)</figcaption></figure>
 <p><b>d)</b></p>
 \[[\Phi]^T[M][\Phi]=\begin{bmatrix}\gamma_1&0\\0&\gamma_2\end{bmatrix}=\begin{bmatrix}\frac32&0\\0&\frac32\end{bmatrix},\qquad \Phi_{i,n}=\frac{1}{\sqrt{\gamma_i}}\Phi_i,\qquad [\Phi_n]=\sqrt{\tfrac23}\begin{bmatrix}0&1\\1&0\end{bmatrix}\]
 <p>代入 \(\{x\}=[\Phi_n]\{q\}\) 并左乘 \([\Phi_n]^T\)：</p>
@@ -319,9 +319,9 @@
 <div class="note"><span class="lbl">补充说明</span>
 <ul>
 <li>严格地说，两根斜杆的伸长是 \(u_1\cos\alpha+u_2\sin\alpha\) 和 \(u_1\cos\alpha-u_2\sin\alpha\)，平方后各有交叉项 \(\pm2u_1u_2\sin\alpha\cos\alpha\)；两根杆对称，交叉项相加正好抵消。原解答直接分开写平方，结果碰巧正确——结构不对称时就不能这样做。</li>
-<li>\(K\) 和 \(M\) 本来就是对角阵，系统天然解耦，振型就是坐标轴方向。水平刚度小（只靠斜杆的 \(\sin^2\alpha\) 分量），所以低阶模态是水平摆动。</li>
-<li>水平测试力 \(F\) 只激励第 1 阶（水平）模态，第 2 阶模态的广义力为 0。</li>
-<li>这里用的是无量纲数据（\(k=1,\ m=3/2\)），频率数值只有相对意义。</li>
+<li>\(K\) 和 \(M\) 本来就是对角阵，系统天然解耦，振型就是坐标轴方向。水平刚度小 (只靠斜杆的 \(\sin^2\alpha\) 分量)，所以低阶模态是水平摆动。</li>
+<li>水平测试力 \(F\) 只激励第 1 阶 (水平) 模态，第 2 阶模态的广义力为 0。</li>
+<li>这里用的是无量纲数据 (\(k=1,\ m=3/2\))，频率数值只有相对意义。</li>
 </ul></div>
 </details>
 </article>

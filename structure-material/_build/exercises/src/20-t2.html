@@ -1,6 +1,6 @@
 <section class="set" id="t2" data-short="Tutorial 2">
 <h2 class="set-title"><span class="set-num">Tutorial 2</span>弹性力学基础 Elementary Concepts of Elasticity<span class="set-src">Lecture 2 · 8 页</span></h2>
-<p class="lead">弹性力学的三组方程：运动学（位移 → 应变）、平衡（应力 ↔ 外力）和本构（应力 ↔ 应变）。本次习题分别练习：由位移场求应变和应力、判断应力场能否满足平衡、大转动下小应变的失效，以及平面应力 Hooke 定律的直接应用。</p>
+<p class="lead">弹性力学的三组方程：运动学 (位移 → 应变)、平衡 (应力 ↔ 外力) 和本构 (应力 ↔ 应变)。本次习题分别练习：由位移场求应变和应力、判断应力场能否满足平衡、大转动下小应变的失效，以及平面应力 Hooke 定律的直接应用。</p>
 
 <article class="task" id="t2-1">
 <h3><span class="tno">Task 1</span>由位移场求应变与应力</h3>
@@ -20,7 +20,7 @@
 <p><b>B)</b> 平面应力 Hooke 定律：</p>
 \[\sigma_{xx}=\frac{E}{1-\nu^2}(\varepsilon_{xx}+\nu\varepsilon_{yy}),\qquad \sigma_{yy}=\frac{E}{1-\nu^2}(\nu\varepsilon_{xx}+\varepsilon_{yy}),\qquad \sigma_{xy}=\frac{E}{1+\nu}\varepsilon_{xy}\]
 \[\boldsymbol\sigma(2,2)=\begin{bmatrix}\dfrac{70\,\mathrm{GPa}}{1-0.3^2}(2a_1+0.6a_3)&\dfrac{70\,\mathrm{GPa}}{1.3}\left(\tfrac12a_0+a_1+a_3\right)\\[2mm]\dfrac{70\,\mathrm{GPa}}{1.3}\left(\tfrac12a_0+a_1+a_3\right)&\dfrac{70\,\mathrm{GPa}}{1-0.3^2}(0.6a_1+a_3)\end{bmatrix}\]
-<p>矩阵形式（Voigt 记法，注意剪切用工程切应变 \(\gamma_{xy}=2\varepsilon_{xy}\)）：</p>
+<p>矩阵形式 (Voigt 记法，注意剪切用工程切应变 \(\gamma_{xy}=2\varepsilon_{xy}\))：</p>
 \[\begin{Bmatrix}\sigma_{xx}\\\sigma_{yy}\\\sigma_{xy}\end{Bmatrix}=\begin{bmatrix}\frac{E}{1-\nu^2}&\frac{E\nu}{1-\nu^2}&0\\\frac{E\nu}{1-\nu^2}&\frac{E}{1-\nu^2}&0\\0&0&\frac{E}{2(1+\nu)}\end{bmatrix}\begin{Bmatrix}\varepsilon_{xx}\\\varepsilon_{yy}\\2\varepsilon_{xy}\end{Bmatrix},\qquad S=\frac1E\begin{bmatrix}1&-\nu&0\\-\nu&1&0\\0&0&2(1+\nu)\end{bmatrix}\]
 <p class="erratum">原解答勘误：幻灯片中间写的 \(Q=S^{-1}\) 第三个对角元为 \(\tfrac{1}{2(1+\nu)}\)，漏了因子 \(E\)，应为 \(\tfrac{E}{2(1+\nu)}=G\)；下方完整矩阵是对的。</p>
 <div class="note"><span class="lbl">补充说明</span>
@@ -48,7 +48,7 @@
 <ul>
 <li>完整的"物理可实现"条件有三条：① 平衡方程；② 应变协调方程 (compatibility)，保证由应力算出的应变能积分出连续的位移场；③ 边界上与外载荷相符。</li>
 <li>本题应力是坐标的线性函数 → 应变也是线性函数 → 协调方程 \(\partial^2\varepsilon_{xx}/\partial y^2+\partial^2\varepsilon_{yy}/\partial x^2=2\partial^2\varepsilon_{xy}/\partial x\partial y\) 中全是二阶导数，自动等于 0。所以只剩平衡方程起约束作用。</li>
-<li>切应力已经写成对称形式 \(\tau_{xy}=\tau_{yx}\)，切应力互等（力矩平衡）已自动满足。</li>
+<li>切应力已经写成对称形式 \(\tau_{xy}=\tau_{yx}\)，切应力互等 (力矩平衡) 已自动满足。</li>
 </ul></div>
 </details>
 </article>
@@ -76,7 +76,7 @@
 <p>同理 \(\varepsilon_{yy}=0\)，\(\varepsilon_{xy}=\tfrac12\left[-\sin\beta+\sin\beta+(\cos\beta-1)(-\sin\beta)+\sin\beta(\cos\beta-1)\right]=0\)。</p>
 <div class="note"><span class="lbl">补充说明</span>
 <ul>
-<li>核心结论：刚体运动不应产生应变。小应变张量在大转动下给出 \(-100\%\) 的"虚假应变"，而 Green–Lagrange 应变对<b>任意</b>转角都精确为零（上面的推导没有用到 \(\beta=90^\circ\)）。</li>
+<li>核心结论：刚体运动不应产生应变。小应变张量在大转动下给出 \(-100\%\) 的"虚假应变"，而 Green–Lagrange 应变对<b>任意</b>转角都精确为零 (上面的推导没有用到 \(\beta=90^\circ\))。</li>
 <li>小应变只有在转角很小时才可用：\(\cos\beta-1\approx-\beta^2/2\)，是二阶小量，可以忽略。这正是 Trial Exam 题 1 d) 的考点：大变形或大转动时用 Green 应变。</li>
 <li>Green–Lagrange 应变的紧凑写法：\(\mathbf E=\tfrac12(\mathbf F^T\mathbf F-\mathbf I)\)。刚体转动 \(\mathbf F=\mathbf Q\)，\(\mathbf Q^T\mathbf Q=\mathbf I\)，所以 \(\mathbf E=0\)。</li>
 </ul></div>
@@ -97,12 +97,12 @@
 <p><b>A)</b> \(F_1\) 作用在长为 \(a\) 的右边，\(F_2\) 作用在长为 \(b\) 的上边：</p>
 \[\sigma_x=\frac{F_1}{a\,t}=\frac{25000}{200\cdot2}=62.5\,\mathrm{MPa},\qquad \sigma_y=\frac{F_2}{b\,t}=\frac{10000}{500\cdot2}=10\,\mathrm{MPa},\qquad \tau_{xy}=0\]
 \[\begin{Bmatrix}\varepsilon_x\\\varepsilon_y\\\gamma_{xy}\end{Bmatrix}=\frac1E\begin{bmatrix}1&-\nu&0\\-\nu&1&0\\0&0&2(1+\nu)\end{bmatrix}\begin{Bmatrix}\sigma_x\\\sigma_y\\\tau_{xy}\end{Bmatrix}=\begin{Bmatrix}0.00085\\-0.000125\\0\end{Bmatrix}\]
-<p><b>B)</b> 应变均匀，沿 \(x\) 积分（左边 \(u_x=0\)）：</p>
+<p><b>B)</b> 应变均匀，沿 \(x\) 积分 (左边 \(u_x=0\))：</p>
 \[\varepsilon_x=\frac{du_x}{dx}\ \Rightarrow\ u_x=\int_0^b\varepsilon_x\,dx=\varepsilon_x\,b=0.00085\cdot500\,\mathrm{mm}=0.425\,\mathrm{mm}\]
 <div class="note"><span class="lbl">补充说明</span>
 <ul>
 <li>手算细节：\(\varepsilon_x=(62.5-0.3\cdot10)/70000=59.5/70000=8.5\times10^{-4}\)；\(\varepsilon_y=(10-0.3\cdot62.5)/70000=-8.75/70000=-1.25\times10^{-4}\)。</li>
-<li>虽然上边受拉，\(\varepsilon_y\) 却是负的：\(x\) 向拉应力通过泊松效应引起的横向收缩（\(\nu\sigma_x=18.75\,\mathrm{MPa}\)）超过了 \(\sigma_y\) 本身。</li>
+<li>虽然上边受拉，\(\varepsilon_y\) 却是负的：\(x\) 向拉应力通过泊松效应引起的横向收缩 (\(\nu\sigma_x=18.75\,\mathrm{MPa}\)) 超过了 \(\sigma_y\) 本身。</li>
 <li>边界条件是"滑动支座"：左边只约束 \(u_x\)，下边只约束 \(u_y\)，板可以自由横向变形，所以不产生额外的约束应力，应力状态处处均匀。</li>
 <li>图中 \(a\) 是竖直方向的边长、\(b\) 是水平方向的边长，所以右边位移是 \(\varepsilon_x\cdot b\) 而不是 \(\varepsilon_x\cdot a\)。</li>
 </ul></div>
@@ -127,7 +127,7 @@
 \[\varepsilon_{xx}=\frac1E\left[\sigma_{xx}-\nu\sigma_{yy}\right]=\frac{\sigma_0}{E}(\nu^2-1)=-\frac{(1-\nu^2)\,\sigma_0}{E}\]
 <div class="note"><span class="lbl">补充说明</span>
 <ul>
-<li>约束后：\(y\) 向出现压应力 \(-\nu\sigma_0\)（板想往 \(y\) 方向胀、被挡住）；\(x\) 向压缩量变小，等效刚度从 \(E\) 提高到 \(E/(1-\nu^2)\)（铝约 +10%）。</li>
+<li>约束后：\(y\) 向出现压应力 \(-\nu\sigma_0\) (板想往 \(y\) 方向胀、被挡住)；\(x\) 向压缩量变小，等效刚度从 \(E\) 提高到 \(E/(1-\nu^2)\) (铝约 +10%)。</li>
 <li>这就是"板刚度" \(E/(1-\nu^2)\) 的由来：宽板弯曲时横向不能自由收缩，所以板的弯曲刚度 \(D=Et^3/[12(1-\nu^2)]\) 比同截面梁的 \(EI\) 大。Tutorial 4 eLamX 表中 "with / without transverse contraction restriction" 也是同一个概念。</li>
 </ul></div>
 </details>

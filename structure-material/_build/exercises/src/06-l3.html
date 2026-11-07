@@ -10,10 +10,10 @@
 </div>
 <details class="sol"><summary>解答</summary>
 <p>三组方程：平衡 \(\dfrac{dN}{dx}+n=0\)；运动学 \(\varepsilon=\dfrac{du}{dx}\)；本构 \(\varepsilon=\dfrac{\sigma}{E}=\dfrac{N}{EA}\)。</p>
-<p><b>Task 1</b>（\(n=0\)）：</p>
+<p><b>Task 1</b> (\(n=0\))：</p>
 \[\frac{dN}{dx}=0\Rightarrow N(x)=C=G,\qquad \frac{du}{dx}=\frac{G}{EA}\Rightarrow u(x)=\frac{G}{EA}x+C\]
 \[u(0)=0\Rightarrow C=0,\qquad \boxed{u(x=l)=\frac{G\,l}{EA}}\]
-<p><b>Task 2</b>（\(n=G/l\)）：</p>
+<p><b>Task 2</b> (\(n=G/l\))：</p>
 \[\frac{dN}{dx}=-\frac Gl\Rightarrow N(x)=-\frac Glx+C,\qquad N(l)=0\Rightarrow C=G,\qquad N(x)=G\left(1-\frac xl\right)\]
 \[\frac{du}{dx}=\frac{G(1-x/l)}{EA}\Rightarrow u(x)=\frac{G}{EA}x-\frac{G}{2lEA}x^2+C,\qquad u(0)=0\Rightarrow C=0\]
 \[\boxed{u(x=l)=\frac{Gl}{EA}-\frac{Gl}{2EA}=\frac12\frac{G\,l}{EA}}\]
@@ -32,16 +32,16 @@
 <p><b>Task:</b> Compare the torsional stiffness of the two cross sections (closed rectangular tube \(a\times b\), and the same tube with an infinitely small cut) with constant thickness \(t\) and shear modulus \(G\).</p>
 </div>
 <details class="sol"><summary>解答</summary>
-<p><b>闭口</b>（Bredt 第二公式）：\(A_m=a\cdot b\)，</p>
+<p><b>闭口</b> (Bredt 第二公式)：\(A_m=a\cdot b\)，</p>
 \[I_t=\frac{4A_m^2}{\oint\frac{ds}{t}}=\frac{4(ab)^2}{2\left(\frac at+\frac bt\right)}=\frac{2t(ab)^2}{a+b}\]
-<p><b>开口</b>（由狭长矩形组成）：\(I_t=\tfrac13\sum h_it_i^3\)：</p>
+<p><b>开口</b> (由狭长矩形组成)：\(I_t=\tfrac13\sum h_it_i^3\)：</p>
 \[I_t=\frac13\left(2bt^3+at^3+2\cdot\frac a2t^3\right)=\frac13\left(2bt^3+2at^3\right)=\frac23(a+b)t^3\]
 <p><b>比值：</b></p>
 \[\frac{I_{closed}}{I_{open}}=\frac{2t(ab)^2}{a+b}\cdot\frac{3}{2t^3(a+b)}=\frac{3}{t^2}\left(\frac{ab}{a+b}\right)^2\]
 <div class="note"><span class="lbl">补充说明</span>
 <ul>
 <li>数值感受：\(a=b=100\,\mathrm{mm}\)，\(t=1\,\mathrm{mm}\)：比值 \(=3\cdot50^2=7500\)。一条极细的切缝就让扭转刚度下降三到四个数量级。</li>
-<li>原因：闭口截面中剪力流沿整个周长环流，力臂是截面尺寸；开口截面只能在壁厚内形成小环流，力臂只有 \(t\) 的量级。所以机翼盒段、机身都做成闭口；开口长桁（Z、L 型）扭转刚度很低，这也是 Home Exercise 4 中"低扭转刚度边界"的来源。</li>
+<li>原因：闭口截面中剪力流沿整个周长环流，力臂是截面尺寸；开口截面只能在壁厚内形成小环流，力臂只有 \(t\) 的量级。所以机翼盒段、机身都做成闭口；开口长桁 (Z、L 型) 扭转刚度很低，这也是 Home Exercise 4 中"低扭转刚度边界"的来源。</li>
 </ul></div>
 </details>
 </article>
@@ -53,7 +53,7 @@
 <p>Determine the centre of gravity \(z_S\) and the total bending stiffness \(EI_{C.G.}\) of the shown cross-section (all parts made of the same material; dimensions in mm, \(z\) measured downward from the top).</p>
 </div>
 <details class="sol"><summary>解答</summary>
-<p>分成 3 个矩形：① 翼缘 330 × 5，② 加强板 50 × 3（紧贴翼缘下方），③ 腹板 6 × 44（从 \(z=8\) 到 \(z=52\)）。</p>
+<p>分成 3 个矩形：① 翼缘 330 × 5，② 加强板 50 × 3 (紧贴翼缘下方)，③ 腹板 6 × 44 (从 \(z=8\) 到 \(z=52\))。</p>
 <figure class="fig"><img src="exercises/L3-tsec-table.png" alt="各部分的 z_i、EA_i、EA_i z_i、EA_i z_i²、EI_i 表"></figure>
 <table class="tbl"><thead><tr><th>Part</th><th>\(z_i\)</th><th>\(A_i\)</th><th>\(A_iz_i\)</th><th>\(A_iz_i^2\)</th><th>\(I_i\)</th></tr></thead>
 <tbody><tr><td>1</td><td>2.5</td><td>1650</td><td>4125</td><td>10 312.5</td><td>3437.5</td></tr>
@@ -66,10 +66,10 @@
 <p class="erratum">原解答表格笔误：第 1 部分的 \(EI_i\) 写成 \(E\cdot34\,375\)，应为 \(330\cdot5^3/12=3437.5\)；合计 46 142 是按正确值算的，所以最终结果不受影响。</p>
 <div class="note"><span class="lbl">补充说明</span>
 <ul>
-<li>腹板高度：图中 47 是从翼缘下缘量到底部，腹板本身从加强板下缘（\(z=8\)）开始，所以高 44 mm，形心 \(z=30\)。</li>
+<li>腹板高度：图中 47 是从翼缘下缘量到底部，腹板本身从加强板下缘 (\(z=8\)) 开始，所以高 44 mm，形心 \(z=30\)。</li>
 <li>平行轴定理 (Steiner)：\(I=\sum(I_i+A_id_i^2)\)。展开成三项求和是为了用表格一次算完。用未取整的 \(z_S=6.308\) 得 218 260.4，几乎一样。</li>
-<li>形心很靠近翼缘（6.3 mm），因为宽翼缘占了大部分面积；对弯曲刚度贡献最大的却是腹板的 \(A z^2\) 项——离形心远的材料最有效。</li>
-<li>写成 \(E\sum A_i\) 的形式是为了推广到不同材料（复合截面）：那时用 \(E_iA_i\) 加权，就是 Trial Exam 中"刚度加权形心"的思路。</li>
+<li>形心很靠近翼缘 (6.3 mm)，因为宽翼缘占了大部分面积；对弯曲刚度贡献最大的却是腹板的 \(A z^2\) 项——离形心远的材料最有效。</li>
+<li>写成 \(E\sum A_i\) 的形式是为了推广到不同材料 (复合截面)：那时用 \(E_iA_i\) 加权，就是 Trial Exam 中"刚度加权形心"的思路。</li>
 </ul></div>
 </details>
 </article>
@@ -81,16 +81,16 @@
 <p><b>Task 1:</b> Find the edge length \(c\), such that the allowable normal stress \(\sigma_{crit}=200\,\mathrm{MPa}\). (Simply supported beam of length \(l\), load \(F\) at \(l/3\) from the support, thin-walled square tube \(c\times c\), wall thickness \(t\).)</p>
 </div>
 <details class="sol"><summary>解答</summary>
-<p>最大弯矩（载荷距两支座 \(l/3\) 和 \(2l/3\)）：</p>
+<p>最大弯矩 (载荷距两支座 \(l/3\) 和 \(2l/3\))：</p>
 \[M_{\max}=F\frac{(l/3)(2l/3)}{l}=\frac29lF\]
-<p>薄壁方管的惯性矩（侧壁 + 上下壁，略去上下壁自身的 \(ct^3/12\)）：</p>
+<p>薄壁方管的惯性矩 (侧壁 + 上下壁，略去上下壁自身的 \(ct^3/12\))：</p>
 \[I=2\left(\frac{tc^3}{12}\right)+2\left(\underbrace{\frac{ct^3}{12}}_{\approx0}+\left(\frac c2\right)^2ct\right)\approx\frac{tc^3}{6}+\frac{tc^3}{2}=\frac23tc^3\]
 \[\sigma=\frac{M}{I}\frac c2\ \Rightarrow\ 200=\frac{Mc}{2I}=\frac{3M}{4tc^2}\ \Rightarrow\ c^2=\frac{3M}{4t\cdot200}\]
 \[\boxed{c=\sqrt{\frac{lF}{6t\cdot200}}}=333.33\,\mathrm{mm}\]
-<p class="erratum">幻灯片没有给出 \(l\)、\(F\)、\(t\) 的数值，只给出了结果 333.33 mm（对应 \(lF/t=1.33\times10^8\,\mathrm{N}\)）。公式推导是完整的，复习时以通式为准。</p>
+<p class="erratum">幻灯片没有给出 \(l\)、\(F\)、\(t\) 的数值，只给出了结果 333.33 mm (对应 \(lF/t=1.33\times10^8\,\mathrm{N}\))。公式推导是完整的，复习时以通式为准。</p>
 <div class="note"><span class="lbl">补充说明</span>
 <ul>
-<li>\(t\ll c\) 时忽略 \(t^3\) 项是薄壁结构的标准工程简化（误差为 \((t/c)^2\) 量级）。</li>
+<li>\(t\ll c\) 时忽略 \(t^3\) 项是薄壁结构的标准工程简化 (误差为 \((t/c)^2\) 量级)。</li>
 <li>对比实心方截面 \(I=c^4/12\)：同样的 \(I\)，薄壁管用的材料少得多——上下壁位于 \(c/2\) 处，贡献了 3/4 的惯性矩。</li>
 </ul></div>
 </details>
@@ -109,21 +109,21 @@
 \[w(x)=\frac{F}{EI}\left(\frac{lx^2}{2}-\frac{x^3}{6}\right),\qquad \boxed{w_{\max}=w(l)=\frac{Fl^3}{3EI}}\]
 <div class="note"><span class="lbl">补充说明</span>
 <ul>
-<li>符号：这里取 \(w''=+M/EI\)（挠度与力同向为正）。Lecture 3 Slide 13 的约定是 \(w''=-M/EI\)，两者只差 \(w\) 的正方向，大小不变。</li>
+<li>符号：这里取 \(w''=+M/EI\) (挠度与力同向为正)。Lecture 3 Slide 13 的约定是 \(w''=-M/EI\)，两者只差 \(w\) 的正方向，大小不变。</li>
 <li>\(Fl^3/(3EI)\) 和端部转角 \(Fl^2/(2EI)\) 值得记住——Lecture 6 例 4 用 FEM 算同一根梁，得到完全相同的结果。</li>
 </ul></div>
 </details>
 </article>
 
 <article class="task" id="l3-6">
-<h3><span class="tno">例 6</span>矩形截面的切应力分布</h3>
+<h3><span class="tno">例 6</span>矩形截面的 shear stress distribution</h3>
 <div class="q">
 <figure class="fig"><img src="exercises/L3-shear.png" alt="悬臂梁，矩形截面 h = 40 mm，b = 7.5 mm，F = 10 kN"></figure>
 <p>Determine the shear stress distribution \(\tau(z)\) over the rectangular cross-section of the cantilever (\(h=40\,\mathrm{mm}\), \(b=7.5\,\mathrm{mm}\), \(F=10\,\mathrm{kN}\)).</p>
 </div>
 <details class="sol"><summary>解答</summary>
 <p><b>Step 1</b> 二阶矩：\(I_y=\dfrac{bh^3}{12}=80\,000\,\mathrm{mm^4}\)</p>
-<p><b>Step 2</b> 一阶矩（\(z\) 以外部分面积对中性轴）：</p>
+<p><b>Step 2</b> 一阶矩 (\(z\) 以外部分面积对中性轴)：</p>
 \[S_y=\int_z^{h/2}z\,b\,dz=\frac12b\,z^2\Big|_z^{h/2}=\frac12b\left(\frac{h^2}{4}-z^2\right)\]
 <p><b>Step 3</b> 切应力 \(\tau=\dfrac{Q_zS_y}{I_yb}\)：</p>
 \[\tau(z)=\frac{Q_z}{I_y}\cdot\frac12\left(\frac{h^2}{4}-z^2\right),\qquad \tau(\pm h/2)=0,\qquad \tau_{\max}=\tau(0)=\frac{Q_zh^2}{8I_y}=25\,\mathrm{MPa}\]
@@ -131,14 +131,14 @@
 <p class="erratum">原解答数据不一致：\(b=7.5\,\mathrm{mm}\) 时 \(I_y=7.5\cdot40^3/12=40\,000\,\mathrm{mm^4}\)，\(\tau_{\max}=50\,\mathrm{MPa}\)，\(\tau_m=33.3\,\mathrm{MPa}\)。幻灯片的 80 000、25 MPa、16.7 MPa 三个数彼此一致，对应的是 \(b=15\,\mathrm{mm}\)。比例关系 \(\tau_{\max}=1.5\,\tau_m\) 在两种情况下都成立。</p>
 <div class="note"><span class="lbl">补充说明</span>
 <ul>
-<li>切应力沿高度呈抛物线分布：上下表面为零（自由表面无切应力 + 切应力互等），中性轴最大，为平均值的 1.5 倍。</li>
-<li>这与 Bernoulli 假设矛盾（假设没有剪切变形），所以 Euler–Bernoulli 梁的切应力只能事后由平衡方程"补出来"；Timoshenko 梁用平均切应变 + 剪切修正系数 \(\kappa\) 来处理。</li>
+<li>切应力沿高度呈抛物线分布：上下表面为零 (自由表面无切应力 + 切应力互等)，中性轴最大，为平均值的 1.5 倍。</li>
+<li>这与 Bernoulli 假设矛盾 (假设没有剪切变形)，所以 Euler–Bernoulli 梁的切应力只能事后由平衡方程"补出来"；Timoshenko 梁用平均切应变 + 剪切修正系数 \(\kappa\) 来处理。</li>
 </ul></div>
 </details>
 </article>
 
 <article class="task" id="l3-7">
-<h3><span class="tno">例 7</span>夹层板的最大挠度（Timoshenko 梁）</h3>
+<h3><span class="tno">例 7</span>夹层板的最大挠度 (Timoshenko 梁)</h3>
 <div class="q">
 <figure class="fig"><img src="exercises/L3-sandwich-fig.png" alt="三点弯曲的夹层板：l = 2000，b = 500，tf = 0.5，tc = 25.4 mm，P = 1500 N"></figure>
 <figure class="fig"><img src="exercises/L3-sandwich-table.png" alt="面板与芯材的材料参数表"></figure>
@@ -147,25 +147,25 @@
 <details class="sol"><summary>解答</summary>
 <p>原解答给出的刚度：</p>
 \[(EI)=5645\,\mathrm{Nm^2},\qquad (GA)=2794\ (\text{见下方说明}),\qquad w=w_b+w_s\]
-<p><b>弯曲挠度</b>（Slide 25）：\(M(x)=\tfrac P2x\)，\(w''=-M/EI\)，用 \(w(0)=0\)、\(w'(l/2)=0\) 积分：</p>
+<p><b>弯曲挠度</b> (Slide 25)：\(M(x)=\tfrac P2x\)，\(w''=-M/EI\)，用 \(w(0)=0\)、\(w'(l/2)=0\) 积分：</p>
 \[w(x)=-\frac{P}{12EI}x^3+C_1x,\quad C_1=\frac{Pl^2}{16EI},\qquad w_{b,\max}=w(l/2)=-\frac{Pl^3}{EI}\left(\frac1{32}-\frac1{96}\right)=-\frac1{48}\frac{Pl^3}{EI}\]
 <p><b>剪切挠度</b>：\(w_s'=\dfrac{Q}{\kappa GA}=\dfrac{P}{2\kappa GA}\)，\(w_s(0)=0\)：</p>
 \[w_{s,\max}=\frac14\frac{P\,l}{\kappa GA}\]
-<p><b>代入数值</b>（原课件未算到底，以下为补充）：</p>
+<p><b>代入数值</b> (原课件未算到底，以下为补充)：</p>
 \[w_b=\frac{1500\cdot2^3}{48\cdot5645}=0.0443\,\mathrm m=44.3\,\mathrm{mm}\]
 \[w_s=\frac{1500\cdot2}{4\cdot2.794\times10^6}=0.27\,\mathrm{mm}\quad(\kappa=1)\qquad\Rightarrow\qquad w_{\max}\approx44.6\,\mathrm{mm}\]
-<p class="erratum">剪切刚度的单位应为 N 而不是 Nm²：\(GA=G_z\,b\,t_c=220\cdot500\cdot25.4=2.794\times10^6\,\mathrm N\)。弯曲刚度 5645 Nm² 来自 \(EI\approx E_ft_fb\,t_c^2/2=70\,000\cdot0.5\cdot500\cdot25.4^2/2\)（面板间距近似取芯材厚度；用面板中心距 \(t_c+t_f\) 则为 5869 Nm²）。</p>
+<p class="erratum">剪切刚度的单位应为 N 而不是 Nm²：\(GA=G_z\,b\,t_c=220\cdot500\cdot25.4=2.794\times10^6\,\mathrm N\)。弯曲刚度 5645 Nm² 来自 \(EI\approx E_ft_fb\,t_c^2/2=70\,000\cdot0.5\cdot500\cdot25.4^2/2\) (面板间距近似取芯材厚度；用面板中心距 \(t_c+t_f\) 则为 5869 Nm²)。</p>
 <div class="note"><span class="lbl">补充说明</span>
 <ul>
-<li>夹层结构的思路与工字梁相同：薄而强的面板承担弯曲正应力（像翼缘），轻芯材承担剪力并把两块面板分开（像腹板）。面板应力校核：\(M=Pl/4=750\,\mathrm{Nm}\)，面板力 \(=M/t_c=29.5\,\mathrm{kN}\)，应力 \(\approx118\,\mathrm{MPa}\lt150\,\mathrm{MPa}\) ✓。</li>
-<li>本例芯材 \(G_z=220\,\mathrm{MPa}\) 较高，剪切挠度不到 1%；若用泡沫芯（\(G\) 只有几十 MPa）且跨度较短，\(w_s\) 会成为主要部分——这正是要用 Timoshenko 梁的场合（Slide 23 的曲线：长细比越小，剪切变形占比越大）。</li>
-<li>夹层截面一般取 \(\kappa\approx1\)（切应力在芯材中几乎均匀）；矩形实心截面 \(\kappa\approx5/6\)。用 5/6 得 0.32 mm，结论不变。</li>
+<li>夹层结构的思路与工字梁相同：薄而强的面板承担弯曲正应力 (像翼缘)，轻芯材承担剪力并把两块面板分开 (像腹板)。面板应力校核：\(M=Pl/4=750\,\mathrm{Nm}\)，面板力 \(=M/t_c=29.5\,\mathrm{kN}\)，应力 \(\approx118\,\mathrm{MPa}\lt150\,\mathrm{MPa}\) ✓。</li>
+<li>本例芯材 \(G_z=220\,\mathrm{MPa}\) 较高，剪切挠度不到 1%；若用泡沫芯 (\(G\) 只有几十 MPa) 且跨度较短，\(w_s\) 会成为主要部分——这正是要用 Timoshenko 梁的场合 (Slide 23 的曲线：长细比越小，剪切变形占比越大)。</li>
+<li>夹层截面一般取 \(\kappa\approx1\) (切应力在芯材中几乎均匀)；矩形实心截面 \(\kappa\approx5/6\)。用 5/6 得 0.32 mm，结论不变。</li>
 </ul></div>
 </details>
 </article>
 
 <article class="task" id="l3-8">
-<h3><span class="tno">例 8</span>四边简支板的 Fourier 解（Kirchhoff 板）</h3>
+<h3><span class="tno">例 8</span>四边简支板的 Fourier 解 (Kirchhoff 板)</h3>
 <div class="q">
 <figure class="fig small"><img src="exercises/L3-plate.png" alt="正方形板受正弦分布载荷 q0 及其弯矩分布"></figure>
 <p>Example Fourier Method: a simply supported square plate (\(l\times l\), plate stiffness \(K=\dfrac{Et^3}{12(1-\nu^2)}\)) is loaded by \(q=q_0\sin\left(\frac{\pi x}{l}\right)\sin\left(\frac{\pi y}{l}\right)\). Find the deflection \(w(x,y)\) from the plate equation \(K\left(\dfrac{\partial^4w}{\partial x^4}+2\dfrac{\partial^4w}{\partial x^2\partial y^2}+\dfrac{\partial^4w}{\partial y^4}\right)=q\).</p>
@@ -175,11 +175,11 @@
 \[w=0,\quad m_x=0\ (x=0,l),\qquad w=0,\quad m_y=0\ (y=0,l)\]
 <p>代入板方程，每次对 \(x\) 或 \(y\) 求两次导数都乘以 \(-(\pi/l)^2\)：</p>
 \[KC\left(\frac{\pi}{l}\right)^4(1+2+1)=q_0\ \Rightarrow\ \boxed{C=\frac{q_0l^4}{4\pi^4K}},\qquad w(x,y)=\frac{q_0l^4}{4\pi^4K}\sin\frac{\pi x}{l}\sin\frac{\pi y}{l}\]
-<p><b>推广</b>（Slide 34，\(a\times b\) 板、任意载荷）：把载荷展开成双重 Fourier 级数</p>
+<p><b>推广</b> (Slide 34，\(a\times b\) 板、任意载荷)：把载荷展开成双重 Fourier 级数</p>
 \[p_{mn}=\frac{4}{ab}\int_0^a\!\!\int_0^bp(x,y)\sin\frac{m\pi x}{a}\sin\frac{n\pi y}{b}\,dx\,dy,\qquad w_{mn}=\frac{p_{mn}}{K\pi^4\left[\left(\frac ma\right)^2+\left(\frac nb\right)^2\right]^2}\]
 <div class="note"><span class="lbl">补充说明</span>
 <ul>
-<li>正弦函数是双调和算子的"特征函数"：\(\nabla^4\) 作用后形状不变，只乘一个常数，所以每一项 Fourier 分量都可以独立求解（Navier 解）。</li>
+<li>正弦函数是双调和算子的"特征函数"：\(\nabla^4\) 作用后形状不变，只乘一个常数，所以每一项 Fourier 分量都可以独立求解 (Navier 解)。</li>
 <li>验算：令 \(a=b=l\)、\(m=n=1\)，推广公式给出 \(w_{11}=p_{11}l^4/(4\pi^4K)\)，与上面的特例一致。</li>
 <li>同一套 Fourier 方法用于 Lecture 5 的板屈曲：把 \(q\) 换成 \(N_x\partial^2w/\partial x^2\) 项，得到屈曲系数 \(k=(m/\alpha+\alpha/m)^2\)。</li>
 </ul></div>

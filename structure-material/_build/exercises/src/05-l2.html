@@ -9,7 +9,7 @@
 <p>Example: Rod under uniaxial tension (\(A=1\,\mathrm{mm^2}\), \(F=10\,\mathrm N\)). The Cauchy stress tensor contains all the information needed to determine the normal and shear stresses on any plane passing through a point. Determine the traction, normal stress and shear stress on (a) the cross-section with normal \(-\vec e_x\) and (b) a 45° cut.</p>
 </div>
 <details class="sol"><summary>解答</summary>
-<p>应力张量（只有 \(\sigma_{xx}\)）：</p>
+<p>应力张量 (只有 \(\sigma_{xx}\))：</p>
 \[\sigma=\frac FA=\frac{10\,\mathrm N}{1\,\mathrm{mm^2}}=10\,\mathrm{MPa},\qquad \boldsymbol\sigma=\begin{bmatrix}10&0&0\\0&0&0\\0&0&0\end{bmatrix}\mathrm{MPa}\]
 <p><b>(a) 横截面</b>，\(\vec n=[-1,0,0]^T\)：</p>
 \[\vec t=\boldsymbol\sigma\vec n=\begin{Bmatrix}-10\\0\\0\end{Bmatrix},\qquad \sigma_N=\vec n^T\boldsymbol\sigma\vec n=10\,\mathrm{MPa},\qquad \vec t_n=\sigma_N\vec n=[-10\ 0\ 0]^T,\qquad \tau=0\]
@@ -36,7 +36,7 @@
 <div class="note"><span class="lbl">补充说明</span>
 <ul>
 <li>与例 1 一致：\(\sigma'_{x'x'}=5\) 是 45° 截面上的正应力，\(|\tau'_{x'y'}|=5\) 是该截面上的切应力。张量旋转一次给出了所有方向的分量，是比逐个截面计算更系统的方法。</li>
-<li>切应力符号取决于坐标轴方向约定，大小不变。旋转前后迹不变：\(10+0=5+5\)（应力不变量）。</li>
+<li>切应力符号取决于坐标轴方向约定，大小不变。旋转前后迹不变：\(10+0=5+5\) (应力不变量)。</li>
 </ul></div>
 </details>
 </article>
@@ -48,8 +48,8 @@
 \[\det\begin{bmatrix}10-\lambda&0\\0&0-\lambda\end{bmatrix}=-\lambda(10-\lambda)=0\ \Rightarrow\ \lambda_1=10,\ \lambda_2=0\]
 \[\det\begin{bmatrix}5-\lambda&-5\\-5&5-\lambda\end{bmatrix}=(5-\lambda)^2-25=\lambda^2-10\lambda=0\ \Rightarrow\ \lambda_1=10,\ \lambda_2=0\]
 <p>两种坐标系得到相同的主应力 \(\boldsymbol\sigma_{principal}=\begin{bmatrix}10&0\\0&0\end{bmatrix}\)：杆内部实际上是单轴拉伸。</p>
-<p class="erratum">原解答笔误：右侧特征方程写成 \(\lambda^2-10\lambda+25=0\)，应为 \(\lambda^2-10\lambda=0\)（\(+25\) 与 \(-25\) 抵消）；若按 \(+25\) 求解会得到重根 5，而不是幻灯片给出的 10 和 0。</p>
-<div class="note"><span class="lbl">补充说明</span><p>主应力是应力张量的特征值，与坐标系无关（不变量），所以可以用来判断"真实"的受力类型：一个非零主应力 → 单轴，两个 → 双轴，\(\sigma_1=-\sigma_2\) → 纯剪（Lecture 2 Slide 10 表格）。强度准则（Rankine、Tresca、von Mises）也都建立在主应力之上。</p></div>
+<p class="erratum">原解答笔误：右侧特征方程写成 \(\lambda^2-10\lambda+25=0\)，应为 \(\lambda^2-10\lambda=0\) (\(+25\) 与 \(-25\) 抵消)；若按 \(+25\) 求解会得到重根 5，而不是幻灯片给出的 10 和 0。</p>
+<div class="note"><span class="lbl">补充说明</span><p>主应力是应力张量的特征值，与坐标系无关 (不变量)，所以可以用来判断"真实"的受力类型：一个非零主应力 → 单轴，两个 → 双轴，\(\sigma_1=-\sigma_2\) → 纯剪 (Lecture 2 Slide 10 表格)。强度准则 (Rankine、Tresca、von Mises) 也都建立在主应力之上。</p></div>
 </details>
 </article>
 
@@ -60,16 +60,16 @@
 \[\frac{d}{dt}\left(\frac{\partial T}{\partial\dot u}\right)-\frac{\partial T}{\partial u}+\frac{\partial\Pi_i}{\partial u}=\frac{\partial W_e}{\partial u}\]
 </div>
 <details class="sol"><summary>解答</summary>
-<p><b>Example 1</b>（静力）：\(\Pi_i=\tfrac12ku^2\)，\(W_e=Fu\)：</p>
+<p><b>Example 1</b> (静力)：\(\Pi_i=\tfrac12ku^2\)，\(W_e=Fu\)：</p>
 \[\frac{\partial\Pi_i}{\partial u}=ku,\quad \frac{\partial W_e}{\partial u}=F\ \Rightarrow\ \boxed{ku=F}\]
-<p><b>Example 2</b>（动力）：另加动能 \(T=\tfrac12m\dot u^2\)：</p>
+<p><b>Example 2</b> (动力)：另加动能 \(T=\tfrac12m\dot u^2\)：</p>
 \[\frac{\partial T}{\partial\dot u}=m\dot u,\quad \frac{d}{dt}\left(\frac{\partial T}{\partial\dot u}\right)=m\ddot u,\quad \frac{\partial T}{\partial u}=0\ \Rightarrow\ \boxed{m\ddot u+ku=F}\]
-<div class="note"><span class="lbl">补充说明</span><p>Lagrange 方法的好处：不用画受力图、不用追踪内力，只要写出能量（标量）再求导，刚度矩阵和质量矩阵就"自动"出来了。FEM 本质上就是系统化地应用这个方法（Lecture 6 Slide 6）。</p></div>
+<div class="note"><span class="lbl">补充说明</span><p>Lagrange 方法的好处：不用画受力图、不用追踪内力，只要写出能量 (标量) 再求导，刚度矩阵和质量矩阵就"自动"出来了。FEM 本质上就是系统化地应用这个方法 (Lecture 6 Slide 6)。</p></div>
 </details>
 </article>
 
 <article class="task" id="l2-5">
-<h3><span class="tno">例 5</span>两自由度弹簧–质量系统</h3>
+<h3><span class="tno">例 5</span>两 DoF 弹簧–质量系统</h3>
 <div class="q">
 <figure class="fig"><img src="exercises/L2-2dof.png" alt="墙–k1–m1–k2–m2 串联系统"></figure>
 <p>Example 2: 2-DoF System. Derive the equations of motion of the two masses \(m_1,m_2\) connected in series by springs \(k_1,k_2\), loaded by \(f_1,f_2\).</p>
@@ -80,7 +80,7 @@
 \[\frac{d}{dt}\frac{\partial T}{\partial\dot x_1}=m_1\ddot x_1,\quad \frac{d}{dt}\frac{\partial T}{\partial\dot x_2}=m_2\ddot x_2,\quad \frac{\partial T}{\partial x_i}=0,\quad \frac{\partial W_e}{\partial x_i}=f_i\]
 \[k_1x_1+k_2(x_1-x_2)+m_1\ddot x_1=f_1,\qquad k_2(x_2-x_1)+m_2\ddot x_2=f_2\]
 \[\begin{bmatrix}m_1&0\\0&m_2\end{bmatrix}\begin{Bmatrix}\ddot x_1\\\ddot x_2\end{Bmatrix}+\begin{bmatrix}k_1+k_2&-k_2\\-k_2&k_2\end{bmatrix}\begin{Bmatrix}x_1\\x_2\end{Bmatrix}=\begin{Bmatrix}f_1\\f_2\end{Bmatrix}\]
-<div class="note"><span class="lbl">补充说明</span><p>弹簧 2 的势能取决于<b>相对</b>位移 \(x_2-x_1\)，这就是刚度矩阵出现非对角项 \(-k_2\) 的原因。Lecture 7 第 8 节把这个系统代入数值（\(k=0.1\,\mathrm{N/mm},\ m=0.2\,\mathrm{kg}\)）求了静变形、固有频率和振型，见 <a href="#l7-2">Lecture 7 例 2</a>。</p></div>
+<div class="note"><span class="lbl">补充说明</span><p>弹簧 2 的势能取决于<b>相对</b>位移 \(x_2-x_1\)，这就是刚度矩阵出现非对角项 \(-k_2\) 的原因。Lecture 7 第 8 节把这个系统代入数值 (\(k=0.1\,\mathrm{N/mm},\ m=0.2\,\mathrm{kg}\)) 求了静变形、固有频率和振型，见 <a href="#l7-2">Lecture 7 例 2</a>。</p></div>
 </details>
 </article>
 </section>

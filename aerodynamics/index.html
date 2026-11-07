@@ -37,7 +37,7 @@
         <span class="d">均匀流 + source/sink 求某点速度；non-lifting / lifting cylinder：V∞ 加倍后流线形状是否改变</span>
       </a></li>
       <li><a href="tutorials/tutorial-3.pdf">
-        <span class="t">Tutorial 3 · 升力线理论</span><span class="tag">10 页</span>
+        <span class="t">Tutorial 3 · lifting line theory</span><span class="tag">10 页</span>
         <span class="d">Prandtl lifting line：抛物线环量分布下的升力、尾涡片强度 γ(y)、downwash w(y)、induced drag 积分式</span>
       </a></li>
       <li><a href="tutorials/tutorial-4.pdf">
@@ -51,8 +51,8 @@
     <h2>编程作业 Code (MATLAB) <a href="code/aerodynamics-code.zip">打包下载 ↓</a></h2>
     <ul class="items">
       <li><div class="card">
-        <span class="t">涡面元法 Vortex Panel Method</span><span class="tag">NACA 4 位数翼型</span>
-        <span class="d">常值 γ 面元、flow tangency + Kutta 条件，求 c<sub>l</sub>–α 与 C<sub>p</sub> 分布；答案版附 5 个思考题（升力从哪来、Kutta 条件的作用、厚度与弯度、为何预测不了失速）</span>
+        <span class="t">vortex panel method</span><span class="tag">NACA 4 位数翼型</span>
+        <span class="d">常值 γ 面元、flow tangency + Kutta 条件，求 c<sub>l</sub>–α 与 C<sub>p</sub> 分布；答案版附 5 个思考题 (升力从哪来、Kutta 条件的作用、厚度与弯度、为何预测不了失速)</span>
         <div class="links">
           <a href="code/vortex-panel-equations.pdf">公式汇总 PDF</a>
           <a href="code/vortex_panel_method.m" class="alt">填空版 .m</a>
@@ -61,7 +61,7 @@
         </div>
       </div></li>
       <li><div class="card">
-        <span class="t">升力线理论 Lifting Line Theory</span>
+        <span class="t">lifting line theory</span>
         <span class="d">用一排马蹄涡离散机翼：downwash、有效迎角、升力、诱导阻力，以及所需扭转 twist</span>
         <div class="links">
           <a href="code/lifting_line_theory.m" class="alt">填空版 .m</a>
@@ -70,7 +70,7 @@
       </div></li>
       <li><div class="card">
         <span class="t">XFOIL 练习 XFOIL Exercise</span><span class="tag">NACA 0021 / 4421</span>
-        <span class="d">无黏 → 黏性（Re = 5.8×10⁶）→ 有弯度翼型；答案脚本把 XFOIL、涡面元法和风洞压力孔数据画在一起对比</span>
+        <span class="d">无黏 → 黏性 (Re = 5.8×10⁶)→ 有弯度翼型；答案脚本把 XFOIL、涡面元法和风洞压力孔数据画在一起对比</span>
         <div class="links">
           <a href="code/xfoil-commands.pdf">操作指南 PDF</a>
           <a href="code/xfoil_assignment_solution.m">答案脚本 .m</a>
@@ -84,15 +84,15 @@
     <ul class="items">
       <li><div class="card">
         <span class="t">NACA 0021 压力孔实验 Pressure Tap Experiment</span><span class="tag">8 页</span>
-        <span class="d">高压风洞（约 230 atm）+ 32 个压力孔 + 天平。任务：计算三组数据的 Re；画 α = 0 时上下表面压力分布；用天平与压力积分两种方法得到 lift / drag 曲线并比较</span>
+        <span class="d">高压风洞 (约 230 atm)+ 32 个压力孔 + 天平。任务：计算三组数据的 Re；画 α = 0 时上下表面压力分布；用天平与压力积分两种方法得到 lift / drag 曲线并比较</span>
         <div class="links">
           <a href="lab/aerodynamics-lab.pdf">实验说明 PDF</a>
-          <a href="lab/aerodynamics-lab.pptx" class="alt">原始 PPT（26 MB）</a>
+          <a href="lab/aerodynamics-lab.pptx" class="alt">原始 PPT (26 MB)</a>
         </div>
       </div></li>
       <li><div class="card">
         <span class="t">实验数据与课程代码 Data and Course Code</span>
-        <span class="d">数据列：α、速度、密度、升力、阻力、32 个压力孔读数。<code>airfoil_normals.m</code> 给出压力孔坐标与法向量（需与 <code>NACA0021_taps.mat</code> 放在同一文件夹）</span>
+        <span class="d">数据列：α、速度、密度、升力、阻力、32 个压力孔读数。<code>airfoil_normals.m</code> 给出压力孔坐标与法向量 (需与 <code>NACA0021_taps.mat</code> 放在同一文件夹)</span>
         <div class="links">
           <a href="lab/data_Re1.txt">data_Re1.txt</a>
           <a href="lab/data_Re2.txt">data_Re2.txt</a>
@@ -118,15 +118,15 @@
     <p class="note">网页版可直接查看图和动画；想拖动、点击交互，请下载 .ipynb 在本地 Jupyter 中运行</p>
     <ul class="items">
       <li><div class="card">
-        <span class="t">Notebook 1 · 流线、迹线与脉线</span>
-        <span class="d">Streamlines, pathlines, streaklines：定常流中三者重合，非定常流中各不相同（含动画）</span>
+        <span class="t">Notebook 1 · streamline、迹线与脉线</span>
+        <span class="d">Streamlines, pathlines, streaklines：定常流中三者重合，非定常流中各不相同 (含动画)</span>
         <div class="links">
           <a href="notebooks/01-streamlines-pathlines-streaklines.html">网页版</a>
           <a href="notebooks/01-streamlines-pathlines-streaklines.ipynb" class="alt">.ipynb</a>
         </div>
       </div></li>
       <li><div class="card">
-        <span class="t">Notebook 2 · 涡量与环量</span>
+        <span class="t">Notebook 2 · 涡量与 circulation</span>
         <span class="d">Vorticity and circulation：Rankine 涡，orbiting is not spinning；Stokes 定理；自己画围线计算 Γ</span>
         <div class="links">
           <a href="notebooks/02-vorticity-and-circulation.html">网页版</a>
@@ -147,7 +147,7 @@
 
   <section>
     <h2>手写笔记 Handwritten</h2>
-    <p class="empty">（待添加，放在 handwritten/ 文件夹）</p>
+    <p class="empty">(待添加，放在 handwritten/ 文件夹)</p>
   </section>
   <footer>最后更新：2026-11-07 · <a href="https://github.com/stickydog/stickydog.github.io">源文件</a></footer>
 </main>

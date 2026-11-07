@@ -1,6 +1,6 @@
 <section class="set" id="t1" data-short="Tutorial 1">
 <h2 class="set-title"><span class="set-num">Tutorial 1</span>基础回顾 Repetition<span class="set-src">Lecture 1 · 13 页</span></h2>
-<p class="lead">复习后面整门课都要用到的两类工具：线性代数（向量、矩阵、旋转变换、线性方程组）和静力学（支反力、剪力图与弯矩图）。Task 2 和 4.1 用 Python (NumPy) 验算手算结果。</p>
+<p class="lead">复习后面整门课都要用到的两类工具：线性代数 (向量、矩阵、旋转变换、线性方程组) 和静力学 (支反力、剪力图与弯矩图)。Task 2 和 4.1 用 Python (NumPy) 验算手算结果。</p>
 
 <article class="task" id="t1-1">
 <h3><span class="tno">Task 1</span>向量与矩阵运算</h3>
@@ -23,7 +23,7 @@
 \[\vec d=\begin{bmatrix}1.0\\2.5\\2.0\end{bmatrix}\times\begin{bmatrix}0.0\\1.0\\0.0\end{bmatrix}=\begin{bmatrix}2.5\cdot0.0-2.0\cdot1.0\\2.0\cdot0.0-1.0\cdot0.0\\1.0\cdot1.0-2.5\cdot0.0\end{bmatrix}=\begin{bmatrix}-2.0\\0.0\\1.0\end{bmatrix}\]
 <p><b>D)</b> 把矩阵乘向量看成"各列的线性组合"：</p>
 \[\vec e=\begin{bmatrix}1.0\\1.5\\0.0\end{bmatrix}\cdot0+\begin{bmatrix}1.5\\2.5\\1.0\end{bmatrix}\cdot1.0+\begin{bmatrix}0.0\\1.0\\3.0\end{bmatrix}\cdot0=\begin{bmatrix}1.5\\2.5\\1.0\end{bmatrix}\]
-<p>因为 \(A=A^T\)（对称矩阵），所以 \(\vec f=\vec e\)。</p>
+<p>因为 \(A=A^T\) (对称矩阵)，所以 \(\vec f=\vec e\)。</p>
 <div class="note"><span class="lbl">补充说明</span>
 <ul>
 <li>\(\vec v=\vec e_y\) 是单位基向量，所以 \(A\vec v\) 就是 \(A\) 的第 2 列——这是检查矩阵乘法最快的办法。</li>
@@ -97,17 +97,17 @@ f = np.matmul(A.T, v)       # [1.5 2.5 1. ]</pre>
 \[\vec b=[A]^{-1}\vec u=-\frac{4}{113}\begin{bmatrix}2.0\cdot2-5.5\cdot3\\-5.5\cdot2+1.0\cdot3\end{bmatrix}=-\frac{4}{113}\begin{bmatrix}-12.5\\-8\end{bmatrix}=\begin{bmatrix}0.4425\\0.2832\end{bmatrix}\]
 <p><b>验算：</b></p>
 \[-\frac{4}{113}\begin{bmatrix}1.0&5.5\\5.5&2.0\end{bmatrix}\begin{bmatrix}-12.5\\-8\end{bmatrix}=-\frac{4}{113}\begin{bmatrix}-56.5\\-84.75\end{bmatrix}=\begin{bmatrix}2\\3\end{bmatrix}\ \checkmark\]
-<p><b>4.1)</b> Python：<code>b = np.linalg.solve(A, u)</code>（推荐），或 <code>A_inv = np.linalg.inv(A); b = A_inv @ u</code>。</p>
+<p><b>4.1)</b> Python：<code>b = np.linalg.solve(A, u)</code>(推荐)，或 <code>A_inv = np.linalg.inv(A); b = A_inv @ u</code>。</p>
 <div class="note"><span class="lbl">补充说明</span>
 <ul>
 <li>数值计算中优先用 <code>solve</code> 而不是先求逆：求逆更慢、舍入误差更大。FEM 里解 \([K]\{u\}=\{f\}\) 也是同样道理。</li>
-<li>行列式为负并不奇怪——这个矩阵不正定（有一个负特征值）。真正的刚度矩阵必须正定，否则结构是机构或不稳定的。</li>
+<li>行列式为负并不奇怪——这个矩阵不正定 (有一个负特征值)。真正的刚度矩阵必须正定，否则结构是机构或不稳定的。</li>
 </ul></div>
 </details>
 </article>
 
 <article class="task" id="t1-5">
-<h3><span class="tno">Task 5</span>悬臂梁的支反力</h3>
+<h3><span class="tno">Task 5</span>悬臂梁的 support reaction</h3>
 <div class="q">
 <figure class="fig"><img src="exercises/t1-task5.png" alt="悬臂梁，端部受竖向力 F1 与水平力 F2"></figure>
 <p>Given is a rigid beam loaded by constant forces \(F_1=10\,\mathrm N\) and \(F_2=1\,\mathrm N\) (\(L=0.5\,\mathrm m\)).</p>
@@ -118,15 +118,15 @@ f = np.matmul(A.T, v)       # [1.5 2.5 1. ]</pre>
 \[\sum F_x=0:\ A_x-F_2=0\ \Rightarrow\ A_x=F_2=1\,\mathrm N\]
 \[\sum F_y=0:\ A_y-F_1=0\ \Rightarrow\ A_y=F_1=10\,\mathrm N\]
 \[\sum M_z^{(A)}=0:\ M_{A,z}-F_1L=0\ \Rightarrow\ M_{A,z}=F_1L=5\,\mathrm{Nm}\]
-<p><b>矢量写法</b>（与原解答右侧对应）：\(\vec r_{AF}=[0.5,\,0,\,0]^T\)，\(\vec F=[-1,\,-10,\,0]^T\)，</p>
+<p><b>矢量写法</b> (与原解答右侧对应)：\(\vec r_{AF}=[0.5,\,0,\,0]^T\)，\(\vec F=[-1,\,-10,\,0]^T\)，</p>
 \[\vec F_A+\vec F=0\Rightarrow\begin{bmatrix}A_x\\A_y\end{bmatrix}=\begin{bmatrix}1.0\\10.0\end{bmatrix},\qquad \vec M_A+\vec r_{AF}\times\vec F=0\Rightarrow M_{A,z}=-(0.5\cdot(-10))=5.0\,\mathrm{Nm}\]
 <div class="note"><span class="lbl">补充说明</span>
-<p>矢量写法的好处是力矩的正负号由叉积自动给出（逆时针为正），在 Task 6 那种力有斜向分量、作用点不在梁轴线上的情况下尤其不容易出错。\(F_2\) 沿梁轴线作用，对 A 点不产生力矩。</p></div>
+<p>矢量写法的好处是力矩的正负号由叉积自动给出 (逆时针为正)，在 Task 6 那种力有斜向分量、作用点不在梁轴线上的情况下尤其不容易出错。\(F_2\) 沿梁轴线作用，对 A 点不产生力矩。</p></div>
 </details>
 </article>
 
 <article class="task" id="t1-6">
-<h3><span class="tno">Task 6</span>刚架的支反力</h3>
+<h3><span class="tno">Task 6</span>frame 的 support reaction</h3>
 <div class="q">
 <figure class="fig"><img src="exercises/t1-task6.png" alt="简支刚架：0.25L 处集中力偶，0.5L 处竖杆顶端受 45° 斜向力"></figure>
 <p>Given is a rigid frame structure loaded by a constant force \(F=10\,\mathrm N\) and a moment \(M_1=12\,\mathrm{Nm}\), \(\alpha=45^\circ\) (\(L=0.5\,\mathrm m\), force applied at \(x=0.5L\), height \(b=0.1L\)).</p>
@@ -135,9 +135,9 @@ f = np.matmul(A.T, v)       # [1.5 2.5 1. ]</pre>
 <details class="sol"><summary>解答</summary>
 <p>力的分量与作用点：</p>
 \[\vec F=10\begin{bmatrix}\cos45^\circ\\\sin45^\circ\end{bmatrix}=5\begin{bmatrix}\sqrt2\\\sqrt2\end{bmatrix},\qquad \vec r_{AF}=L\begin{bmatrix}0.5\\0.1\end{bmatrix},\qquad \vec r_{AB}=L\begin{bmatrix}1.0\\0.0\end{bmatrix}\]
-<p>A 为固定铰（\(A_x, A_y\)），B 为滑动铰（只有 \(B_y\)）。力平衡：</p>
+<p>A 为固定铰 (\(A_x, A_y\))，B 为滑动铰 (只有 \(B_y\))。力平衡：</p>
 \[\begin{bmatrix}A_x\\A_y\end{bmatrix}+\begin{bmatrix}0\\B_y\end{bmatrix}+5\begin{bmatrix}\sqrt2\\\sqrt2\end{bmatrix}=0\ \Rightarrow\ A_x=-5\sqrt2,\quad A_y+B_y=-5\sqrt2\]
-<p>对 A 取矩（逆时针为正）：</p>
+<p>对 A 取矩 (逆时针为正)：</p>
 \[M_1+L(0.5F_y-0.1F_x)+B_yL=0\ \Rightarrow\ B_yL=-M_1-2\sqrt2\,L\]
 <p>写成矩阵形式并求解：</p>
 \[\begin{bmatrix}1&1\\0&L\end{bmatrix}\begin{bmatrix}A_y\\B_y\end{bmatrix}=\begin{bmatrix}-5\sqrt2\\-M_1-2\sqrt2L\end{bmatrix}\ \Rightarrow\ \begin{bmatrix}A_y\\B_y\end{bmatrix}=\begin{bmatrix}-3\sqrt2+\dfrac{M_1}{L}\\-\dfrac{M_1}{L}-2\sqrt2\end{bmatrix}\approx\begin{bmatrix}19.76\\-26.83\end{bmatrix}\mathrm N\]
@@ -145,14 +145,14 @@ f = np.matmul(A.T, v)       # [1.5 2.5 1. ]</pre>
 <div class="note"><span class="lbl">补充说明</span>
 <ul>
 <li>力 \(F\) 的作用点比梁轴线高 \(b=0.1L\)，所以水平分量 \(F_x\) 也会产生力矩 \(-0.1L\,F_x\)。很多人在这里漏项。</li>
-<li>集中力偶 \(M_1\) 在力矩平衡中直接相加，与它作用在哪个位置无关（0.25L 这个尺寸对支反力没有影响，只影响弯矩图）。</li>
+<li>集中力偶 \(M_1\) 在力矩平衡中直接相加，与它作用在哪个位置无关 (0.25L 这个尺寸对支反力没有影响，只影响弯矩图)。</li>
 <li>检查：\(A_y+B_y=19.76-26.83=-7.07=-5\sqrt2\) ✓。\(B_y\) 为负表示 B 处支座实际向下拉住梁——力偶 \(M_1=12\,\mathrm{Nm}\) 相对于 \(L=0.5\,\mathrm m\) 的跨度很大。</li>
 </ul></div>
 </details>
 </article>
 
 <article class="task" id="t1-7">
-<h3><span class="tno">Task 7</span>悬臂梁的剪力图与弯矩图</h3>
+<h3><span class="tno">Task 7</span>悬臂梁的 shear force diagram 与 bending moment diagram</h3>
 <div class="q">
 <p>Given is a rigid beam (same as Task 5) loaded by a constant force \(F_1=10\,\mathrm N\) and \(F_2=1\,\mathrm N\).</p>
 <ol class="parts">
@@ -163,7 +163,7 @@ f = np.matmul(A.T, v)       # [1.5 2.5 1. ]</pre>
 </div>
 <details class="sol"><summary>解答</summary>
 <p><b>A)</b> 同 Task 5：\(A_x=1\,\mathrm N\)，\(A_y=10\,\mathrm N\)，\(M_{A,z}=5\,\mathrm{Nm}\)。</p>
-<p><b>B)</b> 在 \(x\) 处截开，取右侧部分（只受 \(F_1\)），截面上正剪力 \(Q\) 朝下（正截面约定）：</p>
+<p><b>B)</b> 在 \(x\) 处截开，取右侧部分 (只受 \(F_1\))，截面上正剪力 \(Q\) 朝下 (正截面约定)：</p>
 \[-Q-F_1=0\ \Rightarrow\ Q=-F_1=-10\,\mathrm N\quad(\text{沿全长为常数})\]
 <p><b>C)</b> 对截面取矩：</p>
 \[-M-F_1(L-x)=0\ \Rightarrow\ M(x)=F_1(x-L)\]
@@ -171,14 +171,14 @@ f = np.matmul(A.T, v)       # [1.5 2.5 1. ]</pre>
 <figure class="fig"><img src="exercises/t1-task7-qm.png" alt="剪力图为常数、弯矩图从根部 -5 Nm 线性变到 0"><figcaption>原解答中的截面受力、剪力图与弯矩图</figcaption></figure>
 <div class="note"><span class="lbl">补充说明</span>
 <ul>
-<li>检验关系 \(\dfrac{dM}{dx}=Q\)：\(\dfrac{d}{dx}F_1(x-L)=F_1\)。这里得到的是 \(+F_1\) 而 B 中 \(Q=-F_1\)，差一个符号——说明 B 和 C 用的剪力正方向约定不一致（取右段时正剪力应朝下还是朝上，不同教材约定不同）。考试时先画出所用约定，并保证 \(dM/dx=\pm Q\) 前后一致即可，弯矩图的形状和大小不受影响。</li>
-<li>悬臂梁的最大弯矩总在固定端，大小等于支反力矩 \(M_{A,z}\)（5 Nm）——这正好与 A) 互相验证。</li>
+<li>检验关系 \(\dfrac{dM}{dx}=Q\)：\(\dfrac{d}{dx}F_1(x-L)=F_1\)。这里得到的是 \(+F_1\) 而 B 中 \(Q=-F_1\)，差一个符号——说明 B 和 C 用的剪力正方向约定不一致 (取右段时正剪力应朝下还是朝上，不同教材约定不同)。考试时先画出所用约定，并保证 \(dM/dx=\pm Q\) 前后一致即可，弯矩图的形状和大小不受影响。</li>
+<li>悬臂梁的最大弯矩总在固定端，大小等于支反力矩 \(M_{A,z}\) (5 Nm)——这正好与 A) 互相验证。</li>
 </ul></div>
 </details>
 </article>
 
 <article class="task" id="t1-8">
-<h3><span class="tno">Task 8</span>简支梁的剪力图与弯矩图</h3>
+<h3><span class="tno">Task 8</span>简支梁的 shear force diagram 与 bending moment diagram</h3>
 <div class="q">
 <figure class="fig"><img src="exercises/t1-task8.png" alt="简支梁跨中受 F1，B 端受轴向 F2"></figure>
 <p>Given is a rigid beam loaded by a constant force \(F_1=10\,\mathrm N\) (at \(0.5L\)) and \(F_2=1\,\mathrm N\) (\(L=0.5\,\mathrm m\)).</p>
@@ -197,19 +197,19 @@ f = np.matmul(A.T, v)       # [1.5 2.5 1. ]</pre>
 \[0\lt x_1\lt 0.5L:\quad Q+A_y=0\Rightarrow Q=-A_y=-5\,\mathrm N\]
 \[0.5L\lt x\lt L:\quad Q+A_y-F_1=0\Rightarrow Q=-A_y+F_1=+5\,\mathrm N\]
 <figure class="fig"><img src="exercises/t1-task8-q.png" alt="剪力图在跨中 F1 处跳变 10 N"><figcaption>剪力在集中力 \(F_1\) 处跳变，跳变量等于 \(F_1\)</figcaption></figure>
-<p><b>C)</b> 第 1 段（取左段，\(0\lt x_1\lt0.5L\)）：</p>
+<p><b>C)</b> 第 1 段 (取左段，\(0\lt x_1\lt0.5L\))：</p>
 \[M-A_yx_1=0\Rightarrow M=A_yx_1=5x_1\]
-<p>第 2 段（取右段，\(x_2\) 从跨中量起，\(0\lt x_2\lt0.5L\)）：</p>
+<p>第 2 段 (取右段，\(x_2\) 从跨中量起，\(0\lt x_2\lt0.5L\))：</p>
 \[-M+B_y\left(\tfrac L2-x_2\right)=0\Rightarrow M=B_y\left(\tfrac L2-x_2\right)\]
 <p>跨中最大弯矩：</p>
 \[M_{\max}=M(x_1=0.5L)=M(x_2=0)=5\cdot\frac L2=1.25\,\mathrm{Nm}=\frac{F_1L}{4}\]
 <figure class="fig"><img src="exercises/t1-task8-m.png" alt="三角形弯矩图，跨中最大 5·L/2 Nm"></figure>
-<p class="erratum">原解答勘误：第 2 段写成了 "\(M=B_y(\tfrac L2-x_2)=0\)"，末尾的 "= 0" 是笔误；它只在 \(x_2=L/2\)（支座 B）处为 0。</p>
+<p class="erratum">原解答勘误：第 2 段写成了 "\(M=B_y(\tfrac L2-x_2)=0\)"，末尾的 "= 0" 是笔误；它只在 \(x_2=L/2\) (支座 B) 处为 0。</p>
 <div class="note"><span class="lbl">补充说明</span>
 <ul>
-<li>集中力下的规律：剪力图在集中力处跳变、弯矩图在该处出现折角（尖点）；剪力为零（换号）的位置就是弯矩极值所在。</li>
+<li>集中力下的规律：剪力图在集中力处跳变、弯矩图在该处出现折角 (尖点)；剪力为零 (换号) 的位置就是弯矩极值所在。</li>
 <li>\(M_{\max}=F L/4\) 是跨中集中力简支梁的标准结果，值得记住，可用于快速估算。</li>
-<li>\(F_2\) 只产生轴力 \(N=-1\,\mathrm N\)（受压）不影响剪力和弯矩。</li>
+<li>\(F_2\) 只产生轴力 \(N=-1\,\mathrm N\) (受压) 不影响剪力和弯矩。</li>
 </ul></div>
 </details>
 </article>

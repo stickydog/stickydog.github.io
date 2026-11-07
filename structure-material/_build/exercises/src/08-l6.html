@@ -1,41 +1,41 @@
 <section class="set" id="l6" data-short="Lecture 6 例题">
 <h2 class="set-title"><span class="set-num">Lecture 6</span>有限元法 · 课堂例题<span class="set-src">Slides 8–29</span></h2>
-<p class="lead">FEM 的五个例题由浅入深：一维杆（组装与边界条件）→ 两杆桁架（坐标变换）→ 悬臂梁（集中力、均布载荷与等效节点力）→ 梁–杆组合结构（不同单元组装在一起）。每个例题都按同一个流程：单元刚度 → 变换到全局 → 组装 → 施加边界条件求解 → 后处理求应力。</p>
+<p class="lead">FEM 的五个例题由浅入深：一维杆 (组装与边界条件)→ 两杆桁架 (坐标变换)→ 悬臂梁 (集中力、均布载荷与等效节点力)→ 梁–杆组合结构 (不同单元组装在一起)。每个例题都按同一个流程：单元刚度 → 变换到全局 → 组装 → 施加边界条件求解 → 后处理求应力。</p>
 
 <article class="task" id="l6-1">
-<h3><span class="tno">例 1</span>三单元杆：组装、边界条件与求解</h3>
+<h3><span class="tno">例 1</span>三单元杆：组装、boundary conditions 与求解</h3>
 <div class="q">
 <figure class="fig"><img src="exercises/L6-bar.png" alt="长 l 的杆分为 3 个 l/3 单元，左端固定，右端受力 F"></figure>
 <p>A bar of length \(l\) (left end fixed, tip load \(F\)) is discretized by three truss elements of length \(l_e=l/3\). Assemble the global stiffness matrix, apply the boundary conditions, solve for the nodal displacements and compute strain and stress.</p>
 </div>
 <details class="sol"><summary>解答</summary>
-<p>三个单元刚度矩阵相同，\([K]_i=\dfrac{EA}{l_e}\begin{bmatrix}1&-1\\-1&1\end{bmatrix}\)，分别作用于节点 (1,2)、(2,3)、(3,4)。组装（重叠位置相加）：</p>
+<p>三个单元刚度矩阵相同，\([K]_i=\dfrac{EA}{l_e}\begin{bmatrix}1&-1\\-1&1\end{bmatrix}\)，分别作用于节点 (1,2)、(2,3)、(3,4)。组装 (重叠位置相加)：</p>
 \[\frac{EA}{l_e}\begin{bmatrix}1&-1&0&0\\-1&1+1&-1&0\\0&-1&1+1&-1\\0&0&-1&1\end{bmatrix}\begin{Bmatrix}d_1\\d_2\\d_3\\d_4\end{Bmatrix}=\begin{Bmatrix}f_1\\f_2\\f_3\\f_4\end{Bmatrix}\]
 <p>边界条件：\(d_1=0\)；\(f_2=f_3=0\)，\(f_4=F\)。按已知/未知分块：</p>
 \[\begin{bmatrix}K^{11}&K^{12}\\K^{21}&K^{22}\end{bmatrix}\begin{Bmatrix}u_c\\u_x\end{Bmatrix}=\begin{Bmatrix}f_x\\f_c\end{Bmatrix},\qquad \{u_x\}=[K^{22}]^{-1}\left(\{f_c\}-[K^{21}]\{u_c\}\right)\]
-<p>（\(u_c\)：已知位移，\(u_x\)：未知位移；\(f_c\)：已知力，\(f_x\)：未知反力。）因为 \(u_c=d_1=0\)：</p>
+<p>(\(u_c\)：已知位移，\(u_x\)：未知位移；\(f_c\)：已知力，\(f_x\)：未知反力。) 因为 \(u_c=d_1=0\)：</p>
 \[\frac{EA}{l_e}\begin{bmatrix}2&-1&0\\-1&2&-1\\0&-1&1\end{bmatrix}\begin{Bmatrix}d_2\\d_3\\d_4\end{Bmatrix}=\begin{Bmatrix}0\\0\\F\end{Bmatrix}\ \Rightarrow\ \begin{Bmatrix}d_2\\d_3\\d_4\end{Bmatrix}=\frac{l_e}{EA}\begin{bmatrix}1&1&1\\1&2&2\\1&2&3\end{bmatrix}\begin{Bmatrix}0\\0\\F\end{Bmatrix}=\frac{F\,l_e}{EA}\begin{Bmatrix}1\\2\\3\end{Bmatrix}\]
-<p><b>后处理</b>（每个单元内）：</p>
+<p><b>后处理</b> (每个单元内)：</p>
 \[U(x)=\left[1-\frac xl\quad\frac xl\right]\begin{Bmatrix}d_1\\d_2\end{Bmatrix},\qquad \varepsilon=\frac{du}{dx}=\frac{d_2-d_1}{l},\qquad \sigma=E\varepsilon=\frac El[-1\ \ 1]\begin{Bmatrix}d_1\\d_2\end{Bmatrix}\]
 <p>每个单元 \(\varepsilon=F/(EA)\)，\(\sigma=F/A\)。</p>
 <div class="note"><span class="lbl">补充说明</span>
 <ul>
 <li>验算：端部位移 \(d_4=3Fl_e/EA=Fl/EA\)，与 Lecture 3 例 1 的解析解完全相同——对于线性位移场的问题，线性杆单元给出精确解。</li>
 <li>反力：\(f_1=\frac{EA}{l_e}(d_1-d_2)=-F\) ✓。</li>
-<li>如果不施加边界条件，\([K]\) 是奇异的（行列式为 0）：结构可以整体刚体平移。"划掉固定自由度的行和列"就是消除刚体运动。</li>
+<li>如果不施加边界条件，\([K]\) 是奇异的 (行列式为 0)：结构可以整体刚体平移。"划掉固定自由度的行和列"就是消除刚体运动。</li>
 </ul></div>
 </details>
 </article>
 
 <article class="task" id="l6-2">
-<h3><span class="tno">例 2</span>两杆桁架：节点位移与杆应力</h3>
+<h3><span class="tno">例 2</span>两杆 truss：节点位移与杆应力</h3>
 <div class="q">
 <figure class="fig"><img src="exercises/L6-truss.png" alt="两根杆从墙上两点汇交于节点 3，节点 3 受向下 5 N"></figure>
 <p><b>Task 1:</b> Find the displacement of node 3. <b>Task 2:</b> Calculate the stresses in the elements. (Node 1 at (0, 10), node 2 at (0, 0), node 3 at (10, 5); both elements have the same \(EA\) and length \(l\); load \(F\) downward at node 3. \(A\) := constant cross section area, \(E\) := Young's modulus.)</p>
 </div>
 <details class="sol"><summary>解答</summary>
-<p><b>单元刚度</b>（全局坐标）：\(K_e=\dfrac{EA}{l}\begin{bmatrix}c^2&sc&-c^2&-sc\\sc&s^2&-sc&-s^2\\-c^2&-sc&c^2&sc\\-sc&-s^2&sc&s^2\end{bmatrix}\)</p>
-<p>单元 1（节点 1 → 3）：\(\alpha_1=-\arctan(5/10)=-26.57^\circ\)，\(c^2=0.8,\ s^2=0.2,\ sc=-0.4\)。<br>单元 2（节点 2 → 3）：\(\alpha_2=+26.57^\circ\)，\(c^2=0.8,\ s^2=0.2,\ sc=+0.4\)。</p>
+<p><b>单元刚度</b> (全局坐标)：\(K_e=\dfrac{EA}{l}\begin{bmatrix}c^2&sc&-c^2&-sc\\sc&s^2&-sc&-s^2\\-c^2&-sc&c^2&sc\\-sc&-s^2&sc&s^2\end{bmatrix}\)</p>
+<p>单元 1 (节点 1 → 3)：\(\alpha_1=-\arctan(5/10)=-26.57^\circ\)，\(c^2=0.8,\ s^2=0.2,\ sc=-0.4\)。<br>单元 2 (节点 2 → 3)：\(\alpha_2=+26.57^\circ\)，\(c^2=0.8,\ s^2=0.2,\ sc=+0.4\)。</p>
 \[K_1=\frac{EA}{l}\begin{bmatrix}0.8&-0.4&-0.8&0.4\\-0.4&0.2&0.4&-0.2\\-0.8&0.4&0.8&-0.4\\0.4&-0.2&-0.4&0.2\end{bmatrix},\qquad K_2=\frac{EA}{l}\begin{bmatrix}0.8&0.4&-0.8&-0.4\\0.4&0.2&-0.4&-0.2\\-0.8&-0.4&0.8&0.4\\-0.4&-0.2&0.4&0.2\end{bmatrix}\]
 <p><b>组装后</b>，只保留自由自由度 \(D_{3,X},D_{3,Y}\)：</p>
 \[\frac{EA}{l}\begin{bmatrix}0.8+0.8&-0.4+0.4\\-0.4+0.4&0.2+0.2\end{bmatrix}\begin{Bmatrix}D_{3,X}\\D_{3,Y}\end{Bmatrix}=\frac{EA}{l}\begin{bmatrix}1.6&0\\0&0.4\end{bmatrix}\begin{Bmatrix}D_{3,X}\\D_{3,Y}\end{Bmatrix}=\begin{Bmatrix}0\\-F\end{Bmatrix}\]
@@ -43,12 +43,12 @@
 <p><b>Task 2</b>：把全局位移变换到单元轴向，\(\sigma=\dfrac El[-1\ \ 1]\begin{Bmatrix}d_1\\d_2\end{Bmatrix}\)，\(d_i=u_{i,X}\cos\alpha+u_{i,Y}\sin\alpha\)：</p>
 \[\sigma_1=\frac El\left[\cos\alpha_1D_{3,X}+\sin\alpha_1D_{3,Y}\right]=\frac El(-0.4472)\left(-2.5\frac{Fl}{EA}\right)=+1.118\frac FA\quad(\text{拉})\]
 \[\sigma_2=\frac El\left[\cos\alpha_2D_{3,X}+\sin\alpha_2D_{3,Y}\right]=\frac El(0.4472)\left(-2.5\frac{Fl}{EA}\right)=-1.118\frac FA\quad(\text{压})\]
-<p class="erratum">原解答笔误：组装页（Slide 14–15）中 \(K_1\) 与 \(K_2\) 的耦合项 \(\pm0.4\) 符号互换了（上方单元 1 应为 \(sc=-0.4\)，下方单元 2 为 \(+0.4\)，与 Slide 13 一致）。由于两者在 \(K_{3X,3Y}\) 中正好相加为 0，最终位移和应力不受影响。</p>
+<p class="erratum">原解答笔误：组装页 (Slide 14–15) 中 \(K_1\) 与 \(K_2\) 的耦合项 \(\pm0.4\) 符号互换了 (上方单元 1 应为 \(sc=-0.4\)，下方单元 2 为 \(+0.4\)，与 Slide 13 一致)。由于两者在 \(K_{3X,3Y}\) 中正好相加为 0，最终位移和应力不受影响。</p>
 <div class="note"><span class="lbl">补充说明</span>
 <ul>
 <li>节点平衡验算：两杆与水平成 26.57°，\(\sin=0.447\)。竖直：\(2N\sin\alpha=F\Rightarrow N=F/(2\cdot0.447)=1.118F\) ✓；水平：上杆拉、下杆压，分量抵消 ✓。</li>
 <li>对称结构 + 对称载荷 → 刚度矩阵耦合项为 0、水平位移为 0，可以作为检查。</li>
-<li>竖向刚度只有 \(0.4EA/l\)：两杆接近水平，抵抗竖向载荷的效率很低（\(\propto\sin^2\alpha\)）。若把节点 3 往下移让杆更陡，刚度会显著增大。</li>
+<li>竖向刚度只有 \(0.4EA/l\)：两杆接近水平，抵抗竖向载荷的效率很低 (\(\propto\sin^2\alpha\))。若把节点 3 往下移让杆更陡，刚度会显著增大。</li>
 </ul></div>
 </details>
 </article>
@@ -80,14 +80,14 @@
 <p>The same single-element cantilever is loaded by a uniformly distributed load \(q\). Determine the equivalent nodal forces \(\{F\}=\int_0^lq\,[\phi(x)]^T\,dx\) and the tip displacements.</p>
 </div>
 <details class="sol"><summary>解答</summary>
-<p>等效节点力（用 Hermite 形函数积分）：</p>
+<p>等效节点力 (用 Hermite 形函数积分)：</p>
 \[\{F\}=\int_0^lq\begin{Bmatrix}\phi_1\\\phi_2\\\phi_3\\\phi_4\end{Bmatrix}dx=\begin{Bmatrix}ql/2\\ql^2/12\\ql/2\\-ql^2/12\end{Bmatrix}\]
 \[\begin{Bmatrix}D_3\\D_4\end{Bmatrix}=\frac{l}{12EI}\begin{bmatrix}4l^2&6l\\6l&12\end{bmatrix}\begin{Bmatrix}ql/2\\-ql^2/12\end{Bmatrix}=\frac{l}{12EI}\begin{Bmatrix}2ql^3-\tfrac12ql^3\\3ql^2-ql^2\end{Bmatrix}=\begin{Bmatrix}\dfrac{ql^4}{8EI}\\[2mm]\dfrac{ql^3}{6EI}\end{Bmatrix}\]
 <p>解析解：\(w(x)=\dfrac{q}{24EI}(6l^2x^2-4lx^3+x^4)\)，\(w(l)=\dfrac{ql^4}{8EI}\)。</p>
 <p class="erratum">原解答中载荷项写成 \(F_3=ql^2\left(1-\frac l2\right)\)，量纲不对；正确的等效节点力是 \(F_3=ql/2\)。幻灯片的写法只在 \(l=1\) 时数值上相等，图中曲线也是按 \(l=1\) 画的。</p>
 <div class="note"><span class="lbl">补充说明</span>
 <ul>
-<li>节点位移是精确的，但单元内部的挠度曲线只是三次近似（精确解是四次），所以 FEM 曲线和解析曲线在单元中间略有差别；加密网格（h 收敛）可以减小误差。</li>
+<li>节点位移是精确的，但单元内部的挠度曲线只是三次近似 (精确解是四次)，所以 FEM 曲线和解析曲线在单元中间略有差别；加密网格 (h 收敛) 可以减小误差。</li>
 <li>等效节点力 ≠ 简单地把总载荷 \(ql\) 平分到两端：还必须有端部力矩 \(\pm ql^2/12\)，它们和固端梁的固端弯矩相同。漏掉力矩项会导致位移偏大。</li>
 </ul></div>
 </details>
@@ -96,11 +96,11 @@
 <article class="task" id="l6-5">
 <h3><span class="tno">例 5</span>梁–杆组合结构</h3>
 <div class="q">
-<figure class="fig"><img src="exercises/L6-beamtruss.png" alt="悬臂梁（E, I, L）端部节点 2 由竖直杆（E, A, L）支撑到节点 3，节点 2 受向上的力 F"></figure>
+<figure class="fig"><img src="exercises/L6-beamtruss.png" alt="悬臂梁 (E, I, L)端部节点 2 由竖直杆 (E, A, L)支撑到节点 3，节点 2 受向上的力 F"></figure>
 <p><b>Task 1:</b> Find the displacement of node 2. <b>Task 2:</b> Find the bending moment in node 1. <b>Task 3:</b> Calculate the stress in the truss. (Beam: \(E,I,l\), fixed at node 1; truss: \(E,A,l\), vertical, pinned at node 3; load \(F\) upward at node 2.)</p>
 </div>
 <details class="sol"><summary>解答</summary>
-<p><b>单元刚度</b>：梁单元 \([k_e]\)（同例 3）；杆单元旋转 90°（\(c=0,\ s=1\)）：</p>
+<p><b>单元刚度</b>：梁单元 \([k_e]\) (同例 3)；杆单元旋转 90° (\(c=0,\ s=1\))：</p>
 \[K_e^{truss}=\frac{EA}{l}\begin{bmatrix}c^2&sc&-c^2&-sc\\sc&s^2&-sc&-s^2\\-c^2&-sc&c^2&sc\\-sc&-s^2&sc&s^2\end{bmatrix}=\frac{EA}{l}\begin{bmatrix}0&0&0&0\\0&1&0&-1\\0&0&0&0\\0&-1&0&1\end{bmatrix}\]
 <p>只有竖向自由度起作用。自由度编号：1 = \(w_1\)，2 = \(\varphi_1\)，3 = \(w_2\)，4 = \(\varphi_2\)，5 = 节点 3 竖向。<b>组装</b>：</p>
 \[[K_g]={\def\arraystretch{2.2}\begin{bmatrix}\dfrac{12EI}{l^3}&\dfrac{6EI}{l^2}&-\dfrac{12EI}{l^3}&\dfrac{6EI}{l^2}&0\\\dfrac{6EI}{l^2}&\dfrac{4EI}{l}&-\dfrac{6EI}{l^2}&\dfrac{2EI}{l}&0\\-\dfrac{12EI}{l^3}&-\dfrac{6EI}{l^2}&\dfrac{12EI}{l^3}+\dfrac{EA}{l}&-\dfrac{6EI}{l^2}&-\dfrac{EA}{l}\\\dfrac{6EI}{l^2}&\dfrac{2EI}{l}&-\dfrac{6EI}{l^2}&\dfrac{4EI}{l}&0\\0&0&-\dfrac{EA}{l}&0&\dfrac{EA}{l}\end{bmatrix}},\qquad \begin{Bmatrix}D_1=0\\D_2=0\\D_3\\D_4\\D_5=0\end{Bmatrix},\ \begin{Bmatrix}f_1\\f_2\\F\\0\\f_3\end{Bmatrix}\]
@@ -109,14 +109,14 @@
 \[\begin{Bmatrix}D_3\\D_4\end{Bmatrix}=\frac{1}{\left(\frac{12EI}{l^3}+\frac{EA}{l}\right)\frac{4EI}{l}-\left(\frac{6EI}{l^2}\right)^2}\begin{Bmatrix}\frac{4EI}{l}F\\\frac{6EI}{l^2}F\end{Bmatrix}\ \Rightarrow\ D_3=\frac{F}{\dfrac{3EI}{l^3}+\dfrac{EA}{l}},\qquad D_4=\frac{F}{\dfrac{2EI}{l^2}+\dfrac{2EA}{3}}\]
 <p><b>Task 2</b>：节点 1 的弯矩取总方程第 2 行：</p>
 \[f_2=\frac{6EI}{l^2}D_1+\frac{4EI}{l}D_2-\frac{6EI}{l^2}D_3+\frac{2EI}{l}D_4+0\cdot D_5=-\frac{6EI}{l^2}\frac{F}{\frac{3EI}{l^3}+\frac{EA}{l}}+\frac{2EI}{l}\frac{F}{\frac{2EI}{l^2}+\frac{2EA}{3}}\]
-<p><b>Task 3</b>：杆从节点 3（\(d_1=0\)）到节点 2（\(d_2=D_3\)）：</p>
+<p><b>Task 3</b>：杆从节点 3 (\(d_1=0\)) 到节点 2 (\(d_2=D_3\))：</p>
 \[\sigma=E\varepsilon=\frac El[-1\ \ 1]\begin{Bmatrix}0\\D_3\end{Bmatrix}=\frac ElD_3=\frac El\cdot\frac{F}{\frac{3EI}{l^3}+\frac{EA}{l}}=\frac{F}{\frac{3I}{l^2}+A}\]
 <div class="note"><span class="lbl">补充说明</span>
 <ul>
-<li><b>化简 Task 2</b>（补充）：令 \(\beta=\dfrac{EA\,l^2}{EI}\)（杆与梁的相对刚度），则 \(D_3=\dfrac{Fl^3}{EI(3+\beta)}\)、\(D_4=\dfrac{3Fl^2}{2EI(3+\beta)}\)，代入得
+<li><b>化简 Task 2</b> (补充)：令 \(\beta=\dfrac{EA\,l^2}{EI}\) (杆与梁的相对刚度)，则 \(D_3=\dfrac{Fl^3}{EI(3+\beta)}\)、\(D_4=\dfrac{3Fl^2}{2EI(3+\beta)}\)，代入得
 \[M_1=f_2=-\frac{6Fl}{3+\beta}+\frac{3Fl}{3+\beta}=-\frac{3Fl}{3+\beta}\]</li>
-<li>极限检查：\(\beta=0\)（没有杆）→ \(D_3=Fl^3/(3EI)\)、\(|M_1|=Fl\)，就是普通悬臂梁 ✓；\(\beta\to\infty\)（刚性杆）→ \(D_3\to0\)、\(M_1\to0\)，载荷全部由杆承担 ✓。</li>
-<li>物理意义：梁（弯曲刚度 \(3EI/l^3\)）和杆（轴向刚度 \(EA/l\)）在节点 2 <b>并联</b>，\(D_3=F/(k_{beam}+k_{truss})\)，载荷按刚度分配。这与 <a href="#h5">Home Exercise 5</a> 的结构属于同一类问题。</li>
+<li>极限检查：\(\beta=0\) (没有杆)→ \(D_3=Fl^3/(3EI)\)、\(|M_1|=Fl\)，就是普通悬臂梁 ✓；\(\beta\to\infty\) (刚性杆)→ \(D_3\to0\)、\(M_1\to0\)，载荷全部由杆承担 ✓。</li>
+<li>物理意义：梁 (弯曲刚度 \(3EI/l^3\)) 和杆 (轴向刚度 \(EA/l\)) 在节点 2 <b>并联</b>，\(D_3=F/(k_{beam}+k_{truss})\)，载荷按刚度分配。这与 <a href="#h5">Home Exercise 5</a> 的结构属于同一类问题。</li>
 <li>\(D_4\) 分母中 \(\frac{2EA}{3}\) 的量纲：\(EA\) 是力，\(2EI/l^2\) 也是力，转角 \(D_4\) 无量纲 ✓。</li>
 </ul></div>
 </details>

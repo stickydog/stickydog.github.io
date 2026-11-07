@@ -211,9 +211,9 @@ ol.deriv li.enter{animation:rowIn .5s ease}
 <body>
 <div class="wrap">
   <header>
-    <nav class="crumb" aria-label="导航"><a href="../">← 首页</a><a href="index.html">结构与材料</a><a href="course-notes.html#ch14-6">笔记 §14.6 块矩阵与组装</a><a href="exercises.html#l7-3">习题 Lecture 7 例 3</a><a href="exercises.html#l7-5">习题 Lecture 7 例 5（固有频率）</a></nav>
-    <h1>桁架刚度法动画演示</h1>
-    <p>例题：铝制桁架，E = 70 GPa，A = 50 mm²，ρ = 2.7 t/m³，L = 1 m，F = 850 N。依次演示 Task 1 的静力分析（自由度、单元刚度矩阵、组装、求位移、杆力与支反力）和 Task 3/4 的动力分析（质量矩阵、固有频率与振型）。</p>
+    <nav class="crumb" aria-label="导航"><a href="../">← 首页</a><a href="index.html">结构与材料</a><a href="course-notes.html#ch14-6">笔记 §14.6 块矩阵与组装</a><a href="exercises.html#l7-3">习题 Lecture 7 例 3</a><a href="exercises.html#l7-5">习题 Lecture 7 例 5 (固有频率)</a></nav>
+    <h1>truss 刚度法动画演示</h1>
+    <p>例题：铝制桁架，E = 70 GPa，A = 50 mm²，ρ = 2.7 t/m³，L = 1 m，F = 850 N。依次演示 Task 1 的静力分析 (自由度、单元刚度矩阵、组装、求位移、杆力与支反力) 和 Task 3/4 的动力分析 (质量矩阵、固有频率与振型)。</p>
   </header>
 
   <nav class="chapters" id="chapters" aria-label="章节"></nav>
@@ -529,14 +529,14 @@ ol.deriv li.enter{animation:rowIn .5s ease}
       const chips = DOF.map((d,k)=>'<span class="chip '+(FREE.includes(k)?"free":"fixed")+'">'+d+'</span>').join("");
       setBoard(step===0 ? String.raw`
         <h2>先读图：4 个节点、4 根杆</h2>
-        <p>节点 1、2 是固定铰支座（pin），节点 4 靠在竖直墙上，是滚动支座（roller）：只约束水平位移，竖直方向可以滑动。虚线只是尺寸 $L$，不是杆。</p>
+        <p>节点 1、2 是固定铰支座 (pin)，节点 4 靠在竖直墙上，是滚动支座 (roller)：只约束水平位移，竖直方向可以滑动。虚线只是尺寸 $L$，不是杆。</p>
         <table class="t"><tr><th>杆</th><th>长度 $L_e$</th><th>$EA/L_e$</th></tr>
         ${bars.map(b=>`<tr><td><span class="sw" style="background:${b.color}"></span>${b.i}–${b.j}</td><td>$${LeTex(b)}$</td><td>$${kTex(b)}$</td></tr>`).join("")}
         </table>
         <p>后面的矩阵都用 $a$、$b$ 表示，单位统一用 N–mm：</p>
         <div class="calc">$$EA=7\times10^4\ \tfrac{\text N}{\text{mm}^2}\times50\ \text{mm}^2=3.5\times10^6\ \text N$$$$a=\frac{EA}{L}=3500\ \text{N/mm},\qquad b=\frac{EA}{\sqrt2\,L}=\frac{a}{\sqrt2}=2475\ \text{N/mm}$$</div>` : String.raw`
         <h2>8 个自由度里只有 3 个是未知的</h2>
-        <p>每个节点有 $u$（水平）、$v$（竖直）两个自由度，共 8 个。支座把其中 5 个定为 0，剩下的是要求的未知量。</p>
+        <p>每个节点有 $u$ (水平)、$v$ (竖直) 两个自由度，共 8 个。支座把其中 5 个定为 0，剩下的是要求的未知量。</p>
         <p>${chips}</p>
         <p>所以最后只需要解一个 <b>3×3</b> 的方程组，而不是 8×8。图上闪动的蓝色箭头就是 $u_3$、$v_3$、$v_4$ 这 3 个自由度。</p>`);
     }},
@@ -563,7 +563,7 @@ ol.deriv li.enter{animation:rowIn .5s ease}
           <h2>得到 3×3 缩减刚度矩阵</h2>
           <p>只留下 $u_3$、$v_3$、$v_4$ 对应的行和列：</p>
           <div class="calc grow">${sysTex(-1)}</div>
-          <p>自检：矩阵对称，对角元 $a+b$、$b$、$b/2$ 都为正。对角元为正只是必要条件；这里 $\det\mathbf K_{ff}=ab^2/4\gt0$，矩阵非奇异，结构不是机构（mechanism）。</p>
+          <p>自检：矩阵对称，对角元 $a+b$、$b$、$b/2$ 都为正。对角元为正只是必要条件；这里 $\det\mathbf K_{ff}=ab^2/4\gt0$，矩阵非奇异，结构不是机构 (mechanism)。</p>
           <p class="note">右下角的 $b/2$ 只来自杆 3–4。杆 2–4 在 $v_4v_4$ 上贡献为 0，对这三个未知量完全没有贡献。</p>`);
         return;
       }
@@ -590,7 +590,7 @@ ol.deriv li.enter{animation:rowIn .5s ease}
       if(step===0) text=String.raw`<h2>组装规则：看图填块</h2>
         <p>总刚度矩阵按节点分成 2×2 的块。对每根杆 $i$–$j$：</p>
         <p>节点 $i$、节点 $j$ 的<b>对角块</b>各加 $+\mathbf k_0$；块 $(i,j)$ 和 $(j,i)$ 各加 $-\mathbf k_0$。</p>
-        <p class="note">点“下一步”，一根一根把杆加进去。每个格子右下角的小圆点表示是哪几根杆贡献的。</p>`;
+        <p class="note">点"下一步"，一根一根把杆加进去。每个格子右下角的小圆点表示是哪几根杆贡献的。</p>`;
       else if(step<=4) text=String.raw`<h2>加入杆 ${cur.i}–${cur.j}</h2>
         <p>它落在节点 ${cur.i} 和节点 ${cur.j} 的四个块上：对角块 $(${cur.i},${cur.i})$、$(${cur.j},${cur.j})$ 加 $\mathbf k_0$，耦合块 $(${cur.i},${cur.j})$、$(${cur.j},${cur.i})$ 加 $-\mathbf k_0$，其中</p>
         <div class="calc">$$\mathbf k_0=${k0Tex(cur)}$$</div>
@@ -632,10 +632,10 @@ ol.deriv li.enter{animation:rowIn .5s ease}
         setBoard(String.raw`<h2>由位移求杆力：只看沿杆轴的相对位移</h2>
           <p>每根杆的伸长量 $\Delta$ 是两端相对位移在杆轴方向 $\mathbf e=(c,s)$ 上的投影；轴力 $N$ 等于轴向刚度 $EA/L_e$ 乘以 $\Delta$：</p>
           <div class="calc">$$\Delta=c\,(u_j-u_i)+s\,(v_j-v_i),\qquad N=\frac{EA}{L_e}\,\Delta$$</div>
-          <p>$N\gt0$ 表示受拉（tension），$N\lt0$ 表示受压（compression）。垂直于杆轴的相对位移只让杆转动，不改变长度。</p>
+          <p>$N\gt0$ 表示受拉 (tension)，$N\lt0$ 表示受压 (compression)。垂直于杆轴的相对位移只让杆转动，不改变长度。</p>
           <table class="t"><tr><th>已知位移</th><th>表达式</th><th>数值</th></tr>
           <tr><td>$u_3$</td><td>$2\delta$</td><td>+0.486 mm</td></tr><tr><td>$v_3$</td><td>$-(2+2\sqrt2)\,\delta$</td><td>−1.173 mm</td></tr><tr><td>$v_4$</td><td>$-(4+4\sqrt2)\,\delta$</td><td>−2.345 mm</td></tr></table>
-          <p class="note">点“下一步”逐根计算。图中相对位移放大 ${DS}× 后画在节点 $j$ 上。</p>`);
+          <p class="note">点"下一步"逐根计算。图中相对位移放大 ${DS}× 后画在节点 $j$ 上。</p>`);
         return;
       }
       if(step<=4){
@@ -688,7 +688,7 @@ ol.deriv li.enter{animation:rowIn .5s ease}
           <tr><td><span class="sw" style="background:var(--bar13)"></span>1–3</td><td>+1700 N</td><td>(−1700, 0)</td></tr>
           <tr><td><span class="sw" style="background:var(--bar23)"></span>2–3</td><td>−1202 N</td><td>(+850, +850)</td></tr>
           <tr><td><span class="sw" style="background:var(--bar34)"></span>3–4</td><td>+1202 N</td><td>(+850, −850)</td></tr></table>
-          <p>三个力首尾相接，回到起点（下图空心圆），合力为零 ✓</p><div id="rawslot"></div>`); document.getElementById("rawslot").innerHTML=svgPoly;
+          <p>三个力首尾相接，回到起点 (下图空心圆)，合力为零 ✓</p><div id="rawslot"></div>`); document.getElementById("rawslot").innerHTML=svgPoly;
         return;
       }
       // steps 6-9: reactions by the method of sections
@@ -714,10 +714,10 @@ ol.deriv li.enter{animation:rowIn .5s ease}
         cutForce(g,250,330,"24",[-1,0]);
         reac(g,4,850,0,"R₄ₓ = ?",XY(4)[0]-14,XY(4)[1]+36,"end");
         setBoard(String.raw`<h2>截面 I–I：取右半部分求 $R_4$</h2>
-          <p>截面法（又称截断法，method of sections）：用截面把结构切开，取一侧为隔离体，被切断的杆用已知轴力代替，再列平衡方程求支反力。</p>
-          <p>截面 I–I 切断杆 1–3、2–3、2–4，取右边（节点 3、4）为隔离体。受拉杆的力背离隔离体，受压杆的力指向隔离体。</p>
+          <p>截面法 (又称截断法，method of sections)：用截面把结构切开，取一侧为隔离体，被切断的杆用已知轴力代替，再列平衡方程求支反力。</p>
+          <p>截面 I–I 切断杆 1–3、2–3、2–4，取右边 (节点 3、4) 为隔离体。受拉杆的力背离隔离体，受压杆的力指向隔离体。</p>
           <div class="calc">$$\begin{aligned}\textstyle\sum F_x=0:&\quad -N_{13}-\tfrac{N_{23}}{\sqrt2}-N_{24}+R_{4x}=0\\ &\quad -1700-\tfrac{-1202}{\sqrt2}-0+R_{4x}=-1700+850+R_{4x}=0\\ &\quad \Rightarrow\ R_{4x}=+850\ \text N\\ \textstyle\sum F_y=0:&\quad -\tfrac{N_{23}}{\sqrt2}-F=850-850=0\ \checkmark\end{aligned}$$</div>
-          <p class="note">右半部分只有一个支反力 $R_{4x}$（向右），一个方程就能解出来，竖直方向正好用来校核。</p>`);
+          <p class="note">右半部分只有一个支反力 $R_{4x}$ (向右)，一个方程就能解出来，竖直方向正好用来校核。</p>`);
         return;
       }
       if(step===7){
@@ -728,7 +728,7 @@ ol.deriv li.enter{animation:rowIn .5s ease}
         cutForce(g,x1+46,y1,"13",[1,0]);
         reac(g,1,-1700,0,"R₁",x1-60,y1+64,"start");
         setBoard(String.raw`<h2>截面 II：围住节点 1 求 $R_1$</h2>
-          <p>用一个闭合截面把节点 1 和它的支座单独切出来，只切断杆 1–3。杆 1–3 受拉，力背离隔离体（向右）。</p>
+          <p>用一个闭合截面把节点 1 和它的支座单独切出来，只切断杆 1–3。杆 1–3 受拉，力背离隔离体 (向右)。</p>
           <div class="calc">$$\begin{aligned}\textstyle\sum F_x=0:&\quad N_{13}+R_{1x}=0\ \Rightarrow\ R_{1x}=-1700\ \text N\ (\text{向左})\\ \textstyle\sum F_y=0:&\quad R_{1y}=0\end{aligned}$$</div>
           <p class="note">杆 1–3 是水平的，所以节点 1 只有水平支反力。</p>`);
         return;
@@ -742,7 +742,7 @@ ol.deriv li.enter{animation:rowIn .5s ease}
         cutForce(g,x2+46,y2,"24",[1,0]);
         reac(g,2,850,850,"R₂",x2+10,y2+70,"start");
         setBoard(String.raw`<h2>截面 III：围住节点 2 求 $R_2$</h2>
-          <p>闭合截面切断杆 2–3 和杆 2–4。杆 2–3 受压，力指向节点 2（左下方）；杆 2–4 为零力杆。</p>
+          <p>闭合截面切断杆 2–3 和杆 2–4。杆 2–3 受压，力指向节点 2 (左下方)；杆 2–4 为零力杆。</p>
           <div class="calc">$$\begin{aligned}\textstyle\sum F_x=0:&\quad \tfrac{N_{23}}{\sqrt2}+N_{24}+R_{2x}=0\ \Rightarrow\ -850+0+R_{2x}=0\ \Rightarrow\ R_{2x}=+850\ \text N\\ \textstyle\sum F_y=0:&\quad \tfrac{N_{23}}{\sqrt2}+R_{2y}=0\ \Rightarrow\ R_{2y}=+850\ \text N\end{aligned}$$</div>
           <p class="note">注意符号：杆 2–3 从节点 2 指向节点 3 的单位向量是 $(\tfrac{1}{\sqrt2},\tfrac{1}{\sqrt2})$，所以杆对节点 2 的力为 $N_{23}\,(\tfrac{1}{\sqrt2},\tfrac{1}{\sqrt2})=(-850,\,-850)$ N。</p>`);
         return;
@@ -753,10 +753,10 @@ ol.deriv li.enter{animation:rowIn .5s ease}
       reac(g,2,850,850,"R₂ = (850, 850)",XY(2)[0]+12,XY(2)[1]+64,"start");
       reac(g,4,850,0,"R₄ = (850, 0)",XY(4)[0]-14,XY(4)[1]+36,"end");
       setBoard(String.raw`<h2>整体平衡校核</h2>
-        <p>把整个桁架当作一个隔离体，三个支反力和载荷 $F$ 必须满足三个平衡方程（力矩对节点 2 取，逆时针为正）：</p>
+        <p>把整个桁架当作一个隔离体，三个支反力和载荷 $F$ 必须满足三个平衡方程 (力矩对节点 2 取，逆时针为正)：</p>
         <div class="calc">$$\begin{aligned}\textstyle\sum F_x&=-1700+850+850=0\ \checkmark\\ \textstyle\sum F_y&=850-850=0\ \checkmark\\ \textstyle\sum M_2&=\underbrace{-(-1700\ \text N)(1\ \text m)}_{R_{1x}}+\underbrace{(-850\ \text N)(2\ \text m)}_{F}=1700-1700=0\ \checkmark\end{aligned}$$</div>
         <p class="note">$R_2$ 作用在节点 2 上，$R_{4x}$ 的作用线经过节点 2，它们对节点 2 的力矩都为 0。</p>
-        <table class="t"><tr><th>支座</th><th>$R_x$</th><th>$R_y$</th></tr><tr><td>节点 1</td><td>−1700 N</td><td>0</td></tr><tr><td>节点 2</td><td>+850 N</td><td>+850 N</td></tr><tr><td>节点 4</td><td>+850 N</td><td>0（竖直可滑动）</td></tr></table>
+        <table class="t"><tr><th>支座</th><th>$R_x$</th><th>$R_y$</th></tr><tr><td>节点 1</td><td>−1700 N</td><td>0</td></tr><tr><td>节点 2</td><td>+850 N</td><td>+850 N</td></tr><tr><td>节点 4</td><td>+850 N</td><td>0 (竖直可滑动)</td></tr></table>
         <p class="note">整体只有 3 个方程，却有 5 个支反力分量，单靠整体平衡求不出来；必须先有杆力，再用截面逐个求。也可以用矩阵 $\mathbf R=\mathbf K_{sf}\,\mathbf u_f$ 直接算，结果相同。</p>`);
     }},
     {title:"变形图", steps:1, deform:true, draw(step,fwd){
@@ -765,8 +765,8 @@ ol.deriv li.enter{animation:rowIn .5s ease}
       bars.forEach(b=>{barEls[b.id].classList.add("dim");labelEls[b.id].style.opacity=.25;});
       gDef.classList.remove("hidden"); document.getElementById("load").classList.add("hidden");
       setBoard(String.raw`
-        <h2>变形形状（放大显示）</h2>
-        <p>实际位移只有毫米级，这里放大后叠在原结构上。颜色表示杆力：红色受拉（tension），蓝色受压（compression），灰色虚线为零力杆。</p>
+        <h2>变形形状 (放大显示)</h2>
+        <p>实际位移只有毫米级，这里放大后叠在原结构上。颜色表示杆力：红色受拉 (tension)，蓝色受压 (compression)，灰色虚线为零力杆。</p>
         <div class="slider"><label for="scale">放大倍数</label><input id="scale" type="range" min="50" max="400" step="10" value="${defScale}"><span class="mono" id="scaleval">${defScale}×</span></div>
         <div class="controls" style="margin-top:0"><button id="osc" type="button">${playing?"停止":"播放变形动画"}</button></div>
         <div class="legend"><span><b style="background:var(--tension)"></b>受拉</span><span><b style="background:var(--compress)"></b>受压</span><span><b style="background:var(--muted)"></b>零力</span></div>
@@ -795,7 +795,7 @@ ol.deriv li.enter{animation:rowIn .5s ease}
         const th=deg*Math.PI/180;
         const a2=34*Math.PI/180;
         el("path",{d:`M${x2+R2},${y2} A${R2},${R2} 0 0 1 ${x2+R2*Math.cos(a2)},${y2+R2*Math.sin(a2)}`,fill:"none",stroke:"var(--muted)","stroke-width":1.5,"stroke-dasharray":"6 5"},g);
-        label(g,x2+R2*Math.cos(a2)-6,y2+R2*Math.sin(a2)+18,"长度不变的圆弧（纯转动）","var(--muted)","end","500");
+        label(g,x2+R2*Math.cos(a2)-6,y2+R2*Math.sin(a2)+18,"长度不变的圆弧 (纯转动)","var(--muted)","end","500");
         el("line",{x1:x2+R2,y1:y2-20,x2:x2+R2,y2:y2+R2*Math.tan(28*Math.PI/180)+20,stroke:"var(--accent)","stroke-width":1.5,"stroke-dasharray":"6 5"},g);
         label(g,x2+R2-8,y2-46,"切线：线性理论中","var(--accent)","end","500");
         label(g,x2+R2-8,y2-28,"节点 4 竖直下移","var(--accent)","end","500");
@@ -834,14 +834,14 @@ ol.deriv li.enter{animation:rowIn .5s ease}
         <p>严格按几何算，杆 2–4 确实变长了：</p>
         <div class="calc">$$L'=\sqrt{(2L)^2+v_4^2}\approx 2L+\frac{v_4^2}{4L}$$</div>
         <p>但这个伸长量是位移的<b>二阶小量</b>。线性刚度法只保留一阶项 $\Delta=\mathbf e^{\mathsf T}(\mathbf u_j-\mathbf u_i)$，竖直位移垂直于水平杆轴，一阶伸长为 0。</p>
-        <div class="slider"><label for="theta">示意转角 θ（夸大）</label><input id="theta" type="range" min="0" max="28" step="1" value="20"><span class="mono" id="thetaval">20°</span></div>
+        <div class="slider"><label for="theta">示意转角 θ (夸大)</label><input id="theta" type="range" min="0" max="28" step="1" value="20"><span class="mono" id="thetaval">20°</span></div>
         <dl class="readout" id="ro"></dl>
-        <p>左图：线性理论里节点 4 沿<b>切线</b>竖直移动；长度不变的位置在<b>圆弧</b>上。两者之差（红色）就是真实伸长，它随 $\theta^2$ 增长，$\theta$ 很小时可以忽略。</p>
+        <p>左图：线性理论里节点 4 沿<b>切线</b>竖直移动；长度不变的位置在<b>圆弧</b>上。两者之差 (红色) 就是真实伸长，它随 $\theta^2$ 增长，$\theta$ 很小时可以忽略。</p>
         <h2 style="font-size:16px;margin-top:14px">本题的实际数值</h2>
         <div class="calc">$$\begin{aligned}\theta&=\frac{|v_4|}{2L}=\frac{2.345}{2000}\approx0.067^\circ\\ \Delta&\approx\frac{v_4^2}{4L}=\frac{2.345^2}{4000}\approx0.0014\ \text{mm}\\ N&\approx\frac{EA}{2L}\,\Delta=1750\ \text{N/mm}\times0.0014\ \text{mm}\approx2.4\ \text N\end{aligned}$$</div>
         <p class="note">对比：其他杆的轴力是 1202–1700 N。</p>
         <div id="rawslot"></div>
-        <p class="note">红线是杆 2–4 的真实伸长随 $|v_4|$ 的变化，虚线是其他杆的一阶伸长。只有 $|v_4|$ 大到约 ${vx.toFixed(0)} mm（本题的 ${(vx/2.345).toFixed(0)} 倍）时，二者才相当；那时就要做几何非线性（大变形）分析，在变形后的构形上重新列平衡。</p>`);
+        <p class="note">红线是杆 2–4 的真实伸长随 $|v_4|$ 的变化，虚线是其他杆的一阶伸长。只有 $|v_4|$ 大到约 ${vx.toFixed(0)} mm (本题的 ${(vx/2.345).toFixed(0)} 倍) 时，二者才相当；那时就要做几何非线性 (大变形) 分析，在变形后的构形上重新列平衡。</p>`);
       document.getElementById("rawslot").innerHTML=chart;
       const th=document.getElementById("theta"), tv=document.getElementById("thetaval"), ro=document.getElementById("ro");
       const upd=()=>{const d=+th.value, t=d*Math.PI/180; tv.textContent=d+"°"; drawGeo(d);
@@ -856,11 +856,11 @@ ol.deriv li.enter{animation:rowIn .5s ease}
       if(step===0){
         setBoard(String.raw`<h2>Task 3/4：先组装质量矩阵 $\mathbf M$</h2>
           <p>自由振动方程 $\mathbf M\ddot{\mathbf u}+\mathbf K\mathbf u=\mathbf 0$。设 $\mathbf u=\boldsymbol\varphi\sin\omega t$，得到 $(\mathbf K-\omega^2\mathbf M)\,\boldsymbol\varphi=\mathbf 0$，固有频率由 $\det(\mathbf K-\omega^2\mathbf M)=0$ 求出。自由度仍是 $u_3$、$v_3$、$v_4$，$\mathbf K$ 沿用前面的结果。</p>
-          <p>一致质量矩阵（课件写法：轴向形函数转到整体坐标），和刚度矩阵对比：</p>
+          <p>一致质量矩阵 (课件写法：轴向形函数转到整体坐标)，和刚度矩阵对比：</p>
           <div class="calc">$$\mathbf m_e=\frac{\rho AL_e}{6}\begin{bmatrix}2${EE}&${EE}\\${EE}&2${EE}\end{bmatrix},\qquad \mathbf k_e=\frac{EA}{L_e}\begin{bmatrix}${EE}&-${EE}\\-${EE}&${EE}\end{bmatrix}$$</div>
-          <p>块结构完全一样，所以照样“看图填块”：对角块加 $\tfrac{\rho AL_e}{3}${EE}$，耦合块加 $+\tfrac{\rho AL_e}{6}${EE}$（注意是正号）。</p>
+          <p>块结构完全一样，所以照样"看图填块"：对角块加 $\tfrac{\rho AL_e}{3}${EE}$，耦合块加 $+\tfrac{\rho AL_e}{6}${EE}$ (注意是正号)。</p>
           <div class="calc">$$\rho=2.7\times10^{-9}\ \text{t/mm}^3,\qquad \mu=\rho AL=2.7\times10^{-9}\times50\times1000=1.35\times10^{-4}\ \text t$$</div>
-          <p class="note">$\mu$ 是一根长 $L$ 的杆的质量。单位用 N–mm–t，这样 $\mathbf K$（N/mm）除以 $\mathbf M$（t）得到 s⁻²。</p>`);
+          <p class="note">$\mu$ 是一根长 $L$ 的杆的质量。单位用 N–mm–t，这样 $\mathbf K$ (N/mm) 除以 $\mathbf M$ (t) 得到 s⁻²。</p>`);
         return;
       }
       if(step===1){
@@ -890,7 +890,7 @@ ol.deriv li.enter{animation:rowIn .5s ease}
         setBoard(String.raw`<h2>集中质量：每根杆的质量对半分到两端</h2>
           <p>集中质量矩阵 $\mathbf m_e=\tfrac{\rho AL_e}{2}\,\mathbf I_{4\times4}$，$x$、$y$ 方向都一样。图中彩色圆点是每根杆分到各端的一半质量，节点质量就是这些圆点之和。</p>
           <div class="calc">$$\begin{aligned}m_3&=\frac{\mu}{2}+\frac{\sqrt2\,\mu}{2}+\frac{\sqrt2\,\mu}{2}=\mu\left(\tfrac12+\sqrt2\right)=2.584\times10^{-4}\ \text t\\ m_4&=\frac{\sqrt2\,\mu}{2}+\mu=\mu\left(1+\tfrac{\sqrt2}{2}\right)=2.305\times10^{-4}\ \text t\end{aligned}$$$$\mathbf M_l=\mu\begin{bmatrix}\frac12+\sqrt2&0&0\\0&\frac12+\sqrt2&0\\0&0&1+\frac{\sqrt2}{2}\end{bmatrix}$$</div>
-          <p class="note">节点 1、2 上的半质量（浅色）对应的位移为 0，和刚度矩阵一样划掉，不进入 $\mathbf M$。</p>`);
+          <p class="note">节点 1、2 上的半质量 (浅色) 对应的位移为 0，和刚度矩阵一样划掉，不进入 $\mathbf M$。</p>`);
         return;
       }
       setBoard(String.raw`<h2>两种质量矩阵对比</h2>
@@ -898,7 +898,7 @@ ol.deriv li.enter{animation:rowIn .5s ease}
         <table class="t"><tr><th></th><th>一致质量 $\mathbf M_c$</th><th>集中质量 $\mathbf M_l$</th></tr>
         <tr><td>形状</td><td>满阵，有耦合</td><td>对角阵</td></tr>
         <tr><td>来源</td><td>与 $\mathbf K$ 同一套形函数</td><td>质量直接堆在节点上</td></tr>
-        <tr><td>频率</td><td>精确值的上界（偏高）</td><td>通常偏低</td></tr>
+        <tr><td>频率</td><td>精确值的上界 (偏高)</td><td>通常偏低</td></tr>
         <tr><td>$u_3$ 方向的质量</td><td>$10.86\times10^{-5}$ t</td><td>$25.84\times10^{-5}$ t</td></tr></table>
         <p class="note">课件的一致质量只计沿杆轴方向的惯性，垂直于杆的运动没有质量，所以 $\mathbf M_c$ 的对角元比 $\mathbf M_l$ 小得多，频率也就高得多。</p>`);
     }},
@@ -920,11 +920,11 @@ ol.deriv li.enter{animation:rowIn .5s ease}
           <p>$\mathbf M_l=\mu\,\mathbf D$，$\mathbf D=\mathrm{diag}\!\left(\tfrac12+\sqrt2,\ \tfrac12+\sqrt2,\ 1+\tfrac{\sqrt2}{2}\right)$。令 $\omega^2=(k^*/\mu)\,\Lambda$，其中 $k^*/\mu=9.166\times10^6\ \text s^{-2}$：</p>
           <div class="calc">$$\det(\mathbf K_n-\Lambda\,\mathbf D)=0$$$$\begin{aligned}&\left(\tfrac{13}{4}+\tfrac{17\sqrt2}{8}\right)\Lambda^3-\left(\tfrac{53}{4}+9\sqrt2\right)\Lambda^2+(13+9\sqrt2)\,\Lambda-2\sqrt2=0\\ \Leftrightarrow\ &6.255\,\Lambda^3-25.978\,\Lambda^2+25.728\,\Lambda-2.828=0\end{aligned}$$</div>
           ${fTable(MODES.l,true)}
-          <p class="note">集中质量的频率全部低于一致质量。网格很粗（每杆一个单元），而且课件的一致质量不含横向惯性，所以差别很大；加密网格后两者都收敛到精确解。</p>`);
+          <p class="note">集中质量的频率全部低于一致质量。网格很粗 (每杆一个单元)，而且课件的一致质量不含横向惯性，所以差别很大；加密网格后两者都收敛到精确解。</p>`);
         drawMode(MODES.l.v[0],0); return;
       }
       let kind="c", mode=0, play=!matchMedia("(prefers-reduced-motion: reduce)").matches;
-      setBoard(String.raw`<h2>振型动画（mode shapes）</h2>
+      setBoard(String.raw`<h2>振型动画 (mode shapes)</h2>
         <p>每阶固有频率对应一个振型 $\boldsymbol\varphi$：结构按这个形状同步振动。图中振幅已放大，动画速度只示意各阶快慢，不是真实频率。</p>
         <div class="controls" style="margin-top:4px" id="kindbtns"><button type="button" data-k="c">一致质量</button><button type="button" data-k="l">集中质量</button></div>
         <div class="controls" style="margin-top:6px" id="modebtns"><button type="button" data-m="0">第 1 阶</button><button type="button" data-m="1">第 2 阶</button><button type="button" data-m="2">第 3 阶</button><button type="button" id="mplay"></button></div>
@@ -976,7 +976,7 @@ ol.deriv li.enter{animation:rowIn .5s ease}
     scenes[si].draw(st,fwd);
     const dots=document.getElementById("dots"); dots.innerHTML="";
     for(let k=0;k<scenes[si].steps;k++){const d=document.createElement("span");d.className=k===st?"on":k<st?"done":"";dots.appendChild(d);}
-    document.getElementById("stepnum").innerHTML=prettify(`第 ${si+1} 章「${scenes[si].title}」 · 步骤 ${st+1} / ${scenes[si].steps}   （键盘 ← → 也可以翻页）`);
+    document.getElementById("stepnum").innerHTML=prettify(`第 ${si+1} 章「${scenes[si].title}」 · 步骤 ${st+1} / ${scenes[si].steps}   (键盘 ← → 也可以翻页)`);
     prevB.disabled = si===0&&st===0;
     nextB.disabled = si===scenes.length-1&&st===scenes[si].steps-1;
   }
