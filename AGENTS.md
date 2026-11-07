@@ -92,7 +92,43 @@
 
 ---
 
-## 五、维护铁律（每次修改必须遵守）
+## 五、添加新课程（完整流程）
+
+新增一门课程时，按以下步骤操作，全程复制现有骨架。
+
+### 1. 建目录
+- 课程目录名用英文小写（现有：`aerodynamics/`、`structure-material/`、`flight-dynamics/`、`mechanics/`）
+- 资料按需分子目录：`lectures/`、`exercises/`、`homework/`、`exam/`、`code/`、`lab/`、`handwritten/` 等
+
+### 2. 建课程 index.html
+- 复制现有课程的 `index.html`（推荐以 `mechanics/index.html` 为模板）
+- `title`：`英文课程名 中文课程名 · 学习笔记`
+- 骨架：`.crumb`（`../` 返回首页）→ `h1`（英文名 + 中文名）→ `.sub` → 若干资料 `section`（`h2` 中英标题 + `ul.items` / `.card` / `.links`）→ `footer`
+- 相对路径：图标 `../favicon.svg`，样式 `../assets/site.css`
+
+### 3. 建 course-notes.html
+- 复制现有课程的 `course-notes.html`（推荐以 `mechanics/course-notes.html` 为模板）
+- `title`：`英文课程名 课程笔记`
+- 骨架：sidebar 目录导航 → `main`（hero `kicker` + `h1` → `part-banner` 分部 + `chapter` 章交替 → 附录三件套 → `pager` → `foot`）
+- 章内结构：章导读（`lead`）→ 节 `h3`（带 `.sec-no`）→ 小节 `h4` → 每章末尾「本章要点」（`.keypoints`）
+- 附录三件套如适用：公式速查、中英术语表、符号表
+
+### 4. 更新首页 index.html
+- 在 `main` 内新增一个课程 `section`：
+  - `h2`：`英文名 中文名 <a href="新课程目录/">全部资料 →</a>`
+  - `ul.items` 内至少放一张 `course-notes.html` 卡片（`.t` 标题 + `.tag` 章数 + `.d` 描述）
+
+### 5. 提交前一致性自检
+- [ ] 术语全部对照「术语规范」表，无新造译名
+- [ ] 公式全部 KaTeX，无图片公式/乱码
+- [ ] CSS 用同一套，无页面级内嵌覆盖
+- [ ] title、footer、`.crumb`、图注编号格式对齐现有课程
+- [ ] 首页已添加新课程区块，链接路径（`../`）正确
+- [ ] 章末有「本章要点」，术语/符号首次出现带英文注释
+
+---
+
+## 六、维护铁律（每次修改必须遵守）
 
 1. **术语**：先查上文术语表，禁止引入新译名；不确定时保持原术语并标注
 2. **结构**：新增课程/页面复制现有骨架，不另起炉灶
