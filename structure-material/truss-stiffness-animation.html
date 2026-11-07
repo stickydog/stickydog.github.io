@@ -105,6 +105,8 @@ table.t tr.enter td{animation:rowIn .5s ease}
 /* math typography */
 i{font-family:var(--font-math);font-style:italic;font-size:1.1em;letter-spacing:.01em}
 sub i{font-size:1em}
+.op{font-family:var(--font-math);padding:0 .08em}
+.detw{font-family:var(--font-math);font-size:17px}
 .sq{white-space:nowrap;font-family:var(--font-math)}
 .sq .rad{border-top:1px solid currentColor;padding:0 1px 0 1px;margin-left:-.5px}
 .calc{font-family:var(--font-math);background:var(--accent-soft);border-radius:6px;padding:8px 12px;margin:10px 0;font-size:15.5px;line-height:1.9;overflow-x:auto}
@@ -338,11 +340,12 @@ ol.deriv li.enter{animation:rowIn .5s ease}
   const SUB={"ₓ":"x","ᵧ":"y","₀":"0","₁":"1","₂":"2","₃":"3","₄":"4","₅":"5","₆":"6","₇":"7","₈":"8","₉":"9","ₑ":"e"};
   function prettyText(t,svg){
     t=t.replace(/[₀-₉ₑₓᵧ]+/g,m=>"\u0001"+[...m].map(c=>SUB[c]).join("")+"\u0002");
-    t=t.replace(/_(ff|fs|sf|ss|pp|pq|ii|ij|ji|jj|i|j|e|f|s|x|y|c|l)(?![A-Za-z])/g,"\u0005$1\u0006");
+    t=t.replace(/_(ff|fs|sf|ss|pp|pq|ii|ij|ji|jj|i|j|e|f|s|x|y|c|l|n)(?![A-Za-z])/g,"\u0005$1\u0006");
     if(!svg) t=t.replace(/√(\d+|[A-Za-z])/g,"\u0003$1\u0004");
-    t=t.replace(/(?<![A-Za-z\u0001\u0005])(EA|FL|cs|[A-Za-zδ])(?![A-Za-z])/g,(m,v,off,str)=>{
+    t=t.replace(/(?<![A-Za-z\u0001\u0005])(EA|FL|AL|cs|[A-Za-zδ])(?![A-Za-z])/g,(m,v,off,str)=>{
       const pre=str.slice(Math.max(0,off-3),off);
-      if(/^[Nmt]$/.test(v)&&/[\d⁰-⁹]\s$/.test(pre))return v;
+      if(/^[Nmts]$/.test(v)&&/[\d⁰-⁹]\s$/.test(pre))return v;
+      if(v==="s"&&/rad\/$/.test(str.slice(Math.max(0,off-4),off)))return v;
       if(v==="t"&&str[off+1]==="/")return v;
       if(v==="m"&&/N\/$/.test(pre))return v;
       if(v==="m"&&/[²³]/.test(str[off+1]||""))return v;
@@ -350,6 +353,7 @@ ol.deriv li.enter{animation:rowIn .5s ease}
     });
     t=t.replace(/\u0001/g,"<sub>").replace(/\u0002/g,"</sub>");
     t=svg ? t.replace(/\u0005/g,"<sub>").replace(/\u0006/g,"</sub>") : t.replace(/\u0005/g,"<sub><i>").replace(/\u0006/g,"</i></sub>");
+    if(!svg) t=t.replace(/[·×]/g,c=>'<span class="op">'+c+"</span>");
     return t.replace(/\u0003/g,'<span class="sq">√<span class="rad">').replace(/\u0004/g,"</span></span>");
   }
   const prettify=h=>h.split(/(<[^>]+>)/).map(p=>p.startsWith("<")?p:prettyText(p)).join("");
@@ -874,8 +878,8 @@ ol.deriv li.enter{animation:rowIn .5s ease}
       gDofs.classList.add("hidden"); gDef.classList.add("hidden"); showEvec(null); setBarFocus(null);
       if(step===0){
         setBoard(`<h2>一致质量：特征方程与频率</h2>
-          <p>K = k*·K̂，M_c = m*·M̂，其中 k* = EA/(2√2 L) = 1237.4 N/mm。令 ω² = (k*/m*)·Λ，k*/m* = 3EA/(ρAL²) = 7.778×10⁷ s⁻²：</p>
-          <div class="sys">${matHTML([["2√2+2","0","1"],["0","2","−1"],["1","−1","1"]])}<span>− Λ</span>${matHTML([["2√2+4","0","−1"],["0","4","1"],["−1","1","2"]])}<span>→ det = 0</span></div>
+          <p>把公共因子提出来：K = k* · K_n，M_c = m* · M_n，其中 K_n、M_n 是只含纯数的矩阵，k* = EA/(2√2 L) = 1237.4 N/mm，m* = μ/(6√2) = 1.591×10⁻⁵ t。</p><p>令 ω² = (k*/m*) · Λ，其中 k*/m* = 3EA/(ρAL²) = 7.778×10⁷ s⁻²，特征方程 det(K − ω²M_c) = 0 化为：</p>
+          <div class="sys"><span class="detw">det</span><span class="detw" style="font-size:30px;font-weight:300">(</span>${matHTML([["2√2+2","0","1"],["0","2","−1"],["1","−1","1"]])}<span class="detw">− Λ</span>${matHTML([["2√2+4","0","−1"],["0","4","1"],["−1","1","2"]])}<span class="detw" style="font-size:30px;font-weight:300">)</span><span class="detw">= 0</span></div>
           <div class="calc"><div>(24 + 14√2)Λ³ − (60 + 34√2)Λ² + (24 + 22√2)Λ − 2√2 = 0</div><div>43.799Λ³ − 108.083Λ² + 55.113Λ − 2.828 = 0</div></div>
           <table class="t"><tr><th>阶</th><th>Λ</th><th>ω (rad/s)</th><th>f = ω/2π</th></tr>
           ${MODES.c.L.map((L,k)=>`<tr><td>${k+1}</td><td>${L}</td><td>${MODES.c.w[k]}</td><td><b>${MODES.c.f[k]} Hz</b></td></tr>`).join("")}</table>
@@ -884,7 +888,7 @@ ol.deriv li.enter{animation:rowIn .5s ease}
       }
       if(step===1){
         setBoard(`<h2>集中质量：特征方程与频率</h2>
-          <p>M_l = μ·diag(½+√2, ½+√2, 1+√2/2)。令 ω² = (k*/μ)·Λ，k*/μ = 9.166×10⁶ s⁻²：</p>
+          <p>M_l = μ · diag(½ + √2, ½ + √2, 1 + √2/2)，μ = ρAL = 1.35×10⁻⁴ t。令 ω² = (k*/μ) · Λ，其中 k*/μ = 9.166×10⁶ s⁻²，特征方程 det(K_n − Λ · diag(½ + √2, ½ + √2, 1 + √2/2)) = 0 展开为：</p>
           <div class="calc"><div>(13/4 + 17√2/8)Λ³ − (53/4 + 9√2)Λ² + (13 + 9√2)Λ − 2√2 = 0</div><div>6.255Λ³ − 25.978Λ² + 25.728Λ − 2.828 = 0</div></div>
           <table class="t"><tr><th>阶</th><th>Λ</th><th>ω (rad/s)</th><th>f</th><th>一致质量</th></tr>
           ${MODES.l.L.map((L,k)=>`<tr><td>${k+1}</td><td>${L}</td><td>${MODES.l.w[k]}</td><td><b>${MODES.l.f[k]} Hz</b></td><td>${MODES.c.f[k]} Hz</td></tr>`).join("")}</table>
