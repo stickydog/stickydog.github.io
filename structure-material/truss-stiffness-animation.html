@@ -177,6 +177,15 @@ ol.deriv li.enter{animation:rowIn .5s ease}
 .dlabel{font-family:var(--font-math);font-size:15px;fill:var(--ink)}
 .flabel{font-family:var(--font-math);font-size:18px;font-weight:600}
 
+/* new: forces & second order */
+.ov-fade{animation:ovIn .6s ease}
+@keyframes ovIn{from{opacity:0}to{opacity:1}}
+.state{display:inline-block;font-size:12px;padding:0 8px;border-radius:999px;color:var(--panel);font-family:var(--font-body)}
+.mini-chart{width:100%;max-width:440px;height:auto;display:block;margin:8px 0}
+.mini-chart text{font-family:var(--font-math);font-size:12px;fill:var(--muted)}
+.readout{display:grid;grid-template-columns:auto 1fr;gap:2px 14px;font-size:14.5px;margin:8px 0}
+.readout dt{color:var(--muted)}
+.readout dd{margin:0;font-family:var(--font-math)}
 @media (prefers-reduced-motion: reduce){
   *,*::before,*::after{animation:none!important;transition:none!important}
   .evec{stroke-dashoffset:0}
@@ -223,6 +232,7 @@ ol.deriv li.enter{animation:rowIn .5s ease}
         <g id="bars"></g>
         <g id="evec"></g>
         <g id="deformed" class="fade hidden"></g>
+        <g id="overlay"></g>
         <g id="nodes"></g>
         <g id="dofs" class="fade hidden"></g>
 
@@ -421,6 +431,22 @@ ol.deriv li.enter{animation:rowIn .5s ease}
   }
   function stopPlay(){playing=false; if(raf)cancelAnimationFrame(raf); raf=null;}
 
+  // ---------- overlay helpers ----------
+  const gOv=document.getElementById("overlay"), fig=document.getElementById("fig"), gLoad=document.getElementById("load");
+  const XY=n=>[px(P[n][0]),py(P[n][1])];
+  function arrow(g,x1,y1,x2,y2,color,w,dash){
+    const L=Math.hypot(x2-x1,y2-y1); if(L<1){el("circle",{cx:x1,cy:y1,r:4,fill:color},g);return;}
+    const ux=(x2-x1)/L, uy=(y2-y1)/L, h=Math.min(12,L*.45), hw=h*.55;
+    el("line",{x1,y1,x2:x2-ux*h*.8,y2:y2-uy*h*.8,stroke:color,"stroke-width":w||3,"stroke-linecap":"round","stroke-dasharray":dash||"none"},g);
+    el("path",{d:`M${x2},${y2} L${x2-ux*h-uy*hw},${y2-uy*h+ux*hw} L${x2-ux*h+uy*hw},${y2-uy*h-ux*hw} Z`,fill:color},g);
+  }
+  function label(g,x,y,str,color,anchor,weight){const t=el("text",{x,y,class:"dlabel","text-anchor":anchor||"start","font-weight":weight||"600",fill:color||"var(--ink)"},g);svgMath(t,str);return t;}
+  const mmv=v=>(v*1000);
+  const fmtN=n=>Math.abs(n)<1e-6?"0":(n>0?"+":"−")+Math.round(Math.abs(n));
+  const stateChip=n=>Math.abs(n)<1e-6?`<span class="state" style="background:var(--muted)">零力</span>`:n>0?`<span class="state" style="background:var(--tension)">受拉</span>`:`<span class="state" style="background:var(--compress)">受压</span>`;
+  const barDelta=b=>{const du=U[b.j][0]-U[b.i][0], dv=U[b.j][1]-U[b.i][1]; return {du,dv,D:b.c*du+b.s*dv};};
+  const Le=b=>Math.hypot(P[b.j][0]-P[b.i][0],P[b.j][1]-P[b.i][1]);
+
   // ---------- scenes ----------
   const board=document.getElementById("board");
   const setBoard=h=>{board.innerHTML=prettify(h);};
@@ -536,7 +562,93 @@ ol.deriv li.enter{animation:rowIn .5s ease}
         ${step===0?'<p>思路：第 1、2 行右端是 0，可以先把 u₃、v₃ 都用 v₄ 表示，再代入第 3 行，只剩一个未知数。</p>':''}
         <ol class="deriv">${shown}</ol>${res}`);
     }},
-    {title:"变形与杆力", steps:1, draw(step,fwd){
+
+    {title:"杆力与反力", steps:7, vb:"50 40 620 500", noLoad:true, draw(step,fwd){
+      gDofs.classList.add("hidden"); gDef.classList.add("hidden"); showEvec(null);
+      const g=el("g",{class:"ov-fade"},gOv);
+      const DS=78; // px per mm
+      if(step===0){
+        setBarFocus(null);
+        setBoard(`<h2>由位移求杆力：只看沿杆轴的相对位移</h2>
+          <p>每根杆的伸长量是两端相对位移 u_j − u_i 在杆轴方向 e 上的投影，再乘以杆的刚度：</p>
+          <div class="formula"><span>Δ = eᵀ(u_j − u_i) = c·(u_j − u_i) + s·(v_j − v_i)</span><span>N = (EA/Lₑ)·Δ</span></div>
+          <p>N 为正表示受拉（tension），为负表示受压（compression）。垂直于杆轴的相对位移只让杆转动，不改变长度。</p>
+          <table class="t"><tr><th>已知位移</th><th>表达式</th><th>数值</th></tr>
+          <tr><td>u₃</td><td>2δ</td><td>+0.486 mm</td></tr><tr><td>v₃</td><td>−(2+2√2)δ</td><td>−1.173 mm</td></tr><tr><td>v₄</td><td>−(4+4√2)δ</td><td>−2.345 mm</td></tr></table>
+          <p class="note">点“下一步”逐根计算。图中相对位移放大 ${DS}× 后画在节点 j 上。</p>`);
+        return;
+      }
+      if(step<=4){
+        const b=bars[step-1]; setBarFocus(b.id,"dim");
+        const {du,dv,D}=barDelta(b); const Nn=EA/Le(b)*D;
+        const [xj,yj]=XY(b.j); const ex=b.c, ey=-b.s;
+        const tx=xj+mmv(du)*DS, ty=yj-mmv(dv)*DS;
+        // offset the projection line off the bar so it stays visible
+        let nx=-ey, ny=ex; const cr=(tx-xj)*nx+(ty-yj)*ny; if(cr<0){nx=-nx;ny=-ny;}
+        const ox=xj+nx*16, oy=yj+ny*16;
+        el("line",{x1:xj,y1:yj,x2:ox,y2:oy,stroke:"var(--muted)","stroke-width":1.2},g);
+        el("line",{x1:ox-ex*60,y1:oy-ey*60,x2:ox+ex*95,y2:oy+ey*95,stroke:"var(--muted)","stroke-width":1.3,"stroke-dasharray":"4 4"},g);
+        const fx=ox+ex*mmv(D)*DS, fy=oy+ey*mmv(D)*DS;
+        el("line",{x1:tx,y1:ty,x2:fx,y2:fy,stroke:"var(--muted)","stroke-width":1.3,"stroke-dasharray":"2 3"},g);
+        arrow(g,xj,yj,tx,ty,"var(--ink)",2.4);
+        label(g,tx+8,ty+14,"u_j − u_i","var(--ink)");
+        if(Math.abs(D)>1e-12){ arrow(g,ox,oy,fx,fy,forceColor(Nn),5); label(g,fx+nx*14,fy+ny*14+4,"Δ",forceColor(Nn),"middle"); }
+        else { el("circle",{cx:xj,cy:yj,r:6,fill:"none",stroke:"var(--muted)","stroke-width":2},g); label(g,xj-14,yj-18,"Δ = 0","var(--muted)","end"); }
+        const rows=bars.slice(0,step).map((x,k)=>{const r=barDelta(x), n=EA/Le(x)*r.D; return `<tr class="${k===step-1?"cur"+(fwd?" enter":""):""}"><td><span class="sw" style="background:${x.color}"></span>${x.i}–${x.j}</td><td>${(mmv(r.D)).toFixed(3).replace("-","−")} mm</td><td>${fmtN(n)} N</td><td>${(n/50).toFixed(1).replace("-","−")} MPa</td></tr>`;}).join("");
+        const expl={
+          "13":"c = 1, s = 0：Δ = u₃ − u₁ = 2δ。竖向位移 v₃ 垂直于杆轴，不影响伸长。",
+          "23":"c = s = 1/√2：Δ = (u₃ + v₃)/√2 = [2 − (2+2√2)]δ/√2 = −2δ。节点 3 向下多于向右，杆被压短。",
+          "34":"c = 1/√2, s = −1/√2：Δ = [(u₄−u₃) − (v₄−v₃)]/√2 = 2δ。节点 4 比节点 3 下沉更多，杆被拉长。",
+          "24":"c = 1, s = 0：Δ = u₄ − u₂ = 0。节点 4 的位移是竖直的，正好垂直于这根水平杆，一阶近似下杆只转动，不伸长。"}[b.id];
+        setBoard(`<h2>杆 ${b.i}→${b.j}：N = ${fmtN(Nn)} N ${stateChip(Nn)}</h2>
+          <p>相对位移 u_j − u_i = (${mmv(du).toFixed(3).replace("-","−")}, ${mmv(dv).toFixed(3).replace("-","−")}) mm，Lₑ = ${b.Le}。</p>
+          <p>${expl}</p>
+          <div class="formula"><span>N = (EA/Lₑ)·Δ = ${(EA/Le(b)/1000).toFixed(0)} N/mm × ${mmv(D).toFixed(3).replace("-","−")} mm = ${fmtN(Nn)} N</span></div>
+          <table class="t"><tr><th>杆</th><th>Δ</th><th>N</th><th>σ = N/A</th></tr>${rows}</table>
+          ${step===4?'<p class="note">严格按几何算，杆 2–4 其实伸长了一点点，这是二阶小量，见第 7 章。</p>':''}`);
+        return;
+      }
+      setBarFocus(null);
+      const FS=0.05; // px per N
+      if(step===5){
+        const [x3,y3]=XY(3);
+        const parts=[];
+        ["13","23","34"].forEach(id=>{const b=bars.find(x=>x.id===id); const other=b.i===3?b.j:b.i;
+          const [xo,yo]=XY(other); const L=Math.hypot(xo-x3,yo-y3); const ux=(xo-x3)/L, uy=(yo-y3)/L;
+          const Fx=N[id]*ux, Fy=N[id]*uy; parts.push({b,Fx,Fy});
+          arrow(g,x3,y3,x3+Fx*FS,y3+Fy*FS,b.color,4);});
+        // force polygon in board
+        let cx=40, cy=90, pts=[[cx,cy]];
+        const poly=parts.map(p=>{const x2=cx+p.Fx*FS, y2=cy+p.Fy*FS; const seg={x1:cx,y1:cy,x2,y2,c:p.b.color,id:p.b.id}; cx=x2; cy=y2; return seg;});
+        const svgPoly=`<svg class="mini-chart" viewBox="-20 20 200 150" style="max-width:260px">${poly.map(s=>`<line x1="${s.x1}" y1="${s.y1}" x2="${s.x2}" y2="${s.y2}" stroke="${s.c}" stroke-width="4" stroke-linecap="round"/><circle cx="${s.x2}" cy="${s.y2}" r="3.5" fill="${s.c}"/>`).join("")}<circle cx="40" cy="90" r="5" fill="none" stroke="var(--ink)" stroke-width="1.5"/></svg>`;
+        setBoard(`<h2>检查：节点 3 的平衡</h2>
+          <p>受拉的杆把节点往杆的另一端拉；受压时 N 为负，方向自动反过来。所以每根杆对节点的力统一写成 N × 指向另一端的单位向量。</p>
+          <table class="t"><tr><th>杆</th><th>N</th><th>对节点 3 的力 (x, y)</th></tr>
+          <tr><td><span class="sw" style="background:var(--bar13)"></span>1–3</td><td>+1700 N</td><td>(−1700, 0)</td></tr>
+          <tr><td><span class="sw" style="background:var(--bar23)"></span>2–3</td><td>−1202 N</td><td>(+850, +850)</td></tr>
+          <tr><td><span class="sw" style="background:var(--bar34)"></span>3–4</td><td>+1202 N</td><td>(+850, −850)</td></tr></table>
+          <p>三个力首尾相接，回到起点（下图空心圆），合力为零 ✓</p><div id="rawslot"></div>`); document.getElementById("rawslot").innerHTML=svgPoly;
+        return;
+      }
+      // step 6: reactions
+      gLoad.classList.remove("hidden");
+      const R={1:[-1700,0],2:[850,850],4:[850,0]};
+      Object.keys(R).forEach(n=>{const [x,y]=XY(+n); const [Rx,Ry]=R[n];
+        [[Rx,0],[0,Ry]].forEach(([a,b2])=>{ if(!a&&!b2)return; const sx=a*FS, sy=-b2*FS; const L=Math.hypot(sx,sy), ux=sx/L, uy=sy/L;
+          arrow(g, x-sx-ux*15, y-sy-uy*15, x-ux*15, y-uy*15, "var(--accent)",4); });
+      });
+      label(g,XY(1)[0]+14,XY(1)[1]+40,"R₁ = (−1700, 0)","var(--accent)","start");
+      label(g,XY(2)[0]+12,XY(2)[1]+60,"R₂ = (850, 850)","var(--accent)","start");
+      label(g,XY(4)[0]-14,XY(4)[1]+36,"R₄ = (850, 0)","var(--accent)","end");
+      setBoard(`<h2>支座反力</h2>
+        <p>支座节点上，反力和杆对节点的力平衡：R = −Σ（各杆对该节点的力）。也可以用划掉的那些行算：R = K_sf·u_f。</p>
+        <table class="t"><tr><th>节点</th><th>来自哪根杆</th><th>反力 R (N)</th></tr>
+        <tr><td>1</td><td>1–3 受拉，把节点 1 往右拉 1700</td><td>(−1700, 0)</td></tr>
+        <tr><td>2</td><td>2–3 受压，把节点 2 往左下推 (850, 850)</td><td>(+850, +850)</td></tr>
+        <tr><td>4</td><td>3–4 受拉 + 载荷 F</td><td>(+850, 0)</td></tr></table>
+        <p>整体检查：水平 −1700 + 850 + 850 = 0；竖直 850 − F = 850 − 850 = 0 ✓</p>`);
+    }},
+    {title:"变形动画", steps:1, deform:true, draw(step,fwd){
       gDofs.classList.add("hidden"); showEvec(null);
       setBarFocus(null);
       bars.forEach(b=>{barEls[b.id].classList.add("dim");labelEls[b.id].style.opacity=.25;});
@@ -553,7 +665,7 @@ ol.deriv li.enter{animation:rowIn .5s ease}
           <tr><td><span class="sw" style="background:var(--tension)"></span>3–4</td><td>√2 F</td><td>+1202 N</td></tr>
           <tr><td><span class="sw" style="background:var(--muted)"></span>2–4</td><td>0</td><td>0</td></tr>
         </table>
-        <p class="note">杆力由 N = (EA/Lₑ)·[c(u_j−u_i) + s(v_j−v_i)] 从位移算出；杆 2–4 两端水平位移都为 0，所以 N₂₄ = 0。</p>`);
+        <p class="note">杆力怎么从位移算出来见第 5 章；节点 4 下沉而杆 2–4 仍为零力的原因见第 7 章。</p>`);
       if(!playing) drawDeformed(1);
       const sc=document.getElementById("scale");
       sc.addEventListener("input",()=>{defScale=+sc.value;document.getElementById("scaleval").textContent=defScale+"×";if(!playing)drawDeformed(1);});
@@ -562,6 +674,73 @@ ol.deriv li.enter{animation:rowIn .5s ease}
         if(playing){stopPlay();drawDeformed(1);osc.textContent="播放变形动画";}
         else{playing=true;osc.textContent="停止";raf=requestAnimationFrame(loop);}
       });
+    }},
+    {title:"零力杆与二阶效应", steps:1, vb:"50 40 640 570", noLoad:true, draw(step,fwd){
+      gDofs.classList.add("hidden"); gDef.classList.add("hidden"); showEvec(null);
+      setBarFocus("24","dim");
+      const R2=440, [x2,y2]=XY(2);
+      function drawGeo(deg){
+        gOv.innerHTML=""; const g=el("g",{},gOv);
+        const th=deg*Math.PI/180;
+        // arc
+        const a1=0, a2=34*Math.PI/180;
+        el("path",{d:`M${x2+R2},${y2} A${R2},${R2} 0 0 1 ${x2+R2*Math.cos(a2)},${y2+R2*Math.sin(a2)}`,fill:"none",stroke:"var(--muted)","stroke-width":1.5,"stroke-dasharray":"6 5"},g);
+        label(g,x2+R2*Math.cos(a2)-6,y2+R2*Math.sin(a2)+18,"长度不变的圆弧（纯转动）","var(--muted)","end","500");
+        // tangent
+        el("line",{x1:x2+R2,y1:y2-20,x2:x2+R2,y2:y2+R2*Math.tan(28*Math.PI/180)+20,stroke:"var(--accent)","stroke-width":1.5,"stroke-dasharray":"6 5"},g);
+        label(g,x2+R2-8,y2-46,"切线：线性理论中","var(--accent)","end","500");
+        label(g,x2+R2-8,y2-28,"节点 4 竖直下移","var(--accent)","end","500");
+        const Px=x2+R2, Py=y2+R2*Math.tan(th);
+        const Qx=x2+R2*Math.cos(th), Qy=y2+R2*Math.sin(th);
+        el("line",{x1:x2,y1:y2,x2:Px,y2:Py,stroke:"var(--bar24)","stroke-width":6,"stroke-linecap":"round",opacity:.85},g);
+        if(deg>0.5){
+          el("line",{x1:Qx,y1:Qy,x2:Px,y2:Py,stroke:"var(--tension)","stroke-width":8,"stroke-linecap":"round"},g);
+          label(g,(Qx+Px)/2-14,(Qy+Py)/2+26,"Δ = 2L(1/cos θ − 1)","var(--tension)","end");
+          arrow(g,x2+R2+46,y2,x2+R2+46,Py,"var(--ink)",2);
+          label(g,x2+R2+54,(y2+Py)/2,"v₄","var(--ink)");
+          // angle
+          el("path",{d:`M${x2+70},${y2} A70,70 0 0 1 ${x2+70*Math.cos(th)},${y2+70*Math.sin(th)}`,fill:"none",stroke:"var(--ink)","stroke-width":1.4},g);
+          label(g,x2+78,y2+24,"θ","var(--ink)");
+        }
+        el("circle",{cx:Px,cy:Py,r:7,fill:"var(--ink)"},g);
+      }
+      // chart Δ(v4)
+      const W=400,H=190,ml=46,mb=34,mt=10,mr=12;
+      const xs=v=>ml+v/60*(W-ml-mr), ys=d=>H-mb-d/1.0*(H-mb-mt);
+      const dEx=v=>Math.sqrt(2000*2000+v*v)-2000;
+      let path=""; for(let v=0;v<=60;v+=1){path+=(v?"L":"M")+xs(v).toFixed(1)+","+ys(dEx(v)).toFixed(1);}
+      const vx=Math.sqrt((2000+0.4857)**2-2000*2000);
+      const chart=`<svg class="mini-chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="杆 2–4 伸长量随 v4 变化">
+        ${[0,0.25,0.5,0.75,1].map(d=>`<line x1="${ml}" y1="${ys(d)}" x2="${W-mr}" y2="${ys(d)}" stroke="var(--line)"/><text x="${ml-6}" y="${ys(d)+4}" text-anchor="end">${d}</text>`).join("")}
+        ${[0,10,20,30,40,50,60].map(v=>`<text x="${xs(v)}" y="${H-mb+16}" text-anchor="middle">${v}</text>`).join("")}
+        <text x="${(W+ml)/2}" y="${H-4}" text-anchor="middle">|<tspan font-style="italic">v</tspan><tspan baseline-shift="sub" font-size="70%">4</tspan>| (mm)</text>
+        <text x="12" y="${(H-mb)/2}" text-anchor="middle" transform="rotate(-90 12 ${(H-mb)/2})">Δ<tspan baseline-shift="sub" font-size="70%">24</tspan> (mm)</text>
+        <line x1="${ml}" y1="${ys(0.4857)}" x2="${W-mr}" y2="${ys(0.4857)}" stroke="var(--bar13)" stroke-width="1.6" stroke-dasharray="5 4"/>
+        <text x="${W-mr-4}" y="${ys(0.4857)-6}" text-anchor="end" fill="var(--bar13)">其他杆的一阶伸长 0.486</text>
+        <path d="${path}" fill="none" stroke="var(--tension)" stroke-width="2.4"/>
+        <circle cx="${xs(2.345)}" cy="${ys(dEx(2.345))}" r="5" fill="var(--ink)"/>
+        <text x="${xs(2.345)+8}" y="${ys(dEx(2.345))-8}" fill="var(--ink)">本题 2.345</text>
+        <circle cx="${xs(vx)}" cy="${ys(0.4857)}" r="4" fill="var(--tension)"/>
+        <text x="${xs(vx)}" y="${ys(0.4857)+18}" text-anchor="middle" fill="var(--tension)">${vx.toFixed(0)}</text>
+      </svg>`;
+      setBoard(`<h2>节点 4 下沉了，杆 2–4 为什么没有内力？</h2>
+        <p>严格按几何算，杆 2–4 确实变长了：新长度 √((2L)² + v₄²) ≈ 2L + v₄²/(4L)。但这个伸长量是位移的<b>二阶小量</b>。线性刚度法只保留一阶项 Δ = eᵀ(u_j − u_i)，竖直位移垂直于水平杆轴，一阶伸长为 0。</p>
+        <div class="slider"><label for="theta">示意转角 θ（夸大）</label><input id="theta" type="range" min="0" max="28" step="1" value="20"><span class="mono" id="thetaval">20°</span></div>
+        <dl class="readout" id="ro"></dl>
+        <p>左图：线性理论里节点 4 沿<b>切线</b>竖直移动；长度不变的位置在<b>圆弧</b>上。两者之差（红色）就是真实伸长，它随 θ² 增长，θ 很小时可以忽略。</p>
+        <h2 style="font-size:16px;margin-top:14px">本题的实际数值</h2>
+        <dl class="readout">
+          <dt>转角</dt><dd>θ = v₄/(2L) = 2.345/2000 ≈ 0.067°</dd>
+          <dt>二阶伸长</dt><dd>Δ ≈ v₄²/(4L) = 2.345²/4000 ≈ 0.0014 mm</dd>
+          <dt>对应内力</dt><dd>N ≈ 1750 N/mm × 0.0014 mm ≈ 2.4 N（其他杆 1202–1700 N）</dd>
+        </dl>
+        <div id="rawslot"></div>
+        <p class="note">红线是杆 2–4 的真实伸长随 |v₄| 的变化，虚线是其他杆的一阶伸长。只有 |v₄| 大到约 ${vx.toFixed(0)} mm（本题的 ${ (vx/2.345).toFixed(0)} 倍）时，二者才相当；那时就要做几何非线性（大变形）分析，在变形后的构形上重新列平衡。</p>`);
+      document.getElementById("rawslot").innerHTML=chart;
+      const th=document.getElementById("theta"), tv=document.getElementById("thetaval"), ro=document.getElementById("ro");
+      const upd=()=>{const d=+th.value, t=d*Math.PI/180; tv.textContent=d+"°"; drawGeo(d);
+        ro.innerHTML=prettify(`<dt>v₄ / 2L</dt><dd>tan θ = ${Math.tan(t).toFixed(3)}</dd><dt>线性理论 Δ</dt><dd>0</dd><dt>真实 Δ / 2L</dt><dd>1/cos θ − 1 = ${(1/Math.cos(t)-1).toFixed(4)}（≈ θ²/2 = ${(t*t/2).toFixed(4)}）</dd>`);};
+      th.addEventListener("input",upd); upd();
     }}
   ];
 
@@ -576,7 +755,10 @@ ol.deriv li.enter{animation:rowIn .5s ease}
   });
   const prevB=document.getElementById("prev"), nextB=document.getElementById("next"), autoB=document.getElementById("auto");
   function go(s,t,fwd){
-    if(s!==4) {stopPlay(); document.getElementById("load").classList.remove("hidden");}
+    if(!scenes[s].deform) stopPlay();
+    gLoad.classList.toggle("hidden", !!(scenes[s].noLoad||scenes[s].deform));
+    gOv.innerHTML="";
+    fig.setAttribute("viewBox", scenes[s].vb || "50 50 620 410");
     bars.forEach(b=>{barEls[b.id].classList.remove("dim");});
     si=s; st=t;
     [...nav.children].forEach((b,k)=>b.setAttribute("aria-current",k===si?"true":"false"));
