@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<title>桁架刚度法动画演示 · Structure and Material</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=STIX+Two+Text:ital,wght@0,400;0,600;1,400;1,600&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@600;700&display=swap" rel="stylesheet">
+<style>
+/* Layout idea: a drafting-table stage — structure drawing on the left, the matrix board on the right, a chapter stepper on top. */
+:root{
+  --paper:#eef2f5;
+  --panel:#ffffff;
+  --ink:#18222d;
+  --muted:#5a6878;
+  --line:#d3dbe3;
+  --accent:#255b8f;
+  --accent-soft:#e1ecf6;
+  --tint:#e4e9ee;
+  --bar13:#2f6fb5;
+  --bar23:#c97a1e;
+  --bar34:#13897b;
+  --bar24:#8657c4;
+  --tension:#c4412f;
+  --compress:#2d74c9;
+  --fixed:#a7b2be;
+  --font-display:"Noto Serif SC","Songti SC",serif;
+  --font-body:"Noto Sans SC","PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+  --font-math:"STIX Two Text","Cambria Math","Times New Roman",serif;
+  --font-mono:"IBM Plex Mono",ui-monospace,"SFMono-Regular",Menlo,monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#10151b; --panel:#17202a; --ink:#e2e8ee; --muted:#93a2b2; --line:#2a3644;
+    --accent:#86b6e6; --accent-soft:#1d2d3e; --tint:#1c2530;
+    --bar13:#6aa6ea; --bar23:#e9a650; --bar34:#47c2b1; --bar24:#b28ced;
+    --tension:#ef7a68; --compress:#6aa6ea; --fixed:#4a5765;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#10151b; --panel:#17202a; --ink:#e2e8ee; --muted:#93a2b2; --line:#2a3644;
+  --accent:#86b6e6; --accent-soft:#1d2d3e; --tint:#1c2530;
+  --bar13:#6aa6ea; --bar23:#e9a650; --bar34:#47c2b1; --bar24:#b28ced;
+  --tension:#ef7a68; --compress:#6aa6ea; --fixed:#4a5765;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--paper);color:var(--ink);font-family:var(--font-body);font-size:15px;line-height:1.65}
+.wrap{max-width:1180px;margin:0 auto;padding:20px 20px 40px}
+header h1{font-family:var(--font-display);font-size:26px;margin:0 0 4px;text-wrap:balance;letter-spacing:.02em}
+header p{margin:0;color:var(--muted);font-size:14px}
+.crumb{display:flex;flex-wrap:wrap;gap:6px 16px;margin:0 0 10px;font-size:14px}
+.crumb a{color:var(--accent);text-decoration:none}
+.crumb a:hover{text-decoration:underline}
+.mono{font-family:var(--font-mono)}
+
+nav.chapters{display:flex;flex-wrap:wrap;gap:6px;margin:18px 0 12px}
+nav.chapters button{font:inherit;font-size:14px;border:1px solid var(--line);background:var(--panel);color:var(--muted);padding:6px 12px;border-radius:6px;cursor:pointer;display:flex;gap:8px;align-items:center}
+nav.chapters button .n{font-family:var(--font-mono);font-size:12px;color:var(--muted)}
+nav.chapters button[aria-current="true"]{background:var(--accent);border-color:var(--accent);color:var(--panel)}
+nav.chapters button[aria-current="true"] .n{color:var(--panel);opacity:.8}
+button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+.stage{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:14px;align-items:start}
+@media (max-width:900px){.stage{grid-template-columns:1fr}}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px 16px}
+.figure{position:sticky;top:12px}
+.figure svg{width:100%;height:auto;display:block}
+.board{min-height:520px}
+@media (max-width:900px){.figure{position:static}.board{min-height:0}}
+
+.controls{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:12px}
+.controls button{font:inherit;font-size:14px;padding:7px 14px;border-radius:6px;border:1px solid var(--line);background:var(--panel);color:var(--ink);cursor:pointer}
+.controls button.primary{background:var(--accent);border-color:var(--accent);color:var(--panel)}
+.controls button:disabled{opacity:.4;cursor:default}
+.dots{display:flex;gap:5px;margin-left:auto;align-items:center}
+.dots span{width:8px;height:8px;border-radius:50%;background:var(--line)}
+.dots span.on{background:var(--accent)}
+.dots span.done{background:var(--accent);opacity:.4}
+.stepnum{font-family:var(--font-mono);font-size:12px;color:var(--muted)}
+
+.board h2{font-family:var(--font-display);font-size:19px;margin:0 0 6px;text-wrap:balance}
+.board p{margin:6px 0;max-width:62ch}
+.board .note{color:var(--muted);font-size:13.5px}
+.chip{display:inline-block;font-family:var(--font-mono);font-size:12px;padding:1px 7px;border-radius:999px;border:1px solid var(--line);margin:2px 3px 2px 0}
+.chip.free{background:var(--accent-soft);border-color:var(--accent);color:var(--accent);font-weight:600}
+.chip.fixed{color:var(--muted);text-decoration:line-through}
+
+.formula{font-family:var(--font-mono);background:var(--accent-soft);border-radius:6px;padding:8px 12px;margin:10px 0;font-size:14px;overflow-x:auto;white-space:nowrap}
+
+table.t{border-collapse:collapse;width:100%;font-size:14px;margin:8px 0}
+table.t th,table.t td{border-bottom:1px solid var(--line);padding:6px 8px;text-align:left}
+table.t th{color:var(--muted);font-weight:500;font-size:13px}
+table.t td{font-family:var(--font-mono);font-variant-numeric:tabular-nums}
+table.t tr.cur td{background:var(--accent-soft)}
+table.t tr.enter td{animation:rowIn .5s ease}
+.sw{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px;vertical-align:middle}
+
+/* math typography */
+i{font-family:var(--font-math);font-style:italic;font-size:1.1em;letter-spacing:.01em}
+sub{font-size:.7em;line-height:0;vertical-align:-.28em;font-style:normal;font-family:var(--font-math)}
+.board .mono,.chip,table.t td,ol.deriv li .m,.formula,.mini,.mat,.mgrid,.sys{font-family:var(--font-math)!important}
+.mgrid .c{font-size:14.5px!important}
+table.t td{font-size:15px}
+.mat{font-size:16px}
+/* inline mini matrix */
+.mini{display:inline-flex;align-items:center;gap:5px;vertical-align:middle;font-family:var(--font-mono);white-space:nowrap}
+.mini .mm{display:inline-grid;gap:0 10px;padding:1px 7px;border-left:1.5px solid currentColor;border-right:1.5px solid currentColor;border-radius:3px;font-size:14px;line-height:1.4;text-align:center}
+.formula .mini .mm{font-size:13px}
+.formula{display:flex;gap:28px;flex-wrap:wrap;align-items:center;white-space:normal}
+/* matrix grid */
+.mwrap{overflow-x:auto;margin-top:8px}
+.mgrid{display:grid;grid-template-columns:34px repeat(8,minmax(46px,1fr));gap:2px;font-family:var(--font-mono);font-size:12px;min-width:420px}
+.mgrid .hd{color:var(--muted);text-align:center;padding:2px 0;font-size:12px}
+.mgrid .hd.free{color:var(--accent);font-weight:600}
+.mgrid .c{height:42px;font-size:13px;display:flex;align-items:center;justify-content:center;border-radius:4px;background:var(--paper);position:relative;transition:opacity .5s, background .5s;white-space:nowrap;padding:0 2px}
+.mgrid .c.alt{background:var(--tint)}
+.mgrid .nh{grid-column:span 2;text-align:center;font-size:12px;color:var(--muted);border-bottom:1px solid var(--line);margin:0 4px 2px}
+.mgrid .c.bl{margin-left:4px}
+.mgrid .c.bt{margin-top:4px}
+.mgrid .hd.bl{margin-left:4px}
+.mgrid .hd.bt{margin-top:4px}
+.mgrid .c.hl{box-shadow:inset 0 0 0 2px var(--hl)}
+.mgrid .c.flash{animation:flash .9s ease}
+.mgrid .c.dead{opacity:.18}
+.mgrid .c.keep{background:var(--accent-soft);box-shadow:inset 0 0 0 2px var(--accent);font-weight:600}
+.mgrid .c .pips{position:absolute;bottom:2px;right:3px;display:flex;gap:2px}
+.mgrid .c .pips i{width:5px;height:5px;border-radius:50%;display:block}
+@keyframes flash{0%{transform:scale(.6);background:var(--hl)}60%{transform:scale(1.05)}100%{transform:scale(1)}}
+@keyframes rowIn{from{opacity:0;transform:translateX(8px)}to{opacity:1;transform:none}}
+
+/* small matrix */
+.sys{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:10px 0;font-family:var(--font-mono);font-size:14px}
+.mat{display:grid;gap:4px 14px;padding:4px 10px;border-left:2px solid var(--ink);border-right:2px solid var(--ink);border-radius:4px}
+.mat span{text-align:center;padding:3px 4px;border-radius:4px;transition:background .4s}
+.mat .row-hl{background:var(--accent-soft);box-shadow:inset 0 0 0 1px var(--accent)}
+.grow{animation:grow .6s ease}
+@keyframes grow{from{opacity:0;transform:scale(.85)}to{opacity:1;transform:none}}
+
+ol.deriv{margin:10px 0 0;padding-left:22px}
+ol.deriv li{margin:5px 0;padding:4px 8px;border-radius:6px}
+ol.deriv li .m{font-family:var(--font-mono)}
+ol.deriv li.cur{background:var(--accent-soft)}
+ol.deriv li.enter{animation:rowIn .5s ease}
+
+.slider{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:8px 0}
+.slider input{flex:1;min-width:160px;accent-color:var(--accent)}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:13px;color:var(--muted);margin-top:6px}
+.legend b{display:inline-block;width:18px;height:4px;border-radius:2px;vertical-align:middle;margin-right:5px}
+
+/* svg */
+.bar{stroke-width:7;stroke-linecap:round;transition:opacity .4s, stroke-width .3s}
+.bar.dim{opacity:.22}
+.bar.focus{stroke-width:10}
+.barlabel{font-family:var(--font-math);font-size:15px;font-weight:600;transition:opacity .4s}
+.node circle{fill:var(--panel);stroke:var(--ink);stroke-width:2}
+.node text{font-family:var(--font-math);font-size:14px;fill:var(--ink);text-anchor:middle;dominant-baseline:central;font-weight:600}
+.support{stroke:var(--ink);stroke-width:1.6;fill:none}
+.dof line{stroke-width:2.4}
+.dof.fixed line{stroke:var(--fixed)}
+.dof.free line{stroke:var(--accent)}
+.dof text{font-family:var(--font-math);font-size:17px}
+.dof.fixed text{fill:var(--fixed)}
+.dof.free text{fill:var(--accent);font-weight:600}
+.dof.free{animation:pulse 1.6s ease-in-out infinite}
+@keyframes pulse{50%{opacity:.45}}
+.evec{stroke:var(--ink);stroke-width:2.6;stroke-dasharray:90;stroke-dashoffset:90;animation:draw .9s .2s ease forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+.fade{transition:opacity .45s}
+.hidden{opacity:0;pointer-events:none}
+.dlabel{font-family:var(--font-math);font-size:15px;fill:var(--ink)}
+.flabel{font-family:var(--font-math);font-size:18px;font-weight:600}
+
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  .evec{stroke-dashoffset:0}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <nav class="crumb" aria-label="导航"><a href="../">← 首页</a><a href="index.html">结构与材料</a><a href="course-notes.html#ch14-6">笔记 §14.6 块矩阵与组装</a><a href="exercises.html#l7-3">习题 Lecture 7 例 3</a></nav>
+    <h1>桁架刚度法动画演示</h1>
+    <p>例题：铝制桁架，E = 70 GPa，A = 50 mm²，L = 1 m，F = 850 N。按章节一步步看单元矩阵怎么来、怎么组装、怎么求解，最后看变形。</p>
+  </header>
+
+  <nav class="chapters" id="chapters" aria-label="章节"></nav>
+
+  <div class="stage">
+    <div class="card figure">
+      <svg id="fig" viewBox="50 50 620 410" role="img" aria-label="桁架结构图">
+        <defs>
+          <pattern id="hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+            <rect width="6" height="6" fill="var(--panel)"/>
+            <line x1="0" y1="0" x2="0" y2="6" stroke="var(--muted)" stroke-width="2"/>
+          </pattern>
+          <marker id="mFree" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--accent)"/></marker>
+          <marker id="mFixed" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--fixed)"/></marker>
+          <marker id="mInk" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--ink)"/></marker>
+          <marker id="mLoad" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--tension)"/></marker>
+        </defs>
+
+        <!-- supports -->
+        <g class="support">
+          <rect x="78" y="68" width="12" height="84" fill="url(#hatch)" stroke="var(--muted)"/>
+          <line x1="140" y1="110" x2="90" y2="80"/><line x1="140" y1="110" x2="90" y2="140"/>
+          <rect x="78" y="288" width="12" height="84" fill="url(#hatch)" stroke="var(--muted)"/>
+          <line x1="140" y1="330" x2="90" y2="300"/><line x1="140" y1="330" x2="90" y2="360"/>
+          <line x1="580" y1="330" x2="628" y2="298"/><line x1="580" y1="330" x2="628" y2="362"/>
+          <line x1="628" y1="290" x2="628" y2="370"/>
+          <line x1="642" y1="280" x2="642" y2="380" stroke-width="3"/>
+        </g>
+        <line x1="140" y1="122" x2="140" y2="318" stroke="var(--muted)" stroke-dasharray="5 5" stroke-width="1.4"/>
+
+        <!-- undeformed bars -->
+        <g id="bars"></g>
+        <g id="evec"></g>
+        <g id="deformed" class="fade hidden"></g>
+        <g id="nodes"></g>
+        <g id="dofs" class="fade hidden"></g>
+
+        <!-- load -->
+        <g id="load" class="fade">
+          <line x1="580" y1="344" x2="580" y2="408" stroke="var(--tension)" stroke-width="4" marker-end="url(#mLoad)"/>
+          <text x="594" y="404" class="flabel" fill="var(--tension)" data-math>F</text>
+        </g>
+        <text x="150" y="226" class="dlabel" fill="var(--muted)" data-math>L</text>
+      </svg>
+      <div class="controls">
+        <button id="prev" type="button">上一步</button>
+        <button id="next" type="button" class="primary">下一步</button>
+        <button id="auto" type="button">自动播放</button>
+        <div class="dots" id="dots" aria-hidden="true"></div>
+      </div>
+      <p class="stepnum" id="stepnum"></p>
+    </div>
+
+    <div class="card board" id="board" aria-live="polite"></div>
+  </div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  // ---------- model ----------
+  const EA = 70e9*50e-6;          // N
+  const Lm = 1, F = 850;
+  const delta = F*Lm/EA;          // m
+  const S2 = Math.SQRT2;
+  const P = {1:[0,1],2:[0,0],3:[1,1],4:[2,0]};
+  const px = (X)=>140+X*220, py=(Y)=>330-Y*220;
+  const DOF = ["u₁","v₁","u₂","v₂","u₃","v₃","u₄","v₄"];
+  const FREE = [4,5,7];
+  const bars = [
+    {id:"13",i:1,j:3,k:{a:1,b:0},Le:"L",kLabel:"a",color:"var(--bar13)"},
+    {id:"23",i:2,j:3,k:{a:0,b:1},Le:"√2 L",kLabel:"b",color:"var(--bar23)"},
+    {id:"34",i:3,j:4,k:{a:0,b:1},Le:"√2 L",kLabel:"b",color:"var(--bar34)"},
+    {id:"24",i:2,j:4,k:{a:.5,b:0},Le:"2L",kLabel:"a/2",color:"var(--bar24)"}
+  ];
+  bars.forEach(b=>{
+    const dx=P[b.j][0]-P[b.i][0], dy=P[b.j][1]-P[b.i][1], l=Math.hypot(dx,dy);
+    b.c=dx/l; b.s=dy/l;
+    const k0=[[b.c*b.c,b.c*b.s],[b.c*b.s,b.s*b.s]];
+    b.k0=k0;
+  });
+  const cs = (v)=>{ const r=Math.round(v*1e6)/1e6; if(r===1)return"1"; if(r===-1)return"−1"; if(Math.abs(r-1/S2)<1e-5)return"1/√2"; if(Math.abs(r+1/S2)<1e-5)return"−1/√2"; return r===0?"0":String(r); };
+  const k0Text = (b)=>{
+    // k0 = kfac * [c² cs; cs s²] written with integer matrix where possible
+    const m=b.k0.map(r=>r.map(x=>Math.round(x*2)));   // values in halves
+    const half = m.flat().some(x=>Math.abs(x)===1);
+    const fac = half ? (b.kLabel==="b"?"(b/2)":b.kLabel==="a"?"(a/2)":"(a/4)") : (b.kLabel.includes("/")?"("+b.kLabel+")":b.kLabel);
+    const mm = half ? m : m.map(r=>r.map(x=>x/2));
+    const f=x=>x<0?"−"+(-x):String(x);
+    return fac+"·["+f(mm[0][0])+" "+f(mm[0][1])+"; "+f(mm[1][0])+" "+f(mm[1][1])+"]";
+  };
+
+  const mini=(fac,m)=>`<span class="mini">${fac?`<span>${fac}</span>`:""}<span class="mm" style="grid-template-columns:repeat(${m[0].length},auto)">${m.flat().map(x=>`<span>${x}</span>`).join("")}</span></span>`;
+  const k0Mini=(b)=>{
+    const m=b.k0.map(r=>r.map(x=>Math.round(x*2)));
+    const half=m.flat().some(x=>Math.abs(x)===1);
+    const fac= half ? (b.kLabel==="b"?"b/2 ·":b.kLabel==="a"?"a/2 ·":"a/4 ·") : b.kLabel+" ·";
+    const mm= half? m : m.map(r=>r.map(x=>x/2));
+    return mini(fac, mm.map(r=>r.map(x=>x<0?"−"+(-x):String(x))));
+  };
+  // global K accumulation, entries as {a,b}
+  function emptyK(){return Array.from({length:8},()=>Array.from({length:8},()=>({a:0,b:0,pips:[]})));}
+  function addBar(K,b){
+    const idx=[2*(b.i-1),2*(b.i-1)+1,2*(b.j-1),2*(b.j-1)+1];
+    for(let r=0;r<4;r++)for(let c=0;c<4;c++){
+      const sign=((r<2)===(c<2))?1:-1;
+      const v=sign*b.k0[r%2][c%2];
+      if(Math.abs(v)<1e-9)continue;
+      const e=K[idx[r]][idx[c]];
+      e.a+=v*b.k.a; e.b+=v*b.k.b; e.pips.push(b.color);
+    }
+    return idx;
+  }
+  function fmt(e){
+    const parts=[];
+    [["a",e.a],["b",e.b]].forEach(([s,v])=>{
+      v=Math.round(v*1e6)/1e6; if(Math.abs(v)<1e-9)return;
+      const av=Math.abs(v);
+      const t = av===1?s : av===.5?s+"/2" : av===.25?s+"/4" : av===2?"2"+s : av+s;
+      parts.push({neg:v<0,t});
+    });
+    if(!parts.length)return "0";
+    return parts.map((p,k)=> k===0 ? (p.neg?"−":"")+p.t : (p.neg?" − ":"+")+p.t).join("");
+  }
+
+  // displacements (m)
+  const u3=2*delta, v3=-(2+2*S2)*delta, v4=-(4+4*S2)*delta;
+  const U={1:[0,0],2:[0,0],3:[u3,v3],4:[0,v4]};
+  const N={ "13":2*F, "23":-S2*F, "34":S2*F, "24":0 };
+
+  // ---------- math typesetting ----------
+  const SUB={"₀":"0","₁":"1","₂":"2","₃":"3","₄":"4","₅":"5","₆":"6","₇":"7","₈":"8","₉":"9","ₑ":"e"};
+  function prettyText(t){
+    t=t.replace(/[₀-₉ₑ]+/g,m=>"\u0001"+[...m].map(c=>SUB[c]).join("")+"\u0002");
+    t=t.replace(/_(ff|fs|sf|ss|pp|pq|ii|ij|ji|jj|i|j|e|f|s)(?![A-Za-z])/g,"\u0001$1\u0002");
+    t=t.replace(/(?<![A-Za-z\u0001])(EA|FL|cs|[A-Za-zδ])(?![A-Za-z])/g,(m,v,off,str)=>{
+      const pre=str.slice(Math.max(0,off-3),off);
+      if(/^[Nm]$/.test(v)&&/[\d⁰-⁹]\s$/.test(pre))return v;
+      if(v==="m"&&/N\/$/.test(pre))return v;
+      return "<i>"+v+"</i>";
+    });
+    return t.replace(/\u0001/g,"<sub>").replace(/\u0002/g,"</sub>");
+  }
+  const prettify=h=>h.split(/(<[^>]+>)/).map(p=>p.startsWith("<")?p:prettyText(p)).join("");
+  function svgMath(t,str){
+    while(t.firstChild)t.removeChild(t.firstChild);
+    const h=prettyText(str);
+    const re=/<i>(.*?)<\/i>|<sub>(.*?)<\/sub>|([^<]+)/g; let m;
+    while((m=re.exec(h))){
+      const ts=document.createElementNS("http://www.w3.org/2000/svg","tspan");
+      if(m[1]!==undefined){ts.textContent=m[1];ts.setAttribute("font-style","italic");}
+      else if(m[2]!==undefined){ts.textContent=m[2];ts.setAttribute("baseline-shift","sub");ts.setAttribute("font-size","70%");}
+      else ts.textContent=m[3];
+      t.appendChild(ts);
+    }
+  }
+
+  // ---------- svg ----------
+  const NS="http://www.w3.org/2000/svg";
+  const el=(tag,attrs,parent)=>{const e=document.createElementNS(NS,tag);for(const k in attrs)e.setAttribute(k,attrs[k]);if(parent)parent.appendChild(e);return e;};
+  const gBars=document.getElementById("bars"), gNodes=document.getElementById("nodes"), gDofs=document.getElementById("dofs"), gEvec=document.getElementById("evec"), gDef=document.getElementById("deformed");
+  const barEls={}, labelEls={};
+  bars.forEach(b=>{
+    const [x1,y1]=[px(P[b.i][0]),py(P[b.i][1])],[x2,y2]=[px(P[b.j][0]),py(P[b.j][1])];
+    barEls[b.id]=el("line",{x1,y1,x2,y2,class:"bar",stroke:b.color},gBars);
+    const mx=(x1+x2)/2, my=(y1+y2)/2;
+    const off = b.id==="13"?[0,-14]: b.id==="24"?[0,24]: b.id==="23"?[-52,4]:[54,4];
+    const t=el("text",{x:mx+off[0],y:my+off[1],class:"barlabel","text-anchor":"middle",fill:b.color},gBars);
+    svgMath(t,b.i+"–"+b.j+"  ("+b.Le.replace(" ","")+")"); labelEls[b.id]=t;
+  });
+  Object.keys(P).forEach(n=>{
+    const g=el("g",{class:"node"},gNodes);
+    el("circle",{cx:px(P[n][0]),cy:py(P[n][1]),r:12},g);
+    const t=el("text",{x:px(P[n][0]),y:py(P[n][1])},g); t.textContent=n;
+  });
+  // DOF arrows
+  Object.keys(P).forEach(n=>{
+    const x=px(P[n][0]), y=py(P[n][1]);
+    const iu=2*(n-1), iv=iu+1;
+    [[iu,x+16,y,x+52,y,x+40,y+18],[iv,x,y-16,x,y-52,x+8,y-46]].forEach(([d,x1,y1,x2,y2,tx,ty])=>{
+      const free=FREE.includes(d);
+      const g=el("g",{class:"dof "+(free?"free":"fixed")},gDofs);
+      el("line",{x1,y1,x2,y2,"marker-end":free?"url(#mFree)":"url(#mFixed)"},g);
+      const t=el("text",{x:tx,y:ty},g); svgMath(t,DOF[d]);
+    });
+  });
+
+  function setBarFocus(id,others){ // others: 'dim'|'none'
+    bars.forEach(b=>{
+      const e=barEls[b.id];
+      e.classList.toggle("focus",b.id===id);
+      e.classList.toggle("dim",id!==null&&b.id!==id&&others==="dim");
+      labelEls[b.id].style.opacity = (id!==null&&b.id!==id&&others==="dim")?.25:1;
+    });
+  }
+  function showEvec(b){
+    gEvec.innerHTML="";
+    if(!b)return;
+    const x=px(P[b.i][0]), y=py(P[b.i][1]);
+    const L=78;
+    const ln=el("line",{x1:x,y1:y,x2:x+b.c*L,y2:y-b.s*L,class:"evec","marker-end":"url(#mInk)"},gEvec);
+    const t=el("text",{x:x+b.c*L+(b.s<0?12:-4),y:y-b.s*L-10,class:"dlabel","font-weight":"600"},gEvec);
+    svgMath(t,"e");
+  }
+
+  // deformed drawing
+  let defScale=100, playing=false, raf=null, phase=1;
+  function forceColor(n){ if(Math.abs(n)<1e-6)return"var(--muted)"; return n>0?"var(--tension)":"var(--compress)"; }
+  function drawDeformed(f){
+    gDef.innerHTML="";
+    const s=defScale*f;
+    const Q={}; Object.keys(P).forEach(n=>{Q[n]=[px(P[n][0]+U[n][0]*s), py(P[n][1]+U[n][1]*s)];});
+    bars.forEach(b=>{
+      el("line",{x1:Q[b.i][0],y1:Q[b.i][1],x2:Q[b.j][0],y2:Q[b.j][1],stroke:forceColor(N[b.id]),"stroke-width":6,"stroke-linecap":"round","stroke-dasharray":N[b.id]===0?"10 8":"none"},gDef);
+    });
+    Object.keys(Q).forEach(n=>{ el("circle",{cx:Q[n][0],cy:Q[n][1],r:6,fill:"var(--ink)"},gDef); });
+    el("line",{x1:Q[4][0],y1:Q[4][1]+10,x2:Q[4][0],y2:Q[4][1]+58,stroke:"var(--tension)","stroke-width":4,"marker-end":"url(#mLoad)"},gDef);
+    if(f>.98){
+      const lab=(n,str,dx,dy)=>{const t=el("text",{x:Q[n][0]+dx,y:Q[n][1]+dy,class:"dlabel","font-weight":"600"},gDef);svgMath(t,str);};
+      lab(3,"u₃ = +0.486 mm",14,-26);
+      lab(3,"v₃ = −1.173 mm",14,-10);
+      lab(4,"v₄ = −2.345 mm",-150,24);
+    }
+  }
+  function loop(t){
+    if(!playing)return;
+    phase = 0.5-0.5*Math.cos(t/700);
+    drawDeformed(phase);
+    raf=requestAnimationFrame(loop);
+  }
+  function stopPlay(){playing=false; if(raf)cancelAnimationFrame(raf); raf=null;}
+
+  // ---------- scenes ----------
+  const board=document.getElementById("board");
+  const setBoard=h=>{board.innerHTML=prettify(h);};
+  const fmtmm = m=> (m*1000).toFixed(3);
+  let lastKey=null;
+
+  function matHTML(rows,hlRow,cls){
+    let h='<div class="mat '+(cls||"")+'" style="grid-template-columns:repeat('+rows[0].length+',auto)">';
+    rows.forEach((r,i)=>r.forEach(c=>{h+='<span class="'+(i===hlRow?"row-hl":"")+'">'+c+'</span>';}));
+    return h+'</div>';
+  }
+  function vec(items,hl){ return matHTML(items.map(x=>[x]),hl); }
+
+  const scenes=[
+    {title:"结构与自由度", steps:2, draw(step,fwd){
+      setBarFocus(null); showEvec(null);
+      gDofs.classList.toggle("hidden",step<1);
+      gDef.classList.add("hidden");
+      const chips = DOF.map((d,k)=>'<span class="chip '+(FREE.includes(k)?"free":"fixed")+'">'+d+'</span>').join("");
+      setBoard(step===0 ? `
+        <h2>先读图：4 个节点、4 根杆</h2>
+        <p>节点 1、2 是固定铰支座（pin），节点 4 靠在竖直墙上，是滚动支座（roller）：只挡住水平方向。虚线只是尺寸 L，不是杆。</p>
+        <table class="t"><tr><th>杆</th><th>长度 Lₑ</th><th>EA/Lₑ</th></tr>
+        ${bars.map(b=>`<tr><td><span class="sw" style="background:${b.color}"></span>${b.i}–${b.j}</td><td>${b.Le}</td><td>${b.kLabel}</td></tr>`).join("")}
+        </table>
+        <p class="note">记 a = EA/L = 3.5×10⁶ N/m，b = EA/(√2 L) = a/√2。后面所有矩阵都只用 a、b 表示。</p>` : `
+        <h2>8 个自由度里只有 3 个是未知的</h2>
+        <p>每个节点有 u（水平）、v（竖直）两个自由度，共 8 个。支座把其中 5 个定为 0，剩下的是要求的未知量。</p>
+        <p>${chips}</p>
+        <p>所以最后只需要解一个 <b>3×3</b> 的方程组，而不是 8×8。图上闪动的蓝色箭头就是这 3 个自由度。</p>`);
+    }},
+    {title:"单元矩阵 k₀", steps:4, draw(step,fwd){
+      gDofs.classList.add("hidden"); gDef.classList.add("hidden");
+      const b=bars[step];
+      setBarFocus(b.id,"dim"); showEvec(b);
+      const rows=bars.slice(0,step+1).map((x,k)=>`<tr class="${k===step?"cur"+(fwd?" enter":""):""}"><td><span class="sw" style="background:${x.color}"></span>${x.i}→${x.j}</td><td>${x.Le}</td><td>(${cs(x.c)}, ${cs(x.s)})</td><td>${k0Mini(x)}</td></tr>`).join("");
+      setBoard(`
+        <h2>杆 ${b.i}→${b.j}：先求方向，再写 k₀</h2>
+        <p>沿杆从节点 ${b.i} 指向节点 ${b.j} 画单位向量 e = (c, s)。整根杆的 4×4 单元矩阵只由这个 2×2 的 k₀ 决定：</p>
+        <div class="formula"><span>k₀ = ${mini("(EA/Lₑ) ·",[["c²","cs"],["cs","s²"]])}</span><span>k_e = ${mini("",[["k₀","−k₀"],["−k₀","k₀"]])}</span></div>
+        <table class="t"><tr><th>杆</th><th>Lₑ</th><th>(c, s)</th><th>k₀</th></tr>${rows}</table>
+        <p class="note">${step===3?"杆 2–4 是水平的，s = 0，所以 k₀ 里只有左上角一项：它不提供任何竖直刚度。":"c、s 的正负取决于从 i 走向 j 的方向；换个方向 k₀ 不变，因为 c²、cs、s² 都不受整体变号影响。"}</p>`);
+    }},
+    {title:"组装", steps:7, draw(step,fwd){
+      gDofs.classList.add("hidden"); gDef.classList.add("hidden"); showEvec(null);
+      const K=emptyK(); let idx=null, cur=null;
+      const nb=Math.min(step,4);
+      for(let k=0;k<nb;k++){ const r=addBar(K,bars[k]); if(k===nb-1&&step<=4){idx=r;cur=bars[k];} }
+      setBarFocus(cur?cur.id:null,"dim");
+      if(step===6){ // reduced
+        const R=FREE.map(r=>FREE.map(c=>fmt(K[r][c])));
+        setBoard(`
+          <h2>得到 3×3 缩减刚度矩阵</h2>
+          <p>只留下 u₃、v₃、v₄ 对应的行和列：</p>
+          <div class="sys grow">${matHTML(R)}${vec(["u₃","v₃","v₄"])}<span>=</span>${vec(["0","0","−F"])}</div>
+          <p>自检：矩阵对称，三个对角元素 a+b、b、b/2 都是正的，说明结构不是机构（mechanism）。</p>
+          <p class="note">注意右下角的 b/2 只来自杆 3–4。杆 2–4 在 v₄v₄ 上贡献为 0，它对这三个未知量完全没有贡献。</p>`);
+        return;
+      }
+      const isFree=(d)=>FREE.includes(d);
+      let g='<div class="mwrap"><div class="mgrid"><div></div>'+[1,2,3,4].map(n=>`<div class="nh">节点 ${n}</div>`).join("")+'<div></div>';
+      DOF.forEach((d,c)=>{g+=`<div class="hd ${c%2===0&&c>0?"bl":""} ${step>=5&&isFree(c)?"free":""}">${d}</div>`;});
+      for(let r=0;r<8;r++){
+        g+=`<div class="hd ${r%2===0&&r>0?"bt":""} ${step>=5&&isFree(r)?"free":""}">${DOF[r]}</div>`;
+        for(let c=0;c<8;c++){
+          const e=K[r][c]; const v=fmt(e);
+          const inBlock = idx && idx.includes(r) && idx.includes(c);
+          const newly = inBlock && fwd && v!=="0" && step>=1 && step<=4;
+          let cls="c"+(c%2===0&&c>0?" bl":"")+(r%2===0&&r>0?" bt":"")+(((r>>1)+(c>>1))%2?" alt":"");
+          if(inBlock)cls+=" hl";
+          if(newly)cls+=" flash";
+          if(step>=5){ cls += (isFree(r)&&isFree(c))?" keep":" dead"; }
+          const style = cur?`--hl:${cur.color}`:"";
+          const pips=e.pips.map(p=>`<i style="background:${p}"></i>`).join("");
+          g+=`<div class="${cls}" style="${style}">${v==="0"?"":v}<span class="pips">${pips}</span></div>`;
+        }
+      }
+      g+='</div></div>';
+      let text;
+      if(step===0) text=`<h2>组装规则：看图填块</h2>
+        <p>整体刚度矩阵按节点分成 2×2 的块。对每根杆 i–j：</p>
+        <p>节点 i、节点 j 的<b>对角块</b>各加 <span class="mono">+k₀</span>；块 (i, j) 和 (j, i) 各加 <span class="mono">−k₀</span>。</p>
+        <p class="note">点“下一步”，一根一根把杆加进去。每个格子右下角的小圆点表示是哪几根杆贡献的。</p>`;
+      else if(step<=4) text=`<h2>加入杆 ${cur.i}–${cur.j}</h2>
+        <p>它落在节点 ${cur.i} 和节点 ${cur.j} 的四个块上：对角块 (${cur.i},${cur.i})、(${cur.j},${cur.j}) 加 k₀，耦合块 (${cur.i},${cur.j})、(${cur.j},${cur.i}) 加 −k₀。</p>
+        <p>k₀ = ${k0Mini(cur)}</p>
+        ${step===4?'<p class="note">杆 2–4 只改动了 u₂、u₄ 的行列，而这两个自由度都是固定的。</p>':''}`;
+      else text=`<h2>划掉固定自由度的行和列</h2>
+        <p>固定自由度的位移是 0，它们的<b>列</b>乘以 0 没有贡献；它们的<b>行</b>右端是未知反力，求位移用不上。剩下的 9 个蓝框格子就是 K_ff。</p>
+        <p class="note">实际做题时，一开始就只填这 9 个格子，不必写整个 8×8。</p>`;
+      setBoard(text+g);
+    }},
+    {title:"求解", steps:6, draw(step,fwd){
+      gDofs.classList.add("hidden"); gDef.classList.add("hidden"); setBarFocus(null); showEvec(null);
+      const R=[["a+b","0","b/2"],["0","b","−b/2"],["b/2","−b/2","b/2"]];
+      const hl=[-1,1,0,2,2,-1][step];
+      const lines=[
+        ['第 2 行：','b·v₃ − (b/2)·v₄ = 0  ⇒  v₃ = v₄/2'],
+        ['第 1 行：','(a+b)·u₃ + (b/2)·v₄ = 0，代入 b = a/√2  ⇒  u₃ = −(√2−1)/2 · v₄'],
+        ['第 3 行乘以 2/b：','u₃ − v₃ + v₄ = −2F/b = −2√2·δ，  δ = F/a = FL/(EA)'],
+        ['代入：','[−(√2−1)/2 − 1/2 + 1]·v₄ = (2−√2)/2 · v₄ = −2√2·δ  ⇒  v₄ = −(4+4√2)·δ'],
+        ['回代：','v₃ = −(2+2√2)·δ，  u₃ = 2δ']
+      ];
+      const shown=lines.slice(0,step).map((l,k)=>`<li class="${k===step-1?"cur"+(fwd?" enter":""):""}">${l[0]}<span class="m">${l[1]}</span></li>`).join("");
+      const res = step===5 ? `<table class="t"><tr><th>位移</th><th>表达式</th><th>数值</th></tr>
+        <tr><td>u₃</td><td>2δ</td><td>+${fmtmm(u3)} mm</td></tr>
+        <tr><td>v₃</td><td>−(2+2√2)δ</td><td>${fmtmm(v3).replace("-","−")} mm</td></tr>
+        <tr><td>v₄</td><td>−(4+4√2)δ</td><td>${fmtmm(v4).replace("-","−")} mm</td></tr></table>
+        <p class="note">δ = FL/(EA) = 850 / 3.5×10⁶ m = ${fmtmm(delta)} mm。</p>`:"";
+      setBoard(`
+        <h2>${step===0?"手算 3×3：先消元，再回代":"第 "+step+" 步"}</h2>
+        <div class="sys">${matHTML(R,hl)}${vec(["u₃","v₃","v₄"],hl)}<span>=</span>${vec(["0","0","−F"],hl)}</div>
+        ${step===0?'<p>思路：第 1、2 行右端是 0，可以先把 u₃、v₃ 都用 v₄ 表示，再代入第 3 行，只剩一个未知数。</p>':''}
+        <ol class="deriv">${shown}</ol>${res}`);
+    }},
+    {title:"变形与杆力", steps:1, draw(step,fwd){
+      gDofs.classList.add("hidden"); showEvec(null);
+      setBarFocus(null);
+      bars.forEach(b=>{barEls[b.id].classList.add("dim");labelEls[b.id].style.opacity=.25;});
+      gDef.classList.remove("hidden"); document.getElementById("load").classList.add("hidden");
+      setBoard(`
+        <h2>变形形状（放大显示）</h2>
+        <p>实际位移只有毫米级，这里放大后叠在原结构上。颜色表示杆力：红色受拉（tension），蓝色受压（compression），灰色虚线为零力杆。</p>
+        <div class="slider"><label for="scale">放大倍数</label><input id="scale" type="range" min="50" max="400" step="10" value="${defScale}"><span class="mono" id="scaleval">${defScale}×</span></div>
+        <div class="controls" style="margin-top:0"><button id="osc" type="button">${playing?"停止":"播放变形动画"}</button></div>
+        <div class="legend"><span><b style="background:var(--tension)"></b>受拉</span><span><b style="background:var(--compress)"></b>受压</span><span><b style="background:var(--muted)"></b>零力</span></div>
+        <table class="t"><tr><th>杆</th><th>轴力 N</th><th>数值</th></tr>
+          <tr><td><span class="sw" style="background:var(--tension)"></span>1–3</td><td>2F</td><td>+1700 N</td></tr>
+          <tr><td><span class="sw" style="background:var(--compress)"></span>2–3</td><td>−√2 F</td><td>−1202 N</td></tr>
+          <tr><td><span class="sw" style="background:var(--tension)"></span>3–4</td><td>√2 F</td><td>+1202 N</td></tr>
+          <tr><td><span class="sw" style="background:var(--muted)"></span>2–4</td><td>0</td><td>0</td></tr>
+        </table>
+        <p class="note">杆力由 N = (EA/Lₑ)·[c(u_j−u_i) + s(v_j−v_i)] 从位移算出；杆 2–4 两端水平位移都为 0，所以 N₂₄ = 0。</p>`);
+      if(!playing) drawDeformed(1);
+      const sc=document.getElementById("scale");
+      sc.addEventListener("input",()=>{defScale=+sc.value;document.getElementById("scaleval").textContent=defScale+"×";if(!playing)drawDeformed(1);});
+      const osc=document.getElementById("osc");
+      osc.addEventListener("click",()=>{
+        if(playing){stopPlay();drawDeformed(1);osc.textContent="播放变形动画";}
+        else{playing=true;osc.textContent="停止";raf=requestAnimationFrame(loop);}
+      });
+    }}
+  ];
+
+  // ---------- navigation ----------
+  let si=0, st=0, autoTimer=null;
+  const nav=document.getElementById("chapters");
+  scenes.forEach((s,k)=>{
+    const b=document.createElement("button"); b.type="button";
+    b.innerHTML=prettify(`<span class="n">${k+1}</span><span>${s.title}</span>`);
+    b.addEventListener("click",()=>{stopAuto();go(k,0,false);});
+    nav.appendChild(b);
+  });
+  const prevB=document.getElementById("prev"), nextB=document.getElementById("next"), autoB=document.getElementById("auto");
+  function go(s,t,fwd){
+    if(s!==4) {stopPlay(); document.getElementById("load").classList.remove("hidden");}
+    bars.forEach(b=>{barEls[b.id].classList.remove("dim");});
+    si=s; st=t;
+    [...nav.children].forEach((b,k)=>b.setAttribute("aria-current",k===si?"true":"false"));
+    scenes[si].draw(st,fwd);
+    const dots=document.getElementById("dots"); dots.innerHTML="";
+    for(let k=0;k<scenes[si].steps;k++){const d=document.createElement("span");d.className=k===st?"on":k<st?"done":"";dots.appendChild(d);}
+    document.getElementById("stepnum").innerHTML=prettify(`第 ${si+1} 章「${scenes[si].title}」 · 步骤 ${st+1} / ${scenes[si].steps}   （键盘 ← → 也可以翻页）`);
+    prevB.disabled = si===0&&st===0;
+    nextB.disabled = si===scenes.length-1&&st===scenes[si].steps-1;
+  }
+  function next(){
+    if(st<scenes[si].steps-1) go(si,st+1,true);
+    else if(si<scenes.length-1) go(si+1,0,true);
+    else stopAuto();
+  }
+  function prev(){
+    if(st>0) go(si,st-1,false);
+    else if(si>0) go(si-1,scenes[si-1].steps-1,false);
+  }
+  function stopAuto(){ if(autoTimer){clearInterval(autoTimer);autoTimer=null;} autoB.textContent="自动播放"; }
+  prevB.addEventListener("click",()=>{stopAuto();prev();});
+  nextB.addEventListener("click",()=>{stopAuto();next();});
+  autoB.addEventListener("click",()=>{
+    if(autoTimer){stopAuto();return;}
+    autoB.textContent="暂停"; next();
+    autoTimer=setInterval(()=>{ if(nextB.disabled){stopAuto();return;} next(); },3200);
+  });
+  document.addEventListener("keydown",e=>{
+    if(e.target.tagName==="INPUT")return;
+    if(e.key==="ArrowRight"){stopAuto();next();}
+    if(e.key==="ArrowLeft"){stopAuto();prev();}
+  });
+  document.querySelectorAll("[data-math]").forEach(t=>svgMath(t,t.textContent));
+  const hp=document.querySelector("header p"); hp.innerHTML=prettify(hp.innerHTML);
+  go(0,0,false);
+})();
+</script>
+</body>
+</html>

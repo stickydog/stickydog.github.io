@@ -25,6 +25,7 @@ structure-material/
   index.html
   course-notes.html
   exercises.html         习题与解答网页（全部 Tutorial / Home Exercise / Trial Exam，含补充说明与勘误）
+  truss-stiffness-animation.html  桁架刚度法动画演示（单文件交互网页，对应 Lecture 7 例 3）
   exercises/             习题网页用到的示意图（截取自原课件）
   _build/exercises/      习题网页的源文件：改 src/*.html 后在该目录运行 npm install && npm run build
   handwritten/           手写笔记（GoodNotes 导出 PDF）

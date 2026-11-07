@@ -82,6 +82,14 @@
 <li>单位体系：长度 mm、力 N、刚度 N/mm，位移直接得到 mm。</li>
 <li>右下节点是竖向可滑动的支座（只约束水平 \(D_6\)），所以竖向载荷完全依靠两根斜杆和上弦的三角形传递，竖向位移 2.3 mm 最大。</li>
 </ul></div>
+<div class="note"><span class="lbl">考试手算的简化思路</span>
+<ul>
+<li>不必组装 7×7 总刚度矩阵。整体坐标下每根杆的单元矩阵是 \(\begin{bmatrix}\mathbf k_0&-\mathbf k_0\\-\mathbf k_0&\mathbf k_0\end{bmatrix}\)，\(\mathbf k_0=\frac{EA}{l}\begin{bmatrix}c^2&sc\\sc&s^2\end{bmatrix}\)；组装时节点的对角块加所有相连杆的 \(\mathbf k_0\)，两节点之间的块加 \(-\mathbf k_0\)（笔记 <a href="course-notes.html#ch14-6">§14.6</a>）。只填自由度 \(D_2, D_3, D_7\) 对应的 9 个格子即可。</li>
+<li>记 \(a=EA/L=3.5\cdot10^3\)，\(b=EA/(\sqrt2L)=a/\sqrt2=2.475\cdot10^3\)（N/mm），直接得到 \(\begin{bmatrix}a+b&0&b/2\\0&b&-b/2\\b/2&-b/2&b/2\end{bmatrix}\)，与上面的数值矩阵一致。下弦是水平杆，\(s=0\)，对竖向的 \(D_7\) 没有刚度贡献，所以不出现在这里。</li>
+<li>不求逆，直接消元：第 2 行 \(\Rightarrow D_3=D_7/2\)；第 1 行 \(\Rightarrow D_2=-\frac{\sqrt2-1}{2}D_7\)；代入第 3 行得 \(\frac{2-\sqrt2}{2}D_7=-2\sqrt2\,\frac{FL}{EA}\)。</li>
+<li>结果（\(\delta=FL/EA=0.2429\,\mathrm{mm}\)）：\(D_7=-(4+4\sqrt2)\delta=-2.345\,\mathrm{mm}\)，\(D_3=-(2+2\sqrt2)\delta=-1.173\,\mathrm{mm}\)，\(D_2=2\delta=0.486\,\mathrm{mm}\)（上面的 0.485 是舍入误差）。</li>
+<li>逐步动画（单元矩阵、填块组装、划去约束自由度、消元、变形与杆力）：<a href="truss-stiffness-animation.html">桁架刚度法动画演示</a>。</li>
+</ul></div>
 </details>
 </article>
 
