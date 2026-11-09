@@ -474,8 +474,8 @@ ol.deriv li.enter{animation:rowIn .5s ease}
 
 
   // ---------- dynamics data ----------
-  const MODES={c:{name:"一致质量",f:[337.1,1112.4,1873.6],w:[2118.4,6989.6,11772.5],L:[0.0577,0.6281,1.7819],v:[[0.2385,-0.5978,-1.0],[0.9505,1.0,-0.3148],[0.3791,-0.5425,1.0]]},
-               l:{name:"集中质量",f:[170.6,558.8,789.2],w:[1071.8,3511.3,4958.8],L:[0.1253,1.3451,2.6826],v:[[0.2179,-0.5681,-1.0],[0.255,1.0,-0.5747],[1.0,-0.0978,0.3067]]}};
+  const MODES={c:{name:"一致质量",f:[337.1,1112.4,1873.6],w:[2118.4,6989.6,11772.5],L:[0.0577,0.6281,1.7819],lam:["4.488","48.855","138.591"],v:[[0.2385,-0.5978,-1.0],[0.9505,1.0,-0.3148],[0.3791,-0.5425,1.0]]},
+               l:{name:"集中质量",f:[170.6,558.8,789.2],w:[1071.8,3511.3,4958.8],L:[0.1253,1.3451,2.6826],lam:["1.149","12.329","24.590"],v:[[0.2179,-0.5681,-1.0],[0.255,1.0,-0.5747],[1.0,-0.0978,0.3067]]}};
   let modeRaf=null; function stopMode(){ if(modeRaf)cancelAnimationFrame(modeRaf); modeRaf=null; }
   function drawMode(vec,amp){
     gOv.innerHTML=""; const g=el("g",{},gOv);
@@ -538,7 +538,8 @@ ol.deriv li.enter{animation:rowIn .5s ease}
         <h2>8 个自由度里只有 3 个是未知的</h2>
         <p>每个节点有 $u$ (水平)、$v$ (竖直) 两个自由度，共 8 个。支座把其中 5 个定为 0，剩下的是要求的未知量。</p>
         <p>${chips}</p>
-        <p>所以最后只需要解一个 <b>3×3</b> 的方程组，而不是 8×8。图上闪动的蓝色箭头就是 $u_3$、$v_3$、$v_4$ 这 3 个自由度。</p>`);
+        <p>所以最后只需要解一个 <b>3×3</b> 的方程组，而不是 8×8。图上闪动的蓝色箭头就是 $u_3$、$v_3$、$v_4$ 这 3 个自由度。</p>
+        <p class="note">对应习题页 Lecture 7 的自由度编号：$u_3=D_2$、$v_3=D_3$、$v_4=D_7$；被约束的是 $D_1$、$D_4$、$D_5$、$D_6$。</p>`);
     }},
     {title:"单元刚度矩阵", steps:4, draw(step,fwd){
       gDofs.classList.add("hidden"); gDef.classList.add("hidden");
@@ -848,86 +849,98 @@ ol.deriv li.enter{animation:rowIn .5s ease}
         setMath(ro,String.raw`<dt>节点 4 下移</dt><dd>$|v_4|/2L=\tan\theta=${Math.tan(t).toFixed(3)}$</dd><dt>线性理论</dt><dd>$\Delta=0$</dd><dt>真实伸长</dt><dd>$\Delta/2L=\dfrac{1}{\cos\theta}-1=${(1/Math.cos(t)-1).toFixed(4)}\ \approx\ \dfrac{\theta^2}{2}=${(t*t/2).toFixed(4)}$</dd>`);};
       th.addEventListener("input",upd); upd();
     }},
-    {title:"质量矩阵", steps:5, noLoad:true, draw(step,fwd){
+    {title:"质量矩阵", steps:6, noLoad:true, draw(step,fwd){
       gDofs.classList.add("hidden"); gDef.classList.add("hidden"); showEvec(null); setBarFocus(null);
       const g=el("g",{class:"ov-fade"},gOv);
       const dimExcept=ids=>bars.forEach(b=>{const d=!ids.includes(b.id); barEls[b.id].classList.toggle("dim",d); labelEls[b.id].style.opacity=d?.25:1;});
-      const EE=String.raw`\mathbf e\mathbf e^{\mathsf T}`;
+      const sw=c=>`<span class="sw" style="background:${c}"></span>`;
+      // element numbering of Lecture 7 (see the DOF figure on the exercise page)
+      const elTable=String.raw`<table class="t"><tr><th>单元</th><th>杆</th><th>$L_e$</th><th>$\alpha$</th><th>自由度</th><th>$\rho AL_e/6$ (t)</th></tr>
+        <tr><td>1</td><td>${sw("var(--bar13)")}1–3 (上弦)</td><td>$L$</td><td>$0^\circ$</td><td>(1, ·, 2, 3)</td><td>$2.25\times10^{-5}$</td></tr>
+        <tr><td>2</td><td>${sw("var(--bar24)")}2–4 (下弦)</td><td>$2L$</td><td>$0^\circ$</td><td>(4, 5, 6, 7)</td><td>$4.5\times10^{-5}$</td></tr>
+        <tr><td>3</td><td>${sw("var(--bar23)")}2–3</td><td>$\sqrt2\,L$</td><td>$45^\circ$</td><td>(4, 5, 2, 3)</td><td>$\sqrt2\cdot2.25\times10^{-5}$</td></tr>
+        <tr><td>4</td><td>${sw("var(--bar34)")}3–4</td><td>$\sqrt2\,L$</td><td>$-45^\circ$</td><td>(2, 3, 6, 7)</td><td>$\sqrt2\cdot2.25\times10^{-5}$</td></tr></table>`;
       if(step===0){
-        setBoard(String.raw`<h2>Task 3/4：先组装质量矩阵 $\mathbf M$</h2>
-          <p>自由振动方程 $\mathbf M\ddot{\mathbf u}+\mathbf K\mathbf u=\mathbf 0$。设 $\mathbf u=\boldsymbol\varphi\sin\omega t$，得到 $(\mathbf K-\omega^2\mathbf M)\,\boldsymbol\varphi=\mathbf 0$，固有频率由 $\det(\mathbf K-\omega^2\mathbf M)=0$ 求出。自由度仍是 $u_3$、$v_3$、$v_4$，$\mathbf K$ 沿用前面的结果。</p>
-          <p>一致质量矩阵 (课件写法：轴向形函数转到整体坐标)，和刚度矩阵对比：</p>
-          <div class="calc">$$\mathbf m_e=\frac{\rho AL_e}{6}\begin{bmatrix}2${EE}&${EE}\\${EE}&2${EE}\end{bmatrix},\qquad \mathbf k_e=\frac{EA}{L_e}\begin{bmatrix}${EE}&-${EE}\\-${EE}&${EE}\end{bmatrix}$$</div>
-          <p>其中 $\mathbf e=(c,s)$ 是杆的单位方向向量 (第 2 章)，$${EE}$ 是投影矩阵：任意向量乘上它只留下沿杆轴的分量，垂直于杆轴的分量变成 0。</p>
-          <div class="calc">$$${EE}=\begin{bmatrix}c\\ s\end{bmatrix}\begin{bmatrix}c&s\end{bmatrix}=\begin{bmatrix}c^2&cs\\ cs&s^2\end{bmatrix},\qquad (${EE})\,\mathbf u=(\mathbf e^{\mathsf T}\mathbf u)\,\mathbf e$$</div>
-          <p>块结构完全一样，所以照样"看图填块"：对角块加 $\tfrac{\rho AL_e}{3}${EE}$，耦合块加 $+\tfrac{\rho AL_e}{6}${EE}$ (注意是正号)。</p>
-          <div class="calc">$$\rho=2.7\ \text{t/m}^3=2.7\times10^{-9}\ \text{t/mm}^3$$$$\mu=\rho AL=2.7\times10^{-9}\times50\times1000=1.35\times10^{-4}\ \text t$$</div>
-          <p class="note">$\mu$ 是一根长 $L$ 的杆的质量。单位用 $\text{N–mm–t}$，这样 $\mathbf K$ ($\text{N/mm}$) 除以 $\mathbf M$ ($\text t$) 得到 $\text s^{-2}$。水平杆的 $${EE}$ 只有左上角一项，在这种写法里没有竖向质量。</p>`);
+        setBoard(String.raw`<h2>Task 3/4：按 Lecture 7 的步骤组装质量矩阵 $[M]$</h2>
+          <p>自由振动方程 $[M]\{\ddot D\}+[K]\{D\}=\{0\}$。设 $\{D\}=\{\varphi\}\sin\omega t$，得到广义特征值问题 $([K]-\lambda[M])\{\varphi\}=\{0\}$，$\lambda=\omega^2$。步骤与求 $[K]$ 完全相同：单元矩阵 → 转到整体坐标 → 组装 → 引入边界条件。</p>
+          <p><b>单元质量矩阵</b> (Lecture 7 Slide 3)，局部坐标下：</p>
+          <div class="calc">$$[m]_{\text{一致}}=\frac{\rho AL_e}{6}\begin{bmatrix}2&1\\1&2\end{bmatrix},\qquad [m]_{\text{集中}}=\frac{\rho AL_e}{2}\begin{bmatrix}1&0\\0&1\end{bmatrix}$$</div>
+          <p><b>转到整体坐标</b>，和刚度矩阵一样用 $[m]_G=[\tau]^{\mathsf T}[m][\tau]$，$[\tau]=\begin{bmatrix}c&s&0&0\\0&0&c&s\end{bmatrix}$：</p>
+          <div class="calc">$$[m]_G=\rho AL_e\begin{bmatrix}\frac13c^2&\frac13cs&\frac16c^2&\frac16cs\\ \frac13cs&\frac13s^2&\frac16cs&\frac16s^2\\ \frac16c^2&\frac16cs&\frac13c^2&\frac13cs\\ \frac16cs&\frac16s^2&\frac13cs&\frac13s^2\end{bmatrix}$$</div>
+          <p>单元和自由度编号沿用习题页 Lecture 7 的编号 (自由度 $D_2=u_3$、$D_3=v_3$、$D_7=v_4$ 是未知量)。单位用 $\text{N–mm–t}$：$\rho=2.7\times10^{-9}\ \text{t/mm}^3$，$\rho A=1.35\times10^{-7}\ \text{t/mm}$。</p>
+          ${elTable}`);
         return;
       }
       if(step===1){
-        dimExcept(["13","23","34"]);
-        el("circle",{cx:XY(3)[0],cy:XY(3)[1],r:30,fill:"none",stroke:"var(--accent)","stroke-width":2.5,"stroke-dasharray":"6 4"},g);
-        setBoard(String.raw`<h2>一致质量：节点 3 的对角块</h2>
-          <p>节点 3 连着杆 1–3、2–3、3–4，各加 $\tfrac{\rho AL_e}{3}${EE}$：</p>
-          <div class="calc">$$\begin{aligned}\text{杆 1–3:}&\quad \frac{\mu}{3}\begin{bmatrix}1&0\\0&0\end{bmatrix}\\ \text{杆 2–3:}&\quad \frac{\sqrt2\,\mu}{3}\cdot\frac12\begin{bmatrix}1&1\\1&1\end{bmatrix}=\frac{\mu}{3\sqrt2}\begin{bmatrix}1&1\\1&1\end{bmatrix}\\ \text{杆 3–4:}&\quad \frac{\mu}{3\sqrt2}\begin{bmatrix}1&-1\\-1&1\end{bmatrix}\\ \mathbf M_{33}&=\begin{bmatrix}\frac{\mu}{3}+\frac{\sqrt2\,\mu}{3}&0\\0&\frac{\sqrt2\,\mu}{3}\end{bmatrix}\end{aligned}$$</div>
-          <p class="note">两根斜杆的 $cs$ 项一正一负，耦合项正好抵消，和刚度矩阵的情况一样。</p>`);
+        dimExcept(["13","24"]);
+        setBoard(String.raw`<h2>单元 1、2 (水平杆，$\alpha=0^\circ$)</h2>
+          <p>$c=1$，$s=0$，$[m]_G$ 只剩 $x$ 方向的四个元素：</p>
+          <div class="calc">$$[m]_{G1}=2.25\times10^{-5}\begin{bmatrix}2&0&1&0\\0&0&0&0\\1&0&2&0\\0&0&0&0\end{bmatrix}_{(1,\,\cdot,\,2,\,3)},\qquad [m]_{G2}=4.5\times10^{-5}\begin{bmatrix}2&0&1&0\\0&0&0&0\\1&0&2&0\\0&0&0&0\end{bmatrix}_{(4,5,6,7)}$$</div>
+          <p>边界条件 $D_1=D_4=D_5=D_6=0$，只看 $D_2$、$D_3$、$D_7$ 的行和列：</p>
+          <div class="calc">$$\text{单元 1：}\ M_{22}\mathrel{+}=2\times2.25\times10^{-5}=4.5\times10^{-5}\qquad \text{单元 2：}\ M_{77}\mathrel{+}=0$$</div>
+          <p class="note">单元 2 在 $D_7$ (竖直方向) 上的元素是 $\tfrac13 s^2\rho AL_2=0$：水平杆在课件的一致质量写法里没有竖向质量，所以单元 2 对 $[M]$ 没有贡献。</p>`);
         return;
       }
       if(step===2){
-        dimExcept(["34","24"]);
-        el("circle",{cx:XY(4)[0],cy:XY(4)[1],r:30,fill:"none",stroke:"var(--accent)","stroke-width":2.5,"stroke-dasharray":"6 4"},g);
-        setBoard(String.raw`<h2>一致质量：节点 4 与耦合块，得到 $\mathbf M_c$</h2>
-          <div class="calc">$$\begin{aligned}v_4v_4:&\quad \frac{\sqrt2\,\mu}{3}\cdot\frac12=\frac{\mu}{3\sqrt2}\quad(\text{杆 2–4 水平},\ s=0,\ \text{贡献 }0)\\ \text{耦合块 3–4:}&\quad +\frac{\sqrt2\,\mu}{6}\cdot\frac12\begin{bmatrix}1&-1\\-1&1\end{bmatrix}\ \to\ v_4\text{ 列}=\begin{bmatrix}-\frac{\mu}{6\sqrt2}\\ \frac{\mu}{6\sqrt2}\end{bmatrix}\end{aligned}$$</div>
-          <p>记 $m^*=\mu/(6\sqrt2)=1.591\times10^{-5}$ t：</p>
-          <div class="calc grow">$$\mathbf M_c=m^*\begin{bmatrix}2\sqrt2+4&0&-1\\0&4&1\\-1&1&2\end{bmatrix}=10^{-5}\begin{bmatrix}10.864&0&-1.591\\0&6.364&1.591\\-1.591&1.591&3.182\end{bmatrix}\ \text t$$</div>
-          <p class="note">和 $\mathbf K$ 一样对称；但非对角元的正负和 $\mathbf K$ 相反，因为质量矩阵的耦合块是 $+${EE}$。</p>`);
+        dimExcept(["23"]);
+        setBoard(String.raw`<h2>单元 3 (杆 2–3，$\alpha=45^\circ$)</h2>
+          <p>$c=s=\tfrac{1}{\sqrt2}$，$c^2=cs=s^2=\tfrac12$，$\rho AL_3=\sqrt2\cdot1.35\times10^{-4}$ t：</p>
+          <div class="calc">$$[m]_{G3}=\sqrt2\cdot2.25\times10^{-5}\begin{bmatrix}1&1&\frac12&\frac12\\ 1&1&\frac12&\frac12\\ \frac12&\frac12&1&1\\ \frac12&\frac12&1&1\end{bmatrix}_{(4,5,2,3)}$$</div>
+          <p>划去 $D_4$、$D_5$，留下的是 $D_2$、$D_3$ 的 2×2 块：</p>
+          <div class="calc">$$\begin{bmatrix}M_{22}&M_{23}\\M_{32}&M_{33}\end{bmatrix}\mathrel{+}=\sqrt2\cdot2.25\times10^{-5}\begin{bmatrix}1&1\\1&1\end{bmatrix}$$</div>`);
         return;
       }
       if(step===3){
-        bars.forEach(b=>{const m=Le(b)/1000; [[b.i,b.j],[b.j,b.i]].forEach(([n,o])=>{const [x,y]=XY(n),[xo,yo]=XY(o);
-          const t=0.2, cx=x+(xo-x)*t, cy=y+(yo-y)*t; el("circle",{cx,cy,r:7*Math.sqrt(m),fill:b.color,opacity:(n===1||n===2)?.3:.95},g);});});
-        [[3,"m₃ = μ(½ + √2)",30,-10,"start"],[4,"m₄ = μ(1 + √2/2)",-12,-30,"end"]].forEach(([n,t,dx,dy,an])=>{const [x,y]=XY(n);
-          el("circle",{cx:x,cy:y,r:22,fill:"none",stroke:"var(--accent)","stroke-width":2.5},g); label(g,x+dx,y+dy,t,"var(--accent)",an);});
-        setBoard(String.raw`<h2>集中质量：每根杆的质量对半分到两端</h2>
-          <p>集中质量矩阵 $\mathbf m_e=\tfrac{\rho AL_e}{2}\,\mathbf I_{4\times4}$，$x$、$y$ 方向都一样。图中彩色圆点是每根杆分到各端的一半质量，节点质量就是这些圆点之和。</p>
-          <div class="calc">$$\begin{aligned}m_3&=\frac{\mu}{2}+\frac{\sqrt2\,\mu}{2}+\frac{\sqrt2\,\mu}{2}=\mu\left(\tfrac12+\sqrt2\right)=2.584\times10^{-4}\ \text t\\ m_4&=\frac{\sqrt2\,\mu}{2}+\mu=\mu\left(1+\tfrac{\sqrt2}{2}\right)=2.305\times10^{-4}\ \text t\end{aligned}$$$$\mathbf M_l=\mu\begin{bmatrix}\frac12+\sqrt2&0&0\\0&\frac12+\sqrt2&0\\0&0&1+\frac{\sqrt2}{2}\end{bmatrix}$$</div>
-          <p class="note">节点 1、2 上的半质量 (浅色) 对应的位移为 0，和刚度矩阵一样划掉，不进入 $\mathbf M$。</p>`);
+        dimExcept(["34"]);
+        setBoard(String.raw`<h2>单元 4 (杆 3–4，$\alpha=-45^\circ$)</h2>
+          <p>$c=\tfrac{1}{\sqrt2}$，$s=-\tfrac{1}{\sqrt2}$，所以 $cs=-\tfrac12$，含 $cs$ 的元素带负号：</p>
+          <div class="calc">$$[m]_{G4}=\sqrt2\cdot2.25\times10^{-5}\begin{bmatrix}1&-1&\frac12&-\frac12\\ -1&1&-\frac12&\frac12\\ \frac12&-\frac12&1&-1\\ -\frac12&\frac12&-1&1\end{bmatrix}_{(2,3,6,7)}$$</div>
+          <p>划去 $D_6$，留下 $D_2$、$D_3$、$D_7$ 的 3×3 块：</p>
+          <div class="calc">$$\begin{bmatrix}M_{22}&M_{23}&M_{27}\\M_{32}&M_{33}&M_{37}\\M_{72}&M_{73}&M_{77}\end{bmatrix}\mathrel{+}=\sqrt2\cdot2.25\times10^{-5}\begin{bmatrix}1&-1&-\frac12\\-1&1&\frac12\\-\frac12&\frac12&1\end{bmatrix}$$</div>`);
         return;
       }
-      setBoard(String.raw`<h2>两种质量矩阵对比</h2>
-        <div class="calc">$$\mathbf M_c=10^{-5}\begin{bmatrix}10.864&0&-1.591\\0&6.364&1.591\\-1.591&1.591&3.182\end{bmatrix}\ \text t,\qquad \mathbf M_l=10^{-5}\begin{bmatrix}25.84&0&0\\0&25.84&0\\0&0&23.05\end{bmatrix}\ \text t$$</div>
-        <table class="t"><tr><th></th><th>一致质量 $\mathbf M_c$</th><th>集中质量 $\mathbf M_l$</th></tr>
-        <tr><td>形状</td><td>满阵，有耦合</td><td>对角阵</td></tr>
-        <tr><td>来源</td><td>与 $\mathbf K$ 同一套形函数</td><td>质量直接堆在节点上</td></tr>
-        <tr><td>频率</td><td>精确值的上界 (偏高)</td><td>通常偏低</td></tr>
-        <tr><td>$u_3$ 方向的质量</td><td>$10.86\times10^{-5}$ t</td><td>$25.84\times10^{-5}$ t</td></tr></table>
-        <p class="note">课件的一致质量只计沿杆轴方向的惯性，垂直于杆的运动没有质量，所以 $\mathbf M_c$ 的对角元比 $\mathbf M_l$ 小得多，频率也就高得多。</p>`);
+      if(step===4){
+        setBoard(String.raw`<h2>组装：一致质量矩阵 $[M]$ (Task 3)</h2>
+          <p>把四个单元的贡献加起来，提出公因子 $\sqrt2\cdot2.25\times10^{-5}$ (单元 1 的 $4.5\times10^{-5}=\sqrt2\cdot\sqrt2\cdot2.25\times10^{-5}$)：</p>
+          <div class="calc">$$[M]=\sqrt2\cdot2.25\times10^{-5}\begin{bmatrix}\sqrt2+1+1&1-1&-\frac12\\ 1-1&1+1&\frac12\\ -\frac12&\frac12&1\end{bmatrix}$$$$[M]=\sqrt2\cdot2.25\times10^{-5}\begin{bmatrix}\sqrt2+2&0&-\frac12\\ 0&2&\frac12\\ -\frac12&\frac12&1\end{bmatrix}$$$$[M]=10^{-5}\begin{bmatrix}10.864&0&-1.591\\0&6.364&1.591\\-1.591&1.591&3.182\end{bmatrix}\ \text t\qquad(D_2,\ D_3,\ D_7)$$</div>
+          <p class="note">注意：课件这一页写的是 $\sqrt2\cdot2.25\times10^{-5}\begin{bmatrix}\sqrt2+\frac16+\frac16&\frac16+\frac16&\frac1{12}\\ \cdots\end{bmatrix}$，斜杆的元素少乘了 6，而且没有考虑单元 4 的 $cs$ 为负 (所以 $M_{23}$ 应为 $1-1=0$，$M_{27}$ 应为 $-\tfrac12$)。这里按课件 Slide 3 的公式重新计算，与习题页 Lecture 7 例 5 的勘误一致。</p>`);
+        return;
+      }
+      // step 5: lumped
+      bars.forEach(b=>{const m=Le(b)/1000; [[b.i,b.j],[b.j,b.i]].forEach(([n,o])=>{const [x,y]=XY(n),[xo,yo]=XY(o);
+        const t=0.2, cx=x+(xo-x)*t, cy=y+(yo-y)*t; el("circle",{cx,cy,r:7*Math.sqrt(m),fill:b.color,opacity:(n===1||n===2)?.3:.95},g);});});
+      [[3,"D₂, D₃",30,-10,"start"],[4,"D₇",-12,-30,"end"]].forEach(([n,t,dx,dy,an])=>{const [x,y]=XY(n);
+        el("circle",{cx:x,cy:y,r:22,fill:"none",stroke:"var(--accent)","stroke-width":2.5},g); label(g,x+dx,y+dy,t,"var(--accent)",an);});
+      setBoard(String.raw`<h2>集中质量矩阵 $[M]$ (Task 4)</h2>
+        <p>集中质量的单元矩阵是 $\tfrac{\rho AL_e}{2}[I]$，$x$、$y$ 方向一样，转到整体坐标后不变。每个单元把一半质量分给两端节点 (图中彩色圆点)：</p>
+        <div class="calc">$$\frac{\rho AL_1}{2}=6.75\times10^{-5}\ \text t,\qquad \frac{\rho AL_2}{2}=13.5\times10^{-5}\ \text t$$$$\frac{\rho AL_3}{2}=\frac{\rho AL_4}{2}=\sqrt2\cdot6.75\times10^{-5}\ \text t$$$$\begin{aligned}M_{22}=M_{33}&=\tfrac12\left(\rho AL_1+\rho AL_3+\rho AL_4\right)=(6.75+2\cdot6.75\sqrt2)\times10^{-5}\\ M_{77}&=\tfrac12\left(\rho AL_2+\rho AL_4\right)=(13.5+6.75\sqrt2)\times10^{-5}\end{aligned}$$$$[M]=10^{-5}\begin{bmatrix}6.75+2\cdot6.75\sqrt2&0&0\\0&6.75+2\cdot6.75\sqrt2&0\\0&0&13.5+6.75\sqrt2\end{bmatrix}$$$$[M]=10^{-5}\begin{bmatrix}25.84&0&0\\0&25.84&0\\0&0&23.05\end{bmatrix}\ \text t$$</div>
+        <p class="note">注意：课件这一页用的是 $3.375$、$6.75$，即 $\rho AL/4$，比 $\rho AL/2$ 少了一半。这里按"每个节点分到 $\rho AL_e/2$"重新计算，与习题页的勘误一致。</p>`);
     }},
     {title:"固有频率与振型", steps:3, noLoad:true, draw(step,fwd){
       gDofs.classList.add("hidden"); gDef.classList.add("hidden"); showEvec(null); setBarFocus(null);
-      const fTable=(M,cmp)=>`<table class="t"><tr><th>阶</th><th>$\\Lambda$</th><th>$\\omega$ (rad/s)</th><th>$f=\\omega/2\\pi$</th>${cmp?"<th>一致质量</th>":""}</tr>`+M.L.map((L,k)=>`<tr><td>${k+1}</td><td>${L}</td><td>${M.w[k]}</td><td><b>${M.f[k]} Hz</b></td>${cmp?`<td>${MODES.c.f[k]} Hz</td>`:""}</tr>`).join("")+`</table>`;
+      const fTable=(M,cmp)=>`<table class="t"><tr><th>阶</th><th>$\\lambda$ ($10^6\\ \\text s^{-2}$)</th><th>$\\omega=\\sqrt\\lambda$ (rad/s)</th><th>$f=\\omega/2\\pi$</th>${cmp?"<th>一致质量</th>":""}</tr>`+M.lam.map((L,k)=>`<tr><td>${k+1}</td><td>${L}</td><td>${M.w[k]}</td><td><b>${M.f[k]} Hz</b></td>${cmp?`<td>${MODES.c.f[k]} Hz</td>`:""}</tr>`).join("")+`</table>`;
+      const Ktex=String.raw`10^3\begin{bmatrix}5.975&0&1.2374\\0&2.4749&-1.2374\\1.2374&-1.2374&1.2374\end{bmatrix}`;
       if(step===0){
-        setBoard(String.raw`<h2>一致质量：特征方程与频率</h2>
-          <p>把公共因子提出来，剩下只含纯数的矩阵 $\mathbf K_n$、$\mathbf M_n$：</p>
-          <div class="calc">$$\mathbf K=k^*\,\mathbf K_n,\qquad k^*=\frac{EA}{2\sqrt2\,L}=1237.4\ \text{N/mm}$$$$\mathbf M_c=m^*\,\mathbf M_n,\qquad m^*=\frac{\mu}{6\sqrt2}=1.591\times10^{-5}\ \text t$$</div>
-          <p>令 $\omega^2=(k^*/m^*)\,\Lambda$，其中 $k^*/m^*=3EA/(\rho AL^2)=7.778\times10^7\ \text s^{-2}$，特征方程 $\det(\mathbf K-\omega^2\mathbf M_c)=0$ 化为：</p>
-          <div class="calc">$$\det\left(\begin{bmatrix}2\sqrt2+2&0&1\\0&2&-1\\1&-1&1\end{bmatrix}-\Lambda\begin{bmatrix}2\sqrt2+4&0&-1\\0&4&1\\-1&1&2\end{bmatrix}\right)=0$$$$\begin{aligned}&(24+14\sqrt2)\,\Lambda^3-(60+34\sqrt2)\,\Lambda^2+(24+22\sqrt2)\,\Lambda-2\sqrt2=0\\ \Leftrightarrow\ &43.799\,\Lambda^3-108.083\,\Lambda^2+55.113\,\Lambda-2.828=0\end{aligned}$$</div>
+        setBoard(String.raw`<h2>一致质量：$\det([K]-\lambda[M])=0$ (Task 3)</h2>
+          <p>$[K]$ 用 Task 1 的结果 ($\text{N/mm}$)，$[M]$ 用上一章组装的一致质量矩阵 ($\text t$)，$\lambda=\omega^2$ 的单位是 $\text s^{-2}$：</p>
+          <div class="calc">$$[K]=${Ktex}$$$$[M]=\sqrt2\cdot2.25\times10^{-5}\begin{bmatrix}\sqrt2+2&0&-\frac12\\0&2&\frac12\\-\frac12&\frac12&1\end{bmatrix}$$$$\det\big([K]-\lambda[M]\big)=0$$</div>
+          <p>展开是 $\lambda$ 的三次方程 (3 个自由度 → 3 个特征值、3 个固有频率)。两边除以 $\det[M]$，并把 $\lambda$ 以 $10^6\ \text s^{-2}$ 为单位：</p>
+          <div class="calc">$$\lambda^3-191.933\,\lambda^2+7612.0\,\lambda-30384=0$$</div>
           ${fTable(MODES.c,false)}
-          <p class="note">自检：三根之和 $=108.083/43.799=2.4677=0.0577+0.6281+1.7819$ ✓</p>`);
+          <p class="note">自检：三个根之和等于 $[M]^{-1}[K]$ 的迹，$4.488+48.855+138.591=191.93$ ✓。课件给的 $f=303.4,\ 1551.3,\ 4283.3$ Hz 来自有误的质量矩阵，见上一章。</p>`);
         drawMode(MODES.c.v[0],0); return;
       }
       if(step===1){
-        setBoard(String.raw`<h2>集中质量：特征方程与频率</h2>
-          <p>$\mathbf M_l=\mu\,\mathbf D$，$\mathbf D=\mathrm{diag}\!\left(\tfrac12+\sqrt2,\ \tfrac12+\sqrt2,\ 1+\tfrac{\sqrt2}{2}\right)$。令 $\omega^2=(k^*/\mu)\,\Lambda$，其中 $k^*/\mu=9.166\times10^6\ \text s^{-2}$：</p>
-          <div class="calc">$$\det(\mathbf K_n-\Lambda\,\mathbf D)=0$$$$\begin{aligned}&\left(\tfrac{13}{4}+\tfrac{17\sqrt2}{8}\right)\Lambda^3-\left(\tfrac{53}{4}+9\sqrt2\right)\Lambda^2+(13+9\sqrt2)\,\Lambda-2\sqrt2=0\\ \Leftrightarrow\ &6.255\,\Lambda^3-25.978\,\Lambda^2+25.728\,\Lambda-2.828=0\end{aligned}$$</div>
+        setBoard(String.raw`<h2>集中质量：$\det([K]-\lambda[M])=0$ (Task 4)</h2>
+          <p>$[M]$ 是对角阵，做法相同：</p>
+          <div class="calc">$$[M]=10^{-5}\begin{bmatrix}25.84&0&0\\0&25.84&0\\0&0&23.05\end{bmatrix},\qquad \det\big([K]-\lambda[M]\big)=0$$$$\lambda^3-38.067\,\lambda^2+345.58\,\lambda-348.23=0\qquad(\lambda\ \text{以}\ 10^6\ \text s^{-2}\ \text{为单位})$$</div>
           ${fTable(MODES.l,true)}
-          <p class="note">集中质量的频率全部低于一致质量。网格很粗 (每杆一个单元)，而且课件的一致质量不含横向惯性，所以差别很大；加密网格后两者都收敛到精确解。</p>`);
+          <p class="note">集中质量的频率全部低于一致质量。网格很粗 (每杆一个单元)，而且课件的一致质量不含横向惯性，所以差别很大；加密网格后两者都收敛到精确解。课件给的 $f=219.5,\ 770.4,\ 1106.9$ Hz 用的是减半的节点质量。</p>`);
         drawMode(MODES.l.v[0],0); return;
       }
       let kind="c", mode=0, play=!matchMedia("(prefers-reduced-motion: reduce)").matches;
       setBoard(String.raw`<h2>振型动画 (mode shapes)</h2>
-        <p>每阶固有频率对应一个振型 $\boldsymbol\varphi$：结构按这个形状同步振动。图中振幅已放大，动画速度只示意各阶快慢，不是真实频率。</p>
+        <p>把每个 $\lambda$ 代回 $([K]-\lambda[M])\{\varphi\}=\{0\}$ 就得到对应的振型 $\{\varphi\}$：结构按这个形状同步振动。图中振幅已放大，动画速度只示意各阶快慢，不是真实频率。</p>
         <div class="controls" style="margin-top:4px" id="kindbtns"><button type="button" data-k="c">一致质量</button><button type="button" data-k="l">集中质量</button></div>
         <div class="controls" style="margin-top:6px" id="modebtns"><button type="button" data-m="0">第 1 阶</button><button type="button" data-m="1">第 2 阶</button><button type="button" data-m="2">第 3 阶</button><button type="button" id="mplay"></button></div>
         <div id="modeinfo"></div>`);
@@ -940,7 +953,7 @@ ol.deriv li.enter{animation:rowIn .5s ease}
         mplay.textContent=play?"暂停":"播放";
         const M=MODES[kind], v=M.v[mode];
         setMath(info,String.raw`<table class="t"><tr><th>${M.name} · 第 ${mode+1} 阶</th><th>$f=${M.f[mode]}$ Hz</th></tr>
-          <tr><td>振型 $\boldsymbol\varphi=(u_3,\ v_3,\ v_4)$</td><td>$(${v.join(",\\ ")})$</td></tr></table>
+          <tr><td>振型 $\{\varphi\}=\{D_2,\ D_3,\ D_7\}$</td><td>$\{${v.join(",\\ ")}\}$</td></tr></table>
           <p>${desc[kind][mode]}。</p>
           <table class="t"><tr><th>阶</th><th>一致质量</th><th>集中质量</th></tr>${[0,1,2].map(k=>`<tr${k===mode?' class="cur"':''}><td>${k+1}</td><td>${MODES.c.f[k]} Hz</td><td>${MODES.l.f[k]} Hz</td></tr>`).join("")}</table>`);
         stopMode();
