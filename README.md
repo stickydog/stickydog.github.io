@@ -37,6 +37,11 @@ structure-material/
 flight-dynamics/
   index.html
   course-notes.html
+  exercises.html         习题与解答网页 (Exercise 1–12 题目 + Tutorial 与手写笔记合并的解答)
+  exercises/             Exercise 题目 PDF + 习题网页用到的示意图 (截取自原课件)
+  _build/exercises/      习题网页的源文件：改 src/*.html 后在该目录运行 npm install && npm run build
+  tutorials/             Tutorial 1–12 讲解幻灯片 + 总复习 Recap (PDF)
+  handwritten/           习题课手写笔记 Exercise 1–11 (PDF)
   homework/              课后作业 (图片)
 mechanics/               Engineering Mechanics I (工程力学 / 静力学)
   index.html

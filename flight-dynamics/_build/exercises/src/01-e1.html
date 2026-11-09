@@ -1,0 +1,74 @@
+<section class="set" id="t1" data-short="Exercise 1">
+<h2 class="set-title"><span class="set-num">Exercise 1</span>基础：操纵面与坐标系 Fundamentals<span class="set-src">Exercise 1 · Tutorial 1 · Notes</span></h2>
+<p class="lead">认识三个主操纵面和机体轴，然后用两个 GPS 点求运动学速度、航迹方位角 \(\chi_K\) 和航迹倾角 \(\gamma_K\)。核心工具是 WGS-84 → ECEF 坐标变换和 ECEF → NED 的方向余弦矩阵 \(\mathbf{M}_{OE}\) (见课程笔记第 2 章)。</p>
+
+<article class="task" id="t1-1">
+<h3><span class="tno">1.1</span>气动操纵面</h3>
+<div class="q"><p>Give the symbol and name of the primary aerodynamic control surfaces. Give the symbol and the name of the body fixed axis about which the main moment is produced by each of the surfaces.</p></div>
+<details class="sol"><summary>解答</summary>
+<figure class="fig small"><img src="exercises/e1-surfaces.png" alt="三个主操纵面与机体坐标系三轴"></figure>
+<div class="table-wrap"><table class="tbl cols-5">
+<tr><th>操纵面</th><th>偏度符号</th><th>主要绕轴</th><th>力矩</th><th>角速度 / 姿态角</th></tr>
+<tr><td>副翼 (aileron)</td><td>\(\xi\)</td><td>\(x_B\) 滚转轴 (roll axis)</td><td>滚转力矩 \(L\)</td><td>\(p\) / \(\Phi\)</td></tr>
+<tr><td>升降舵 (elevator)</td><td>\(\eta\)</td><td>\(y_B\) 俯仰轴 (pitch axis)</td><td>俯仰力矩 \(M\)</td><td>\(q\) / \(\Theta\)</td></tr>
+<tr><td>方向舵 (rudder)</td><td>\(\zeta\)</td><td>\(z_B\) 偏航轴 (yaw axis)</td><td>偏航力矩 \(N\)</td><td>\(r\) / \(\Psi\)</td></tr>
+</table></div>
+<div class="note"><span class="lbl">补充说明</span>
+<ul>
+<li>手写笔记把各轴上的量排成一行记忆：\(x\)：\(\xi\)、\(L\)、\(p\)、\(\Phi\)、\(u\)；\(y\)：\(\eta\)、\(M\)、\(q\)、\(\Theta\)、\(v\)；\(z\)：\(\zeta\)、\(N\)、\(r\)、\(\Psi\)、\(w\)。希腊字母的顺序 \(\xi,\eta,\zeta\) 正好对应 \(x,y,z\)。</li>
+<li>机体坐标系 B：\(x_B\) 指向机头，\(y_B\) 指向右翼，\(z_B\) 向下 (右手系)。正滚转是右翼下沉，正俯仰是抬头，正偏航是机头向右。</li>
+<li>"主要"绕轴是因为存在交叉耦合：副翼偏转同时产生逆偏航 (adverse yaw)，方向舵偏转也会带来滚转力矩。</li>
+</ul></div>
+</details>
+</article>
+
+<article class="task" id="t1-2">
+<h3><span class="tno">1.2</span>由两个 GPS 点求速度与航迹角</h3>
+<div class="q">
+<p>An aircraft is flying with constant velocity. The ground-station would like to calculate the velocity, the kinematic course angle \(\chi_K\) and the kinematic flight path angle \(\gamma_K\) of the aircraft based on the position and GPS-height of the aircraft at \(t=0\,\mathrm{s}\) and \(t=60\,\mathrm{s}\).</p>
+<div class="table-wrap"><table class="tbl cols-4">
+<tr><th></th><th>Geodetic longitude \(\lambda\)</th><th>Geodetic latitude \(\mu\)</th><th>GPS-height \(h\)</th></tr>
+<tr><td>\(t_1=0\,\mathrm{s}\)</td><td>11.669284 deg</td><td>48.265906 deg</td><td>1500 m</td></tr>
+<tr><td>\(t_2=60\,\mathrm{s}\)</td><td>11.591421 deg</td><td>48.22776 deg</td><td>1530 m</td></tr>
+</table></div>
+<p>You can assume that the earth is flat and non-rotating. Use \(a_{earth}=6378137\,\mathrm{m}\), \(e_{earth}=0.0818\).</p>
+<ol class="parts" type="a">
+<li>State the position vectors of both points in the ECEF system.</li>
+<li>Calculate the velocity vector of the aircraft by using both position vectors from a). Use a suitable and intuitive coordinate system.</li>
+<li>What type of velocity have you calculated in b)?</li>
+<li>Calculate the angles \(\chi_K\) and \(\gamma_K\) in point 1 (at \(t_1\)).</li>
+<li>Do you find an easy way of checking the results of exercise d) using the results of exercise b)?</li>
+</ol>
+</div>
+<details class="sol"><summary>解答</summary>
+<p><b>a)</b> WGS-84 坐标 \((\lambda,\mu,h)\) 转 ECEF 直角坐标：</p>
+\[x=(N+h)\cos\mu\cos\lambda,\qquad y=(N+h)\cos\mu\sin\lambda,\qquad z=\big(N(1-e^2)+h\big)\sin\mu,\qquad N(\mu)=\frac{a}{\sqrt{1-e^2\sin^2\mu}}\]
+<p>其中卯酉圈曲率半径 (prime vertical radius) \(N_1=6\,390\,053.42\,\mathrm{m}\)，\(N_2=6\,390\,039.23\,\mathrm{m}\)。代入得</p>
+\[(\vec r_1^{\,G})_E=\begin{bmatrix}4.16676\times10^6\\8.6056\times10^5\\4.7377\times10^6\end{bmatrix}_E\mathrm{m},\qquad (\vec r_2^{\,G})_E=\begin{bmatrix}4.1710\times10^6\\8.5554\times10^5\\4.7349\times10^6\end{bmatrix}_E\mathrm{m}\]
+<p class="erratum">Tutorial Slide 10 中 \(x_1\) 显示为 \(4.16685\times10^6\)，按公式应为 \(4.16676\times10^6\) (相差约 90 m)。b) 的速度是用全精度坐标算的 (\(71.4293\,\mathrm{m/s}\) 与验算一致)，后续结果不受影响。</p>
+<p><b>b)</b> 匀速飞行，用差商求 ECEF 中的速度：</p>
+\[(\vec V^G)_E^E=\frac{1}{\Delta t}\big((\vec r_2^{\,G})_E-(\vec r_1^{\,G})_E\big)=\begin{bmatrix}71.4293\\-83.7215\\-46.7151\end{bmatrix}_E\mathrm{m/s}\]
+<p>ECEF 分量不直观 (看不出往哪个方向飞、是爬升还是下降)，所以用方向余弦矩阵 \(\mathbf{M}_{OE}\) 转到北东地坐标系 (NED，O)：</p>
+\[(\vec V^G)_O^E=\mathbf{M}_{OE}(\vec V^G)_E^E=\begin{bmatrix}-\sin\mu\cos\lambda&-\sin\mu\sin\lambda&\cos\mu\\-\sin\lambda&\cos\lambda&0\\-\cos\mu\cos\lambda&-\cos\mu\sin\lambda&-\sin\mu\end{bmatrix}\begin{bmatrix}71.4293\\-83.7215\\-46.7151\end{bmatrix}=\begin{bmatrix}-70.6623\\-96.4385\\-0.4328\end{bmatrix}_O\mathrm{m/s}\]
+\[\big|(\vec V^G)_O^E\big|=119.556\,\mathrm{m/s}\]
+<p>两点相距很近，\(\mathbf{M}_{OE}\) 用点 1 或点 2 的 \(\lambda,\mu\) 都可以。</p>
+<p><b>c)</b> 速度由 ECEF 中位置的变化求得 (上标 \(E\))，在 NED 中表示 (下标 \(O\))；没有任何风的信息，所以它是运动学速度 (kinematic velocity)，记作 \((\vec V_K^G)_O^E\)。</p>
+<p><b>d)</b></p>
+<figure class="fig"><img src="exercises/e1-angles.png" alt="航迹方位角 χ_K 在水平面内从北量起，航迹倾角 γ_K 在速度矢量与水平面之间"></figure>
+\[\gamma_K=\arcsin\frac{-(w_K^G)_O}{|(\vec V_K^G)_O|}=\arcsin\frac{0.4328}{119.556}=0.0036\,\mathrm{rad}=0.2074^\circ\]
+\[\chi_K=\arctan\frac{(v_K^G)_O}{(u_K^G)_O}=\arctan\frac{-96.4385}{-70.6623}=53.7691^\circ\ \ (\text{象限错误})\]
+<p>\(\arctan\) 只返回 \(-90^\circ\)–\(90^\circ\)，而航迹方位角要在 \(0^\circ\)–\(360^\circ\) 内取值。北向和东向分量都为负，飞机朝西南飞，所以要用 \(\operatorname{atan2}\) (MATLAB 函数)：</p>
+\[\chi_K=53.7691^\circ+180^\circ=233.7691^\circ\]
+<p><b>e)</b> 用求得的角度构造 \(\mathbf{M}_{KO}\)，把速度转到运动学坐标系 K。若角度正确，速度只剩 \(x_K\) 分量，且大小等于 \(|\vec V_K|\)：</p>
+\[(\vec V_K^G)_K^E=\mathbf{M}_{KO}(\vec V_K^G)_O^E=\begin{bmatrix}\cos\chi_K\cos\gamma_K&\sin\chi_K\cos\gamma_K&-\sin\gamma_K\\-\sin\chi_K&\cos\chi_K&0\\\cos\chi_K\sin\gamma_K&\sin\chi_K\sin\gamma_K&\cos\gamma_K\end{bmatrix}\begin{bmatrix}-70.6623\\-96.4385\\-0.4328\end{bmatrix}=\begin{bmatrix}119.5564\\0\\0\end{bmatrix}_K\]
+<div class="note"><span class="lbl">补充说明</span>
+<ul>
+<li><b>记号</b> \((\vec V_K^G)_O^E\)：下标 \(K\) 是速度类型 (K 运动学、W 风、A 气流)，上标 \(G\) 是参考点 (重心)，右上 \(E\) 是"相对哪个坐标系求导" (此处 ECEF)，右下 \(O\) 是"分量写在哪个坐标系" (此处 NED)。</li>
+<li>\(\mathbf{M}_{OE}\) 是正交矩阵，只旋转不缩放，所以 \(|(\vec V)_E|=|(\vec V)_O|=119.556\,\mathrm{m/s}\)，这是检查坐标变换最快的办法。</li>
+<li>为什么题目说"平坦、不旋转的地球"却还用椭球公式？椭球公式只用来把 GPS 坐标换成直角坐标；"平坦"假设指两点之间用直线 (欧氏距离) 代替大圆弧。Tutorial 中的对比表显示：距离约 10 km 时两者只差约 1 mm，约 1200 km 时才差约 1.8 km。</li>
+<li>\(\gamma_K>0\) 表示爬升：60 s 内高度增加 30 m，\(30/60=0.5\,\mathrm{m/s}\)，与 \(-(w_K)_O=0.43\,\mathrm{m/s}\) 接近。差别来自地球曲率：两点水平距离约 \(d=7.17\,\mathrm{km}\)，点 2 处的地面相对点 1 的切平面低 \(d^2/2R\approx4\,\mathrm{m}\)，\((30-4)/60\approx0.43\,\mathrm{m/s}\)。</li>
+<li>WGS-84 的大地纬度是椭球面法线与赤道面的夹角，法线一般<b>不</b>通过地心；ECEF → WGS-84 的反变换必须迭代求解。</li>
+</ul></div>
+</details>
+</article>
+</section>

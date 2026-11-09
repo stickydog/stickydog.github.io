@@ -1,0 +1,58 @@
+<section class="set" id="t2" data-short="Exercise 2">
+<h2 class="set-title"><span class="set-num">Exercise 2</span>大气与空速 Atmosphere and Airspeeds<span class="set-src">Exercise 2 · Tutorial 2 · Notes</span></h2>
+<p class="lead">由空气密度反推高度，再沿 IAS → CAS → EAS → TAS 的链条逐级修正空速。用到对流层多变 (polytrope) 大气方程、位势高度与几何高度的换算，以及可压缩流的空速公式 (课程笔记第 3 章)。</p>
+
+<article class="task" id="t2-1">
+<h3><span class="tno">2</span>由 IAS 求高度、CAS、EAS 与 TAS</h3>
+<div class="q">
+<p>The indicated airspeed of the aircraft is \(V_{IAS}=320.8\,\mathrm{kts}\). The atmosphere is assumed to be the standard atmosphere. The density of the surrounding air is \(\tilde\rho=0.916\,\mathrm{kg/m^3}\). For this type of aircraft, the following relation holds: \(V_{CAS}=1.01\cdot(V_{IAS}-2\,\mathrm{kts})\).</p>
+<ol class="parts" type="a">
+<li>What is the geometric height of the aircraft?</li>
+<li>Calculate the calibrated airspeed \(V_{CAS}\).</li>
+<li>Can we assume the air to be incompressible?</li>
+<li>Calculate the difference between total and static pressure.</li>
+<li>Calculate the equivalent airspeed \(V_{EAS}\).</li>
+<li>Calculate the true airspeed \(V_{TAS}\).</li>
+</ol>
+<p>Use: \(\rho_{s,MSL}=1.225\,\mathrm{kg/m^3}\), \(p_{s,MSL}=1.01325\times10^5\,\mathrm{Pa}\), \(T_{s,MSL}=288.15\,\mathrm{K}\), \(g_0=9.80665\,\mathrm{m/s^2}\), \(a_{MSL}=340\,\mathrm{m/s}\), \(R=287.05\,\mathrm{J/(kg\,K)}\), \(n=1.235\), \(\kappa=1.4\), \(r_E=6356766\,\mathrm{m}\).</p>
+</div>
+<details class="sol"><summary>解答</summary>
+<p><b>a)</b> 对流层 (troposphere) 是多变大气，温度随位势高度 \(H_G\) 线性下降：</p>
+\[T(H_G)=T_{MSL}+\gamma H_G,\qquad \gamma=\frac{dT}{dH_G}=-\frac{n-1}{n}\frac{g_S}{R}=-0.0065\,\mathrm{K/m}\]
+<p>理想气体加静力平衡给出密度与温度的关系，再代入线性温度，得到只含 \(H_G\) 的式子：</p>
+\[\frac{\rho(H_G)}{\rho_S}=\left(\frac{T(H_G)}{T_S}\right)^{-\left[\frac{g_S}{\gamma R}+1\right]}=\left(1+\frac{\gamma H_G}{T_S}\right)^{\frac{1}{n-1}}\]
+\[H_G=\left[\left(\frac{\rho(H_G)}{\rho_{S,MSL}}\right)^{n-1}-1\right]\frac{T_{S,MSL}}{\gamma}=2927.1\,\mathrm{m}\]
+<p>位势高度 (geopotential height) 考虑了重力随高度的变化，再换算成几何高度：</p>
+\[H_G=\frac{r_E h}{r_E+h}\quad\Rightarrow\quad h=\frac{r_E H_G}{r_E-H_G}=2928.5\,\mathrm{m}\]
+<p><b>b)</b></p>
+\[V_{CAS}=1.01\cdot(320.8-2)\,\mathrm{kts}=321.99\,\mathrm{kts}=165.64\,\mathrm{m/s}\]
+<p><b>c)</b> 判据是 Mach 数 \(Ma<0.3\)。Mach 数必须用<b>真空速</b>和<b>当地声速</b>计算：</p>
+\[T(H_G)=288.15\,\mathrm{K}-0.0065\,\mathrm{K/m}\cdot2927.1\,\mathrm{m}=269.12\,\mathrm{K}\ (-4.03^\circ\mathrm{C}),\qquad a=\sqrt{\kappa RT(H_G)}=328.87\,\mathrm{m/s}\]
+\[Ma=\frac{V_{TAS}}{a}>\frac{V_{CAS}}{a}=0.5\]
+<p>在这个高度 \(V_{TAS}>V_{CAS}\)，所以 \(Ma>0.5>0.3\)：空气<b>必须按可压缩处理</b>。</p>
+<p><b>d)</b> CAS 的可压缩公式以海平面 (MSL) 状态为基准，反解出动压差 \(p_T-p\)：</p>
+\[V_{CAS}=a_{MSL}\sqrt{\frac{2}{\kappa-1}\left(\left(\frac{p_T-p}{p_{MSL}}+1\right)^{\frac{\kappa-1}{\kappa}}-1\right)}\]
+\[p_T-p=\left[\left(\left(\frac{V_{CAS}}{a_{MSL}}\right)^2\frac{\kappa-1}{2}+1\right)^{\frac{\kappa}{\kappa-1}}-1\right]p_{MSL}=17\,857.8\,\mathrm{Pa}\]
+<p><b>e)</b> EAS 公式中要用当地静压 \(p(H_G)\)，由多变大气的压力–温度关系求出：</p>
+\[p(H_G)=p_{S,MSL}\left(1+\frac{\gamma}{T_{S,MSL}}H_G\right)^{\frac{n}{n-1}}=7.0764\times10^4\,\mathrm{Pa}\]
+\[V_{EAS}=\sqrt{\frac{2}{\kappa-1}\cdot\frac{\kappa\,p(H_G)}{\rho_{S,MSL}}\left(\left(\frac{p_T-p}{p(H_G)}+1\right)^{\frac{\kappa-1}{\kappa}}-1\right)}=163.87\,\mathrm{m/s}\]
+<p class="erratum">手写笔记 e) 的结果写成 167.87 m/s，应为 163.87 m/s (f 中的 189.5 m/s 是按 163.87 算的)。</p>
+<p><b>f)</b> 密度修正 (可压缩与不可压缩情况下形式相同)：</p>
+\[V_{TAS}=V_{EAS}\sqrt{\frac{\rho_{S,MSL}}{\tilde\rho}}=163.87\sqrt{\frac{1.225}{0.916}}=189.50\,\mathrm{m/s}\]
+<div class="table-wrap"><table class="tbl cols-3">
+<tr><th></th><th>不可压缩</th><th>可压缩</th></tr>
+<tr><td>CAS</td><td>\(V_{CAS}=\sqrt{\dfrac{2(p_T-p)}{\rho_{MSL}}}\)</td><td>\(V_{CAS}=a_{MSL}\sqrt{\dfrac{2}{\kappa-1}\left(\left(\dfrac{p_T-p}{p_{MSL}}+1\right)^{\frac{\kappa-1}{\kappa}}-1\right)}\)</td></tr>
+<tr><td>EAS</td><td>\(V_{EAS}=V_{CAS}\)</td><td>\(V_{EAS}=a\sqrt{\dfrac{2}{\kappa-1}\dfrac{\rho}{\rho_{MSL}}\left(\left(\dfrac{p_T-p}{p}+1\right)^{\frac{\kappa-1}{\kappa}}-1\right)}=V_{TAS}\sqrt{\dfrac{\rho}{\rho_{MSL}}}\)</td></tr>
+<tr><td>TAS</td><td>\(V_{TAS}=V_{EAS}\sqrt{\dfrac{\rho_{MSL}}{\rho}}\)</td><td>\(V_{TAS}=a\sqrt{\dfrac{2}{\kappa-1}\left(\left(\dfrac{p_T-p}{p}+1\right)^{\frac{\kappa-1}{\kappa}}-1\right)}=V_{EAS}\sqrt{\dfrac{\rho_{MSL}}{\rho}}\)</td></tr>
+</table></div>
+<div class="note"><span class="lbl">补充说明</span>
+<ul>
+<li>四种空速的关系：IAS 修正位置误差 (静压孔安装位置) → CAS；修正压缩性 → EAS；修正密度 → TAS。海平面标准大气中三者相等，高度越高 TAS 比 EAS 大得越多。Tutorial 特别提示：这张公式表考试要求会默写，常数 (\(\rho_{MSL}\)、\(p_{MSL}\)、\(T_{MSL}\)、\(g\)、\(a_{MSL}\)、\(R\)、\(n\)、\(\kappa\)) 也要求记住。</li>
+<li>c) 中用 \(V_{CAS}/a\) 作下界是一个技巧：还没算出 TAS 时就已经能判断 \(Ma>0.3\)。最终 \(Ma=189.5/328.87=0.58\)。</li>
+<li>e) 中的 \(p(H_G)\) 也可以用状态方程 \(p=\rho RT=0.916\cdot287.05\cdot269.12=7.076\times10^4\,\mathrm{Pa}\) 直接求，结果相同，可作验算。</li>
+<li>EAS 的意义：等 EAS 飞行就是等动压 \(\bar q=\tfrac12\rho_{MSL}V_{EAS}^2\) 飞行，所以飞行包线、结构载荷常用 EAS 表示；TAS 用于性能计算 (转弯半径、航程)。</li>
+<li>a) 中 \(H_G\) 与 \(h\) 只差 1.4 m：在 3 km 高度位势高度修正很小，对高空 (航天) 才重要。</li>
+</ul></div>
+</details>
+</article>
+</section>

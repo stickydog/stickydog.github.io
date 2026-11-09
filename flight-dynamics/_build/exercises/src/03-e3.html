@@ -1,0 +1,74 @@
+<section class="set" id="t3" data-short="Exercise 3">
+<h2 class="set-title"><span class="set-num">Exercise 3</span>中性点与压力中心 Neutral Point<span class="set-src">Exercise 3 · Tutorial 3 · Notes</span></h2>
+<p class="lead">区分翼型的压力中心 (C.P.) 和中性点 (N.P.)，再用部件叠加法 (component build-up method) 把机翼和水平安定面合成为全机中性点，求出全机中性点处的俯仰力矩 (课程笔记第 4 章)。</p>
+
+<article class="task" id="t3-1">
+<h3><span class="tno">3.1</span>机翼的中性点与压力中心</h3>
+<div class="q"><ol class="parts" type="a">
+<li>What holds true for the pitch moment around the neutral point?</li>
+<li>How does the position of the center of pressure depend on the angle of attack?</li>
+</ol></div>
+<details class="sol"><summary>解答</summary>
+<figure class="fig"><img src="exercises/e3-wing.png" alt="翼型上的升力、阻力、中性点 N.P. 处的俯仰力矩与压力中心 C.P."></figure>
+<p><b>a)</b> 中性点 (neutral point) 的定义：绕该点的俯仰力矩<b>不随迎角变化</b>。它一般不为零，但对迎角的导数为零；中性点位置固定。</p>
+<div class="table-wrap"><table class="tbl cols-3">
+<tr><th></th><th>位置</th><th>俯仰力矩</th></tr>
+<tr><td>压力中心 C.P.</td><td>\(\dfrac{\partial x^{CP}}{\partial\alpha}\neq0\)，随迎角移动</td><td>\(M^{CP}=0\)</td></tr>
+<tr><td>中性点 N.P.</td><td>\(\dfrac{\partial x^{N}}{\partial\alpha}=0\)，位置固定</td><td>\(M^N\neq0\)，但 \(\dfrac{\partial M^N}{\partial\alpha}=0\)</td></tr>
+</table></div>
+<p><b>b)</b> 压力中心的定义：绕该点的总俯仰力矩为零。忽略阻力 (或设 \(z_{PN}=0\))，把中性点处的力系移到压力中心：</p>
+\[M^{CP}=0\quad\Rightarrow\quad M^N=M^{CP}-L\,|x^{PN}|=-L\,|x^{PN}|=\text{const.}\]
+\[|x^{PN}|=-\frac{M^N}{L}\]
+<p>\(M^N\) 为常数，而升力通常随迎角增大，所以 \(|x^{PN}|\) 随迎角增大而减小：<b>迎角增大时压力中心向前移，逐渐靠近中性点</b>。</p>
+<div class="note"><span class="lbl">补充说明</span>
+<ul>
+<li>手写笔记的力系平移关系：\(M_y^N=-F_z\,|x^{CN}|+M_y^C\)。把一个力从 C 点移到 N 点，要补上"力 × 力臂"的力矩，这是后面所有力矩平衡的基本工具。</li>
+<li>为什么飞行力学偏爱中性点：压力中心随迎角跑来跑去，而中性点固定，力矩为常数，用"中性点处的升力 + 常值力矩"描述气动力最方便。对翼型而言中性点就是气动中心 (aerodynamic center)，亚声速薄翼约在 1/4 弦长处。</li>
+<li>\(M^N<0\) (低头力矩，正弯度翼型的典型情况) 时 C.P. 在 N.P. 之后；升力趋于零时 \(|x^{PN}|\to\infty\)，压力中心失去意义。</li>
+</ul></div>
+</details>
+</article>
+
+<article class="task" id="t3-2">
+<h3><span class="tno">3.2</span>全机中性点</h3>
+<div class="q">
+<p>In this exercise we will investigate the neutral point N of the aircraft. We assume that the aircraft is in horizontal steady state cruise flight without wind, both the wing and horizontal stabilizer have a purely horizontal inflow, and drag and thrust can be neglected.</p>
+<figure class="fig"><img src="exercises/e3-aircraft.png" alt="飞机侧视图：重心 CG、机翼中性点 N_W、全机中性点 N_AC、安定面中性点 N_S，机翼升力向上，安定面升力向下"></figure>
+<div class="table-wrap"><table class="tbl cols-3">
+<tr><th>Quantity</th><th>Symbol</th><th>Value</th></tr>
+<tr><td>Lift of the wing</td><td>\(|L_W|\)</td><td>17000 N</td></tr>
+<tr><td>Change of the wing lift with the angle of attack</td><td>\(\Delta L_{W,\alpha}\)</td><td>2000 N/°</td></tr>
+<tr><td>Position of the neutral point of the wing \(N_W\)</td><td>\(x_{N_W}\)</td><td>−2.3 m</td></tr>
+<tr><td>Lift of the stabilizer</td><td>\(|L_S|\)</td><td>1500 N</td></tr>
+<tr><td>Change of the stabilizer lift with the angle of attack</td><td>\(\Delta L_{S,\alpha}\)</td><td>50 N/°</td></tr>
+<tr><td>Position of the neutral point of the stabilizer \(N_S\)</td><td>\(x_{N_S}\)</td><td>−7 m</td></tr>
+<tr><td>Position C.G.</td><td>\(x_G\)</td><td>−1.8 m</td></tr>
+</table></div>
+<ol class="parts" type="a">
+<li>Calculate the mass of the aircraft.</li>
+<li>Calculate the position of the neutral point N of the aircraft.</li>
+<li>Calculate the moment \(M^N\) in the neutral point. Hint: Assemble forces and moments in the neutral point of the aircraft.</li>
+</ol>
+</div>
+<details class="sol"><summary>解答</summary>
+<p><b>a)</b> 定常平飞，合力为零。取向下为正：\(F_W=-L_W\) (机翼升力向上)，\(F_S=+L_S\) (安定面升力向下，见图)：</p>
+\[\sum F_i=F_G+F_W+F_S=0\quad\Rightarrow\quad mg-L_W+L_S=0\]
+\[m=\frac{L_W-L_S}{g}=\frac{17000-1500}{9.81}=1580\,\mathrm{kg}\]
+<p><b>b)</b> 迎角变化 \(\Delta\alpha\) 时，机翼和安定面的升力分别增加 \(\Delta L_W\)、\(\Delta L_S\)，作用在各自的中性点上 (各部件中性点处的力矩不变，\(\Delta M_W^N=\Delta M_S^N=0\))；重力不随迎角变化。全机中性点的定义要求绕它的总力矩增量为零：</p>
+\[\Delta M^N=\Delta L_W\,x^{N N_W}+\Delta L_S\,x^{N N_S}=\Delta L_W\,(x^{N_W}-x^N)+\Delta L_S\,(x^{N_S}-x^N)=0\]
+\[x^N=\frac{\Delta L_W\,x^{N_W}+\Delta L_S\,x^{N_S}}{\Delta L_W+\Delta L_S}=\frac{2000\cdot(-2.3)+50\cdot(-7)}{2000+50}=-2.41\,\mathrm{m}\]
+<p>全机中性点就是各部件"升力增量"的加权平均位置 (权重为各自的升力线斜率)。</p>
+<p><b>c)</b> 把全部气动力集中到全机中性点：合升力 \(L=L_W-L_S=G=15\,500\,\mathrm{N}\) 加上力矩 \(M^N\)。定常飞行要求绕重心的力矩平衡：</p>
+\[\sum M^G=-L\,|x^{GN}|+M^N=L\,(x^N-x^G)+M^N=0\]
+\[M^N=-L\,(x^N-x^G)=-15\,500\cdot(-2.41+1.8)=9455\,\mathrm{Nm}\]
+<p class="erratum">9455 Nm 是用四舍五入后的 \(x^N=-2.41\,\mathrm{m}\) 算的；用未取整的 \(x^N=-2.4146\,\mathrm{m}\) 得 \(M^N\approx9527\,\mathrm{Nm}\)。两者差别只来自取整。</p>
+<div class="note"><span class="lbl">补充说明</span>
+<ul>
+<li>中性点在重心之后 (\(x^N=-2.41<x^G=-1.8\))，静稳定裕度为 0.61 m：迎角受扰增大时，增加的升力作用在重心之后，产生低头力矩把迎角拉回，这就是纵向静稳定 (课程笔记第 10 章)。</li>
+<li>\(M^N>0\) (抬头)：合升力作用在重心后方会产生低头力矩，必须由中性点处的抬头力矩平衡，这正是靠安定面的向下升力实现的。</li>
+<li>安定面的升力线斜率只有机翼的 1/40，却把中性点从 −2.30 m 拉到 −2.41 m，因为它的力臂长 (−7 m)。安定面越大、离得越远，全机中性点越靠后，稳定性越好。</li>
+<li>手写笔记中题目附表的 \(\Delta L_{S,\alpha}\) 是 200 N/°，与本题 (50 N/°) 不同；按 200 N/° 会得到 \(x^N=-2.73\,\mathrm{m}\)。本页按 Exercise 3 题目和 Tutorial 的 50 N/° 计算。</li>
+</ul></div>
+</details>
+</article>
+</section>

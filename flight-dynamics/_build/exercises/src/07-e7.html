@@ -1,0 +1,97 @@
+<section class="set" id="t7" data-short="Exercise 7">
+<h2 class="set-title"><span class="set-num">Exercise 7</span>巡航与刚体运动方程 Cruise and Equations of Motion<span class="set-src">Exercise 7 · Tutorial 7 · Notes</span></h2>
+<p class="lead">7.1 是 I 型巡航 (速度和升力系数都不变，飞机随燃油消耗逐渐爬高)：选最优 \(C_L\)，求起止高度和飞行时间 (课程笔记第 8 章)。7.2 用刚体运动方程中的 \(\dot V_K\)、\(\dot\alpha_K\)、\(\dot\beta_K\) 方程，求定常直线爬升所需的迎角 (课程笔记第 9 章)。</p>
+
+<article class="task" id="t7-1">
+<h3><span class="tno">7.1</span>巡航 Cruise</h3>
+<div class="q">
+<p>A turbojet aircraft shall fly a distance of \(s=2000\,\mathrm{km}\) with a velocity of \(V=65\,\mathrm{m/s}\) with the least amount of fuel. Throughout the flight the lift coefficient is constant! The following data is given:</p>
+<div class="table-wrap"><table class="tbl cols-3">
+<tr><th>Quantity</th><th>Symbol</th><th>Value</th></tr>
+<tr><td>Aircraft mass (including fuel) at the beginning of the flight</td><td>\(m\)</td><td>2000 kg</td></tr>
+<tr><td>k-factor</td><td>\(k\)</td><td>0.018</td></tr>
+<tr><td>Reference area</td><td>\(S_{ref}\)</td><td>18 m²</td></tr>
+<tr><td>Zero-lift drag coefficient</td><td>\(C_{D0}\)</td><td>0.01</td></tr>
+<tr><td>Specific fuel consumption w.r.t. engine performance parameter</td><td>\(b_L\)</td><td>\(7.6\times10^{-6}\,\mathrm{kg/N}\)</td></tr>
+</table></div>
+<p>What is the initial and final height? How long does the flight take? Hint: Assume a symmetric quadratic drag polar.</p>
+</div>
+<details class="sol"><summary>解答</summary>
+<p><b>巡航类型</b>　巡航的三个方程 (\(dt\)、\(ds\) 和升力条件) 中有三个变量 \(C_L\)、\(V\)、\(\rho\)，要积分就得固定其中两个：</p>
+<div class="table-wrap"><table class="tbl cols-5">
+<tr><th>类型</th><th>\(V\)</th><th>\(C_L\)</th><th>\(\rho\)</th><th>随质量变化</th></tr>
+<tr><td>I</td><td>常数</td><td>常数</td><td>—</td><td>\(\rho\sim m\) (逐渐爬高)</td></tr>
+<tr><td>II</td><td>常数</td><td>—</td><td>常数</td><td>\(C_L\sim m\) (等高飞行)</td></tr>
+</table></div>
+<p>本题 \(V\) 和 \(C_L\) 都不变，是 I 型巡航。航程和飞行时间可以直接积分：</p>
+\[s=\int_{m_1}^{m_2}-\frac{V^{n_V+1}}{gb_L}\frac{C_L}{C_D}\frac{dm}{m}=\frac{V^{n_V+1}}{gb_L}\frac{C_L}{C_D}\ln\frac{m_1}{m_2},\qquad t=\frac{V^{n_V}}{gb_L}\frac{C_L}{C_D}\ln\frac{m_1}{m_2}\]
+<p><b>选哪个 \(C_L\)</b>　燃油最省就是给定航程下 \(\ln(m_1/m_2)\) 最小，即让航程公式中的系数最大。这取决于发动机类型和速度是否给定：</p>
+<ul>
+<li>活塞发动机 (\(n_V=-1\))：\(s\propto C_L/C_D\)，最大于 \(C_L^*=\sqrt{C_{D0}/k}\) (对应 \(V^*\))。</li>
+<li>涡喷发动机 (\(n_V=0\))：\(s\propto V\,C_L/C_D\)。
+<ul><li>a) <b>速度给定</b> (本题)：\(V\) 为常数，与 \(C_L\) 无关，仍是 \(C_L/C_D\) 最大，\(C_L^*=\sqrt{C_{D0}/k}\)。</li>
+<li>b) 速度未给定：\(V=\sqrt{2mg/(\rho S_{ref}C_L)}\) 也随 \(C_L\) 变，\(s\propto\sqrt{C_L}/C_D\)，最大于 \(C_L=\sqrt{C_{D0}/(3k)}=C_L^*/\sqrt3\) (推导见下方补充说明)。</li></ul></li>
+</ul>
+\[C_L^*=\sqrt{\frac{0.01}{0.018}}=0.745,\qquad C_D^*=2C_{D0}=0.02\]
+<p><b>起始高度</b>　水平飞行升力条件给出密度：</p>
+\[\tfrac12\rho V^2S_{ref}C_L=mg\quad\Rightarrow\quad \rho_1=\frac{2m_1g}{V^2S_{ref}C_L^*}=0.69\,\mathrm{kg/m^3}\]
+\[H_{G1}=\frac{\left(\dfrac{\rho_1}{\rho_{S,MSL}}\right)^{n-1}-1}{\gamma_{TR}}\,T_{S,MSL}=5568.7\,\mathrm{m},\qquad h_{geod1}=\frac{r_{earth}H_{G1}}{r_{earth}-H_{G1}}=5573.6\,\mathrm{m}\]
+<p><b>终止高度</b>　由航程公式反解终止质量，再用升力条件求密度：</p>
+\[m_2=\frac{m_1}{\exp\left(\dfrac{s\,g\,b_L\,C_D^*}{V^{n_V+1}C_L^*}\right)}=1880.6\,\mathrm{kg},\qquad \rho_2=\frac{2m_2g}{V^2S_{ref}C_L^*}=0.65\,\mathrm{kg/m^3}\]
+\[H_{G2}=6125.4\,\mathrm{m},\qquad h_{geod2}=6131.3\,\mathrm{m}\]
+<p><b>飞行时间</b></p>
+\[t_{flight}=\frac{V^{n_V}}{gb_L}\frac{C_L}{C_D}\ln\frac{m_1}{m_2}=3.07\times10^4\,\mathrm{s}=8.54\,\mathrm{h}\]
+<div class="note"><span class="lbl">补充说明</span>
+<ul>
+<li>验算：速度不变，所以 \(t=s/V=2\times10^6/65=30\,769\,\mathrm{s}\)，与上式一致。</li>
+<li>Tutorial 幻灯片在这里把给定的 65 m/s 也记作 \(V^*\)；它只是"本题给定的巡航速度"，不是最小阻力速度。</li>
+<li>I 型巡航中 \(\rho/m\) 保持不变：燃油消耗约 6%，密度也下降约 6%，所以飞机缓慢爬升约 560 m ("巡航爬升")。</li>
+<li>速度未给定时的最优 \(C_L\) (手写笔记的推导)：\(f(C_L)=\dfrac{\sqrt{C_L}}{C_{D0}+kC_L^2}\)，\(\dfrac{df}{dC_L}=\dfrac{C_{D0}-3kC_L^2}{2\sqrt{C_L}\,(C_{D0}+kC_L^2)^2}=0\Rightarrow C_L=\sqrt{\dfrac{C_{D0}}{3k}}\)。</li>
+<li>Tutorial 给出 A320 量级的算例 (\(m=65\,000\,\mathrm{kg}\)，\(V=200\,\mathrm{m/s}\)，2000 km)：\(H_{G1}=12\,057\,\mathrm{m}\)，\(H_{G2}=12\,796\,\mathrm{m}\)，耗油约 6068 kg，飞行 2.78 h。实际值有偏差，因为真实涡扇发动机的 \(n_V\neq0\)。</li>
+</ul></div>
+</details>
+</article>
+
+<article class="task" id="t7-2">
+<h3><span class="tno">7.2</span>刚体运动方程：定常爬升的迎角</h3>
+<div class="q">
+<p>A turbojet aircraft shows the following characteristics:</p>
+<div class="table-wrap"><table class="tbl cols-3">
+<tr><th>Quantity</th><th>Symbol</th><th>Value</th></tr>
+<tr><td>Maximum engine performance parameter</td><td>\(L_{P,max}(\rho)\)</td><td>5000 N</td></tr>
+<tr><td>Zero-lift lift coefficient</td><td>\(C_{L0}\)</td><td>0.01</td></tr>
+<tr><td>Lift derivative</td><td>\(C_{L\alpha}\)</td><td>6.2</td></tr>
+<tr><td>Aircraft mass</td><td>\(m\)</td><td>2000 kg</td></tr>
+<tr><td>k-factor</td><td>\(k\)</td><td>0.02</td></tr>
+<tr><td>Reference area</td><td>\(S_{ref}\)</td><td>18 m²</td></tr>
+<tr><td>Zero-lift drag coefficient</td><td>\(C_{D0}\)</td><td>0.02</td></tr>
+<tr><td>Maximum lift coefficient</td><td>\(C_{L,max}\)</td><td>1.2</td></tr>
+</table></div>
+<p>For a true airspeed of \(V_{TAS}=60\,\mathrm{m/s}\) the pilot would like to start a steady-state climb (straight and without sideslip) with \(\gamma_K=3^\circ\). For this he puts the thrust lever to \(\delta_T=0.5\). What is the resulting angle of attack? Use the rigid-body equations of motion to state the result. Hint: You can assume the density \(\rho\) to be constant.</p>
+</div>
+<details class="sol"><summary>解答</summary>
+<p class="erratum">Exercise 7 题目给的是 \(V_{TAS}=60\,\mathrm{m/s}\)，Tutorial 幻灯片写的是 65 m/s。下面会看到速度在求迎角时被消掉，所以两种数据得到同一个迎角。</p>
+<p><b>刚体运动方程中的平移部分</b> (在 \(\bar K\) 系中)：</p>
+\[\dot V_K^G=\frac{(X_T^G)_{\bar K}}{m},\qquad \dot\alpha_K=\frac{(Z_T^G)_{\bar K}}{mV_K^G\cos\beta_K}+q_K-\tan\beta_K(p_K\cos\alpha_K+r_K\sin\alpha_K),\qquad \dot\beta_K=\frac{(Y_T^G)_{\bar K}}{mV_K^G}+(p_K\sin\alpha_K-r_K\cos\alpha_K)\]
+<p>代入力 (推力沿速度方向，无风)：</p>
+\[\dot V_K^G=\frac{T-D}{m}-g\sin\gamma,\qquad \dot\alpha_K=\frac{-L}{mV_K^G\cos\beta_K}+\frac{g}{V}\frac{\cos\mu\cos\gamma}{\cos\beta_K}+q_K-\tan\beta_K(\dots),\qquad \dot\beta_K=\frac{Q}{mV_K^G}+\frac{g}{V}\cos\gamma\sin\mu+(\dots)\]
+<p><b>化简</b>　"定常爬升、直线、无侧滑"意味着：\(\dot V=\dot\alpha=\dot\beta=0\)，\(p=q=r=0\)，\(\beta=0\)，\(\mu=0\)，\(Q=0\)。于是</p>
+\[0=\frac{T-D}{m}-g\sin\gamma_K\quad(1),\qquad 0=\frac{-L}{mV_K^G}+\frac{g}{V_K^G}\cos\gamma_K\quad(2),\qquad \dot\beta_K=0\]
+<p><b>求 α</b>　线性区升力系数 \(C_L\approx C_{L0}+C_{L\alpha}\alpha\)，代入 (2)：</p>
+\[0=\frac{-\rho V^2S_{ref}(C_{L0}+C_{L\alpha}\alpha)}{2mV}+\frac{g}{V}\cos\gamma\]
+<p>两个未知数 \(\alpha\) 和 \(\rho\)，所以还要用 (1)。涡喷发动机 \(n_V=0\)：</p>
+\[T=L_P=L_{P,max}(\rho)\,\delta_T=5000\cdot0.5=2500\,\mathrm{N},\qquad D=T-mg\sin\gamma=2500-2000\cdot9.80665\cdot\sin3^\circ=1473.2\,\mathrm{N}\]
+<p>(2) 给出 \(L=mg\cos\gamma\)，而 \(D=\frac{C_D}{C_L}L=\frac{C_{D0}+kC_L^2}{C_L}\,mg\cos\gamma\)，整理成 \(C_L\) 的二次方程 (\(\rho V^2\) 消掉了)：</p>
+\[\underbrace{k\,mg\cos\gamma}_{a}\,C_L^2\ \underbrace{-\,D}_{b}\,C_L+\underbrace{mg\cos\gamma\,C_{D0}}_{c}=0\]
+\[C_{L,1}=3.4713\ (\text{大于}\ C_{L,max}=1.2，\text{不合物理}),\qquad C_{L,2}=0.2881\]
+\[\alpha=\frac{C_{L,2}-C_{L0}}{C_{L\alpha}}=0.0449\,\mathrm{rad}=2.57^\circ\]
+<div class="note"><span class="lbl">补充说明</span>
+<ul>
+<li>二次方程的两个根对应同一阻力下的两种飞行状态：大 \(C_L\) (低速、诱导阻力为主) 和小 \(C_L\) (高速、零升阻力为主)。\(C_{L,1}\) 超过 \(C_{L,max}\)，会失速，所以舍去。</li>
+<li>速度只决定达到这个 \(C_L\) 需要多大密度：\(\rho=\dfrac{2mg\cos\gamma}{V^2S_{ref}C_L}\)，65 m/s 时约 1.79 kg/m³，60 m/s 时约 2.10 kg/m³，都大于海平面密度 1.225 kg/m³。也就是说，这组数据在真实大气中无法实现，题目的提示"密度看作常数"正是为了绕开这一点；对求迎角的方法没有影响。</li>
+<li>刚体方程用的是 \(\alpha_K\)、\(\beta_K\) (运动学迎角 / 侧滑角)；无风时与气流迎角 \(\alpha_A\)、\(\beta_A\) 相同。</li>
+<li>这里的结果和质点模型 (Exercise 4、5) 一致：定常、无转动时刚体方程退化为质点方程，\(\dot\alpha\) 方程对应质点方程中的 \(\dot\gamma\) 方程。</li>
+</ul></div>
+</details>
+</article>
+</section>

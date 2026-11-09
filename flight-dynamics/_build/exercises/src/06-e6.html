@@ -1,0 +1,64 @@
+<section class="set" id="t6" data-short="Exercise 6">
+<h2 class="set-title"><span class="set-num">Exercise 6</span>转弯飞行 II：最小转弯半径 Turning Flight II<span class="set-src">Exercise 6 · Tutorial 6 · Notes</span></h2>
+<p class="lead">最小转弯半径同时受两个限制：结构 (最大载荷因数 \(n_{z,max}\)) 和气动 (最大升力系数 \(C_{L,max}\))。两条曲线的交点给出最小半径，再检查发动机推力够不够，并找出推力开始成为限制的高度 (课程笔记第 6 章转弯一节)。</p>
+
+<article class="task" id="t6-1">
+<h3><span class="tno">6</span>最小转弯半径与推力限制</h3>
+<div class="q">
+<p>Consider the following turbojet aircraft:</p>
+<div class="table-wrap"><table class="tbl cols-3">
+<tr><th>Quantity</th><th>Symbol</th><th>Value</th></tr>
+<tr><td>Aircraft mass</td><td>\(m\)</td><td>2000 kg</td></tr>
+<tr><td>K-factor</td><td>\(k\)</td><td>0.1</td></tr>
+<tr><td>Reference wing area</td><td>\(S_{ref}\)</td><td>20 m²</td></tr>
+<tr><td>Zero-lift drag coefficient</td><td>\(C_{D0}\)</td><td>0.023</td></tr>
+<tr><td>Maximum lift coefficient</td><td>\(C_{L,max}\)</td><td>1</td></tr>
+<tr><td>Maximum load factor</td><td>\(n_{z,max}\)</td><td>4</td></tr>
+<tr><td>Thrust density dependency exponent</td><td>\(n_\rho\)</td><td>0.75</td></tr>
+<tr><td>Maximum thrust at MSL</td><td>\(T_{max,S}\)</td><td>\(0.55\cdot m\cdot g\)</td></tr>
+</table></div>
+<ol class="parts" type="a">
+<li>What is the minimum turn radius (i.e. the turn radius where \(C_{L,max}\) and \(n_{z,max}\) are not exceeded) and the corresponding aircraft speed? Assume a height \(h=0\,\mathrm{m}\).</li>
+<li>Can this turn radius be achieved with the available propulsive power? How high is the required thrust? Assume a height \(h=0\,\mathrm{m}\).</li>
+<li>Compute the height \(h\) starting from which the available thrust is limiting the achievable turn radius? What is the minimum turn radius at this altitude? Use the standard atmosphere.</li>
+</ol>
+<p>(ISA constants as in Exercise 2.)</p>
+</div>
+<details class="sol"><summary>解答</summary>
+<p><b>a)</b> 定常水平转弯的半径 \(r_t=\dfrac{V^2}{g\sqrt{n_z^2-1}}\)，两个限制分别给出：</p>
+\[r_{t,min,Struct}=\frac{V^2}{g\sqrt{n_{z,max,Struct}^2-1}},\qquad r_{t,min,C_L}=\frac{V^2}{g\sqrt{n_{z,max,C_L}^2-1}}=\frac{V^2}{g\sqrt{\left(\dfrac{\tfrac12\rho V^2S_{ref}C_{L,max}}{mg}\right)^2-1}}\]
+<p>其中 \(n_{z,max,C_L}=L_{max}/(mg)\) 是用满 \(C_{L,max}\) 时能达到的载荷因数。两种效应方向相反：</p>
+<figure class="fig"><img src="exercises/e6-radius.png" alt="结构限制的最小转弯半径随速度增大，升力系数限制的最小转弯半径随速度减小，交点为最小可能转弯半径"></figure>
+<ul>
+<li>结构限制：\(n_z\) 固定，\(r_t\propto V^2\)，速度越大转弯越"难"；</li>
+<li>升力限制：速度越大，可用升力越多，\(r_{t,min,C_L}\) 随速度减小。</li>
+</ul>
+<p>最小可能半径在两条曲线的交点，即恰好在 \(C_{L,max}\) 下达到 \(n_{z,max}\)：</p>
+\[\frac{\rho V^2S_{ref}C_{L,max}}{2mg}=n_{z,max,Struct}\quad\Rightarrow\quad V_{r_{min}}=\sqrt{\frac{2n_{z,max}mg}{\rho C_{L,max}S_{ref}}}=\sqrt{\frac{2\cdot4\cdot2000\cdot9.81}{1.225\cdot1\cdot20}}=80.04\,\mathrm{m/s}\]
+\[r_t=\frac{80.04^2}{9.81\sqrt{4^2-1}}=168.62\,\mathrm{m}\]
+<p>注意以上关系只在 \(n_z>1\) 时成立 (转弯中升力必须大于重力)，即速度要高于水平飞行的最小速度 \(V_{min}=\sqrt{2mg/(\rho C_{L,max}S_{ref})}\)。</p>
+<p><b>b)</b> 水平转弯 (无航迹倾角) 要求 \(T=D\)，而且必须以 \(C_{L,max}\) 飞行：</p>
+\[T_{req}=\tfrac12\rho V_{r_{min}}^2S_{ref}(C_{D0}+kC_{L,max}^2)=\tfrac12\cdot1.225\cdot80.04^2\cdot20\cdot(0.023+0.1\cdot1^2)=9652.85\,\mathrm{N}\]
+\[T_{max}=0.55\,mg=10\,791.00\,\mathrm{N}>T_{req}\]
+<p>海平面推力足够，这个转弯半径可以实现。</p>
+<p><b>c)</b> 先看所需推力是否随高度变化。表面上公式里有 \(\rho\)，但换一种写法：</p>
+\[T_{req}=D=\frac{D}{L}\,L=\frac{C_{D,max}}{C_{L,max}}\,n_{z,max}\,mg\]
+<p>右边没有一个量与密度有关，<b>所需推力与高度无关</b>。原因是最小半径对应的速度满足 \(V^2\propto1/\rho\)，密度在 \(\rho V^2\) 中消掉了。</p>
+<p>可用推力随高度下降 (涡喷 \(n_V=0\)，推力与速度无关)：</p>
+\[\frac{T}{T_i}=\left(\frac{V}{V_i}\right)^{n_V}\left(\frac{\rho}{\rho_i}\right)^{n_\rho}=\left(\frac{\rho}{\rho_i}\right)^{n_\rho}\]
+<p>可用推力等于所需推力时的临界密度：</p>
+\[\rho_{crit}=\left[\frac{T_{req}}{T_{max,S}}\right]^{\frac{1}{n_\rho}}\rho_{S,MSL}=1.0559\,\mathrm{kg/m^3}\]
+<p>由标准大气求高度：</p>
+\[H_G=\frac{\left(\dfrac{\rho_{crit}}{\rho_{S,MSL}}\right)^{n-1}-1}{\gamma_{Tr}}\,T_{S,MSL}=1520.65\,\mathrm{m},\qquad h_{geod}=\frac{r_{earth}H_G}{r_{earth}-H_G}=1521.01\,\mathrm{m}\]
+<p>该高度上的最小半径：由 \(V^2\propto1/\rho\)，</p>
+\[V=\sqrt{\frac{\rho_S}{\rho_{crit}}}\,V_S=\sqrt{\frac{1.225}{1.0559}}\cdot80.04=86.21\,\mathrm{m/s},\qquad r_t=\frac{86.21^2}{9.81\sqrt{4^2-1}}=195.63\,\mathrm{m}\]
+<div class="note"><span class="lbl">补充说明</span>
+<ul>
+<li>高于约 1521 m 时，推力不够维持 \(C_{L,max}\)、\(n_{z,max}\) 的水平转弯，可达到的最小半径由推力决定，会比按 \(r_t\propto1/\rho\) 外推的值增大得更快。</li>
+<li>在 1521 m 以下，最小半径仍是 \(r_{t,min}=\dfrac{2m}{\rho S_{ref}C_{L,max}}\cdot\dfrac{n_{z,max}}{\sqrt{n_{z,max}^2-1}}\)，只与密度成反比：高度越高，转弯半径越大。</li>
+<li>c) 的论证方法值得记住：把 \(D\) 写成 \(\frac{D}{L}\cdot L\)，把 \(L\) 写成 \(n_z mg\)，就能看出哪些量真正依赖高度。</li>
+<li>Tutorial 计算时用了 \(g=9.81\)，且 \(T_{max}=10\,791\,\mathrm{N}\) 对应 \(0.55\cdot2000\cdot9.81\)；用 \(g_0=9.80665\) 会得到 \(T_{max}=10\,787\,\mathrm{N}\)、\(h\approx1517\,\mathrm{m}\)、\(r_t\approx195.5\,\mathrm{m}\)，差别可以忽略。</li>
+</ul></div>
+</details>
+</article>
+</section>

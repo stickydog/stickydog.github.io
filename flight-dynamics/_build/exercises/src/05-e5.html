@@ -1,0 +1,65 @@
+<section class="set" id="t5" data-short="Exercise 5">
+<h2 class="set-title"><span class="set-num">Exercise 5</span>定常飞行状态：滑翔、爬升与转弯 Steady Flight States<span class="set-src">Exercise 5 · Tutorial 5 · Notes</span></h2>
+<p class="lead">一架涡喷飞机 (对称二次阻力极曲线) 依次完成滑翔、最大爬升角爬升和定常转弯。用到的是课程笔记第 6 章的定常飞行方程：滑翔数 \(\varepsilon=C_D/C_L\)、最优滑翔数 \(\varepsilon^*\)、最小阻力速度 \(V^*\)、载荷因数 \(n_z\) 和转弯关系 \(\tan\mu=V\dot\chi/g\)。</p>
+
+<article class="task" id="t5-1">
+<h3><span class="tno">5</span>转弯飞行 Turning Flight</h3>
+<div class="q">
+<p>A turbojet aircraft (symmetric quadratic drag polar) begins to glide at a height \(h_0=1000\,\mathrm{m}\) above the ground.</p>
+<div class="table-wrap"><table class="tbl cols-3">
+<tr><th>Quantity</th><th>Symbol</th><th>Value</th></tr>
+<tr><td>Zero-lift drag coefficient</td><td>\(C_{D0}\)</td><td>0.031</td></tr>
+<tr><td>K-factor</td><td>\(k\)</td><td>0.026</td></tr>
+<tr><td>Reference area</td><td>\(S_{ref}\)</td><td>18 m²</td></tr>
+<tr><td>Aircraft mass</td><td>\(m\)</td><td>2000 kg</td></tr>
+<tr><td>Maximum engine performance parameter</td><td>\(L_P\)</td><td>6000</td></tr>
+<tr><td>Height / density</td><td>\(h\) / \(\rho\)</td><td>1000 m / 1.1117 kg/m³</td></tr>
+</table></div>
+<ol class="parts" type="a">
+<li>What is the maximum horizontal distance the aircraft can cover?</li>
+<li>What are the control inputs to the point mass model and how can the pilot influence them?</li>
+<li>Derive the required velocity for achieving the maximum climb angle. Which climb angle and which velocity is reached?</li>
+<li>The aircraft now flies a turn (height and density as above, turn rate \(\dot\chi=5\,^\circ/\mathrm{s}\), lift coefficient during turn \(C_{L,turn}=1\)). Which kinematic bank angle and what velocity is required for this maneuver?</li>
+</ol>
+</div>
+<details class="sol"><summary>解答</summary>
+<p><b>a)</b> 定常滑翔 (\(T=0\)，\(\dot V=\dot\gamma=\dot\chi=0\)，\(\mu=0\)) 的质点方程给出 \(D=-mg\sin\gamma\)、\(L=mg\cos\gamma\)，两式相除：</p>
+\[\varepsilon=\frac{D}{L}=\frac{C_D}{C_L}=-\tan\gamma,\qquad \frac{\Delta h}{\Delta x}=\tan\gamma\quad\Rightarrow\quad \Delta x=\frac{\Delta h}{-\varepsilon}\]
+<p>滑翔距离最远就是滑翔数最小。对二次极曲线 \(C_D=C_{D0}+kC_L^2\)：</p>
+\[\varepsilon=\frac{C_{D0}}{C_L}+kC_L,\qquad \frac{d\varepsilon}{dC_L}=-\frac{C_{D0}}{C_L^2}+k=0\ \Rightarrow\ C_L^*=\sqrt{\frac{C_{D0}}{k}},\qquad \varepsilon^*=2\sqrt{kC_{D0}}\]
+\[\Delta x_{max}=\frac{\Delta h}{-\varepsilon^*}=\frac{-1000}{-2\sqrt{0.026\cdot0.031}}\,\mathrm{m}\approx17\,600\,\mathrm{m}\]
+<p><b>b)</b> 质点模型的状态 \((V,\chi,\gamma)\) 由力 \((L,D,T,mg)\) 决定：</p>
+\[\dot V=\frac{T-D}{m}-g\sin\gamma_K,\qquad \dot\chi=\frac{L\sin\mu_K}{mV\cos\gamma_K},\qquad \dot\gamma=\frac{L\cos\mu_K}{mV}-\frac{g}{V}\cos\gamma_K\]
+<p>重力 \(mg\) 改变不了，但 \(L\)、\(D\)、\(T\) 可以改变：升力的<b>方向</b>由运动学倾侧角 \(\mu_K\) 决定；升力和阻力的<b>大小</b>由 \(C_L\) 决定 (\(L=\tfrac12\rho V^2SC_L\)，\(C_D\) 由极曲线跟随 \(C_L\))；推力大小由油门 \(\delta_T\) 决定 (\(T=L_PV^{n_V}=\delta_T L_{P,max}V^{n_V}\))。阻力和推力的方向通常不能由飞行员直接控制。</p>
+<div class="table-wrap"><table class="tbl cols-3">
+<tr><th>质点模型的控制输入</th><th>影响</th><th>飞行员操纵</th></tr>
+<tr><td>\(\delta_T\)</td><td>推力大小</td><td>油门杆</td></tr>
+<tr><td>\(C_L\)</td><td>升力 / 阻力大小</td><td>操纵面 (驾驶杆，改变迎角)</td></tr>
+<tr><td>\(\mu_K\)</td><td>升力方向</td><td>操纵面 (驾驶杆，滚转)</td></tr>
+</table></div>
+<p><b>c)</b> 要最大爬升角，先用满推力 \(T=L_{P,max}\) (涡喷 \(n_V=0\)，推力与速度无关，\(T=6000\,\mathrm{N}\))。定常爬升 \(T-D=mg\sin\gamma\)、\(L=mg\cos\gamma\)，结合二次极曲线并取 \(\cos\gamma\approx1\)，爬升角只是速度的函数 (推导见手写笔记)：</p>
+\[\gamma(V)=\arcsin\left[\frac{T}{mg}-\frac{\varepsilon^*}{2}\left[\left(\frac{V}{V^*}\right)^2+\left(\frac{V^*}{V}\right)^2\right]\right]\]
+<p>在 \(0^\circ\)–\(90^\circ\) 内 \(\arcsin\) 单调递增，所以直接对括号内的函数求极值。\(T/mg\) 与速度无关：</p>
+\[\frac{df}{dV}=-\frac{\varepsilon^*}{2}\left(\frac{2V}{V^{*2}}-\frac{2V^{*2}}{V^3}\right)=0\quad\Rightarrow\quad \frac{V}{V^{*2}}=\frac{V^{*2}}{V^3}\quad\Rightarrow\quad V=V^*\]
+<p>结果很直观：\(V^*\) 是给定推力下阻力最小的速度，此时 \(T-D\) 最大，所以爬升角最大。</p>
+\[V^*=\sqrt{\frac{2mg}{\rho S_{ref}C_L^*}}=\sqrt{\frac{2\cdot2000\cdot9.80665}{18\cdot1.1117}\sqrt{\frac{0.026}{0.031}}}=42.37\,\mathrm{m/s}\]
+\[\gamma(V^*)=\arcsin\left[\frac{6000}{2000\cdot9.80665}-\frac{\varepsilon^*}{2}(1^2+1^2)\right]=0.252\,\mathrm{rad}=14.43^\circ\]
+<p><b>d)</b> 定常水平转弯：\(T=D\)，\(L\sin\mu=mV\dot\chi\)，\(L\cos\mu=mg\)。前两式相除得 (3)，与升力公式联立得 (5)：</p>
+\[\tan\mu=\frac{V\dot\chi}{g}\quad(3),\qquad L=\frac{mg}{\cos\mu}=\tfrac12\rho V^2SC_L\quad(5)\]
+<p>两个方程，两个未知数 \(\mu\)、\(V\)。由 (3) 得 \(V=g\tan\mu/\dot\chi\)，代入 (5)，并用 \(\sin^2\mu=1-\cos^2\mu\)：</p>
+\[\underbrace{mg}_{t}=\underbrace{\frac{\rho g^2SC_L}{2\dot\chi^2}}_{s}\cdot\frac{1-\cos^2\mu}{\cos\mu}\quad\Rightarrow\quad s\cos^2\mu+t\cos\mu-s=0\]
+<p>令 \(x=\cos\mu\)，解二次方程：</p>
+\[x=\frac{-t\pm\sqrt{t^2+4s^2}}{2s}\quad\Rightarrow\quad x_1=-1.0802,\quad x_2=0.9257\]
+<p>只有 \(x_2\) 是有效的余弦值：</p>
+\[\mu=\arccos(0.9257)=0.3887\,\mathrm{rad}=22.27^\circ,\qquad V_{Turn}=\frac{g\tan\mu}{\dot\chi}=\frac{9.80665\cdot0.4085}{5\cdot\pi/180}=46.0\,\mathrm{m/s}\]
+<div class="note"><span class="lbl">补充说明</span>
+<ul>
+<li><b>量级感</b> (手写笔记)：A320 的升阻比约 \(E=20\)，\(\varepsilon^*=0.05\)，从 12 000 m 高度无动力滑翔可以飞约 240 km。本题的小飞机 \(E^*=1/\varepsilon^*\approx17.6\)。</li>
+<li>a) 的结论与重量无关：最大滑翔距离只由极曲线决定；重量只影响达到 \(\varepsilon^*\) 所需的速度 (越重飞得越快，但下滑角相同)。</li>
+<li>c) 中 \(\gamma(V)\) 的推导：由 \(\sin\gamma=\frac{T}{mg}-\frac{D}{mg}\) 和 \(\frac{D}{mg}\approx\frac{C_D}{C_L}=\frac{C_{D0}}{C_L}+kC_L\)，再把 \(C_L=\frac{2mg}{\rho V^2S}\) 用 \(V^*\) 表示 (\(C_L/C_L^*=(V^*/V)^2\))，就得到 \(\frac{\varepsilon^*}{2}\left[(V/V^*)^2+(V^*/V)^2\right]\)。\(V=V^*\) 时括号为 2，阻力项恰好是 \(\varepsilon^*\)。</li>
+<li>注意"最大爬升角"(用 \(V^*\)，阻力最小) 与"最大爬升率"(使 \((T-D)V\) 即剩余功率最大) 是不同的问题：对涡喷发动机，最大爬升率对应的速度高于 \(V^*\)。</li>
+<li>d) 的验算：载荷因数 \(n_z=1/\cos\mu=1.08\)；转弯半径 \(r_t=V/\dot\chi=46.0/0.0873=527\,\mathrm{m}\)，也满足 \(\dot\chi=\frac{g}{V}\sqrt{n_z^2-1}\)。转弯性能受最大载荷因数限制：结构/飞行员能承受的 \(n_{z,max,struct}\) 和最大升力系数 \(C_{L,max}\) 给出的 \(n_{z,max,C_L}\) (V–n 图)。</li>
+</ul></div>
+</details>
+</article>
+</section>

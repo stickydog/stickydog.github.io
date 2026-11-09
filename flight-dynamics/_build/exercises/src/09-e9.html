@@ -1,0 +1,108 @@
+<section class="set" id="t9" data-short="Exercise 9">
+<h2 class="set-title"><span class="set-num">Exercise 9</span>配平与线性化 Trim and Linearization<span class="set-src">Exercise 9 · Tutorial 9 · Notes</span></h2>
+<p class="lead">先整理刚体运动的完整状态和主操纵输入，再练习线性化的标准步骤：降阶成一阶系统 → 求参考点 (配平) → 求雅可比矩阵 \(\mathbf A\)、\(\mathbf B\)。最后把侧向位置方程和滚转角方程在"定常直线无侧滑飞行"处线性化 (课程笔记第 11 章)。</p>
+
+<article class="task" id="t9-1">
+<h3><span class="tno">9a</span>刚体运动的状态及纵向 / 侧向分类</h3>
+<div class="q"><p>Give a set of states that suffices to fully describe the rigid body motion of an aircraft. Classify the states as either "longitudinal" or "lateral". Explain (by giving an example) why your particular choice of states is not the only possible solution.</p></div>
+<details class="sol"><summary>解答</summary>
+<p>刚体状态分为四类：位置 (position)、平移 (translation)、姿态 (attitude)、转动 (rotation)，共 12 个状态：</p>
+<div class="table-wrap"><table class="tbl cols-4">
+<tr><th>类别</th><th>状态</th><th>符号</th><th>纵向 / 侧向</th></tr>
+<tr><td>位置</td><td>\(x\) 位置 (导航坐标系)</td><td>\(x_N\)</td><td>— (水平飞行沿 \(x_N\) 时为纵向)</td></tr>
+<tr><td>位置</td><td>\(y\) 位置 (导航坐标系)</td><td>\(y_N\)</td><td>— (同上为侧向)</td></tr>
+<tr><td>位置</td><td>\(z\) 位置 (导航坐标系)</td><td>\(z_N\)</td><td>— (同上为纵向)</td></tr>
+<tr><td>平移</td><td>运动学速度大小</td><td>\(V\)</td><td>纵向</td></tr>
+<tr><td>平移</td><td>迎角</td><td>\(\alpha\)</td><td>纵向</td></tr>
+<tr><td>平移</td><td>侧滑角</td><td>\(\beta\)</td><td>侧向</td></tr>
+<tr><td>姿态</td><td>滚转角</td><td>\(\Phi\)</td><td>侧向</td></tr>
+<tr><td>姿态</td><td>俯仰角</td><td>\(\Theta\)</td><td>纵向</td></tr>
+<tr><td>姿态</td><td>方位角</td><td>\(\Psi\)</td><td>侧向</td></tr>
+<tr><td>转动</td><td>滚转角速度</td><td>\(p\)</td><td>侧向</td></tr>
+<tr><td>转动</td><td>俯仰角速度</td><td>\(q\)</td><td>纵向</td></tr>
+<tr><td>转动</td><td>偏航角速度</td><td>\(r\)</td><td>侧向</td></tr>
+</table></div>
+<p>状态的选择不唯一，只要能完整、无冗余地描述运动即可。例如位置可以用 WGS-84 坐标 \((\lambda,\mu,h)\)；平移状态可以用 \((V,\alpha,\beta)\)，也可以用机体系速度分量 \((u_K,v_K,w_K)\) 或航迹量 \((V,\chi,\gamma)\)；姿态可以用欧拉角，也可以用四元数 (避免 \(\Theta=\pm90^\circ\) 时的奇异)。</p>
+<div class="note"><span class="lbl">补充说明</span>
+<ul>
+<li>纵向运动 (\(V,\alpha,\Theta,q\)，以及 \(x,z\)) 发生在飞机对称面内；侧向运动 (\(\beta,\Phi,\Psi,p,r\)，以及 \(y\)) 是离开对称面的运动。在对称的定常直线飞行附近，两组近似解耦，这正是后面可以分开研究纵向模态和侧向模态的前提。</li>
+</ul></div>
+</details>
+</article>
+
+<article class="task" id="t9-2">
+<h3><span class="tno">9b</span>主操纵输入及其主要作用</h3>
+<div class="q"><p>State the primary control effectors of an aircraft. State the primary effect of each control (force or moment)?</p></div>
+<details class="sol"><summary>解答</summary>
+<div class="table-wrap"><table class="tbl cols-3">
+<tr><th>名称</th><th>符号</th><th>主要作用</th></tr>
+<tr><td>副翼偏度 (aileron deflection)</td><td>\(\xi\)</td><td>滚转力矩</td></tr>
+<tr><td>升降舵偏度 (elevator deflection)</td><td>\(\eta\)</td><td>俯仰力矩</td></tr>
+<tr><td>方向舵偏度 (rudder deflection)</td><td>\(\zeta\)</td><td>偏航力矩</td></tr>
+<tr><td>油门杆位置 (thrust lever position)</td><td>\(\delta_T\)</td><td>\(x_B\) 方向的力</td></tr>
+</table></div>
+<p>按 FAA 的定义，飞行操纵系统分主、次两类：副翼、升降舵 (或全动平尾) 和方向舵是主操纵系统，是安全操纵飞机所必需的；襟翼、前缘装置、扰流板和配平系统属于次操纵系统，用来改善性能或减轻飞行员的操纵力。</p>
+<p>符号约定：副翼、升降舵、方向舵的正偏度产生负的滚转 / 俯仰 / 偏航力矩。升降舵后缘向上 (负偏度) 时尾部产生向下的力，飞机抬头。</p>
+</details>
+</article>
+
+<article class="task" id="t9-3">
+<h3><span class="tno">9c</span>非线性摆系统的线性化</h3>
+<div class="q">
+<p>Transform the well-known nonlinear differential equation of the spring-mass-damper system</p>
+\[m\cdot l^2\cdot\ddot\varphi(t)=-m\cdot g\cdot l\cdot\sin\varphi(t)-F_d(\dot\varphi(t))+F(t)\cdot l\cdot\cos\varphi(t)\]
+<p>with the nonlinear damping force \(F_d(\dot\varphi(t))=d\cdot\dot\varphi(t)\cdot\cos\dfrac{\dot\varphi(t)}{\dot\varphi_{max}}\) to a linear system. Linearize around the steady-state operating point \(\varphi(0)=\varphi_0\).</p>
+</div>
+<details class="sol"><summary>解答</summary>
+<p><b>第 1 步：确定状态和输入</b>　状态 \(\varphi(t)\)，输入 \(u=F(t)\)。这是二阶方程，而线性状态空间模型要求一阶系统。</p>
+<p><b>第 2 步：降阶</b>　令 \(x_1=\varphi\)，\(x_2=\dot\varphi\)：</p>
+\[\dot x_1=x_2=f_1(\mathbf x,u),\qquad \dot x_2=f_2(\mathbf x,u)=-\frac{d\,x_2\cos\frac{x_2}{x_{2,max}}}{ml^2}-g\frac{\sin x_1}{l}+u\frac{\cos x_1}{ml}\]
+<p><b>第 3 步：参考点 (定常工作点)</b>　定常要求 \(\dot x_{1,ref}=\dot x_{2,ref}=0\)，参考状态 \(x_{1,ref}=\varphi_0\)，\(x_{2,ref}=\dot x_{1,ref}=0\)。由 \(\dot x_{2,ref}=0\) 求参考输入：</p>
+\[0=0-g\frac{\sin\varphi_0}{l}+u_{ref}\frac{\cos\varphi_0}{ml}\quad\Rightarrow\quad u_{ref}=mg\tan\varphi_0\]
+<p><b>第 4 步：求雅可比矩阵</b>　线性化原理 (手写笔记)：\(f(\mathbf x,u)\approx f(\mathbf x_{ref},u_{ref})+\left.\dfrac{\partial f}{\partial\mathbf x}\right|_{ref}\delta\mathbf x+\left.\dfrac{\partial f}{\partial u}\right|_{ref}\delta u\)，其中 \(\mathbf A=\left.\dfrac{\partial\mathbf f}{\partial\mathbf x}\right|_{ref}\)，\(\mathbf B=\left.\dfrac{\partial\mathbf f}{\partial u}\right|_{ref}\)。</p>
+<p>\(f_1\)：\(\dfrac{\partial f_1}{\partial x_1}=0\)，\(\dfrac{\partial f_1}{\partial x_2}=1\)。</p>
+<p>\(f_2\) 对 \(x_1\)，代入 \(u_{ref}=mg\tan x_{1,ref}\)：</p>
+\[\left.\frac{\partial f_2}{\partial x_1}\right|_{ref}=-\frac gl\cos x_{1,ref}-\frac{u_{ref}}{ml}\sin x_{1,ref}=-\frac gl\cos x_{1,ref}-\frac gl\frac{\sin^2x_{1,ref}}{\cos x_{1,ref}}=-\frac gl\frac{1}{\cos x_{1,ref}}\]
+<p>\(f_2\) 对 \(x_2\)，在 \(x_{2,ref}=0\) 处：</p>
+\[\left.\frac{\partial f_2}{\partial x_2}\right|_{ref}=-\frac{d\cos\frac{x_{2,ref}}{x_{2,max}}}{ml^2}+\frac{d\,x_{2,ref}\sin\frac{x_{2,ref}}{x_{2,max}}}{ml^2\,x_{2,max}}=-\frac{d}{ml^2}\]
+<p>对输入：\(\dfrac{\partial f_1}{\partial u}=0\)，\(\dfrac{\partial f_2}{\partial u}=\dfrac{\cos x_{1,ref}}{ml}\)。</p>
+<p><b>结果</b>　注意线性模型描述的是相对参考点的增量 \(\delta x_i=x_i-x_{i,ref}\)、\(\delta u=u-u_{ref}\)：</p>
+\[\begin{bmatrix}\delta\dot x_1\\\delta\dot x_2\end{bmatrix}=\underbrace{\begin{bmatrix}0&1\\-\dfrac gl\dfrac{1}{\cos x_{1,ref}}&-\dfrac{d}{ml^2}\end{bmatrix}}_{\mathbf A}\begin{bmatrix}\delta x_1\\\delta x_2\end{bmatrix}+\underbrace{\begin{bmatrix}0\\\dfrac{\cos x_{1,ref}}{ml}\end{bmatrix}}_{\mathbf B}\delta u\]
+<div class="note"><span class="lbl">补充说明</span>
+<ul>
+<li>题目称之为"弹簧–质量–阻尼系统"，实际方程是受力摆：重力项 \(-mgl\sin\varphi\) 起"弹簧"作用，线性化后等效刚度 \(\frac gl\frac{1}{\cos\varphi_0}\) 随工作点变化；\(\varphi_0=0\) 时退化为熟悉的 \(\ddot\varphi=-\frac gl\varphi-\frac{d}{ml^2}\dot\varphi\)。</li>
+<li>非线性阻尼 \(\cos(\dot\varphi/\dot\varphi_{max})\) 在 \(\dot\varphi=0\) 附近等于 1，所以线性化后只剩普通的线性阻尼。</li>
+<li>同样的四步 (降阶 → 配平 → 求偏导 → 写增量方程) 就是飞机运动方程线性化的完整流程，只是状态更多。</li>
+</ul></div>
+</details>
+</article>
+
+<article class="task" id="t9-4">
+<h3><span class="tno">9d</span>侧向位置方程与滚转角方程的线性化</h3>
+<div class="q">
+<p>Linearize the equation for the y-position (which is decoupled from the longitudinal motion) and the equation for the bank angle around the condition: "steady-state straight flight without sideslip".</p>
+\[0=\dot y-V\cdot\sin\chi\cdot\cos\gamma=\dot y-V\cdot\sin(\Psi+\beta)\cdot\cos(\Theta-\alpha)\]
+\[0=\dot\phi-p-q\cdot\sin\Phi\cdot\tan\Theta-r\cdot\cos\Phi\cdot\tan\Theta\]
+</div>
+<details class="sol"><summary>解答</summary>
+<p><b>侧向状态</b> \((\beta,p,r,\Phi,\Psi)\)。与纵向运动解耦意味着纵向状态的增量为零，所以只对侧向状态求偏导。<b>参考点</b>"定常直线无侧滑飞行"：</p>
+\[\beta_0=0,\qquad \Phi_0=0,\qquad p_0=q_0=r_0=0\]
+<p><b>侧向位置方程</b>　\(\chi=\Psi+\beta\)、\(\gamma=\Theta-\alpha\) 只在定常直线飞行时成立。显式写成</p>
+\[f(\mathbf x)=\dot y=V\sin(\Psi+\beta)\cos(\Theta-\alpha)\]
+\[\left.\frac{\partial f}{\partial p}\right|_0=\left.\frac{\partial f}{\partial r}\right|_0=\left.\frac{\partial f}{\partial\Phi}\right|_0=\left.\frac{\partial f}{\partial u}\right|_0=0,\qquad \left.\frac{\partial f}{\partial\beta}\right|_0=\left.\frac{\partial f}{\partial\Psi}\right|_0=V_0\cos(\Psi_0+\beta_0)\cos(\Theta_0-\alpha_0)=V_0\cos\Psi_0\cos(\Theta_0-\alpha_0)\]
+\[\delta\dot y=\begin{bmatrix}V_0\cos\Psi_0\cos(\Theta_0-\alpha_0)&0&0&0&V_0\cos\Psi_0\cos(\Theta_0-\alpha_0)\end{bmatrix}\begin{bmatrix}\delta\beta\\\delta p\\\delta r\\\delta\Phi\\\delta\Psi\end{bmatrix}\]
+\[\boxed{\delta\dot y=V_0\cos\Psi_0\cos(\Theta_0-\alpha_0)\,(\delta\beta+\delta\Psi)}\]
+<p><b>滚转角方程</b>　显式写成</p>
+\[f(\mathbf x)=\dot\Phi=p+q\sin\Phi\tan\Theta+r\cos\Phi\tan\Theta\]
+<p>\(\Theta\) 和 \(q\) 属于纵向运动，不需要对它们求偏导。对侧向状态：</p>
+\[\left.\frac{\partial f}{\partial\beta}\right|_0=\left.\frac{\partial f}{\partial\Psi}\right|_0=\left.\frac{\partial f}{\partial u}\right|_0=0,\qquad \left.\frac{\partial f}{\partial\Phi}\right|_0=q_0\cos\Phi_0\tan\Theta_0-r_0\sin\Phi_0\tan\Theta_0=0\]
+\[\left.\frac{\partial f}{\partial p}\right|_0=1,\qquad \left.\frac{\partial f}{\partial r}\right|_0=\cos\Phi_0\tan\Theta_0=\tan\Theta_0\]
+\[\boxed{\delta\dot\Phi=\delta p+\tan\Theta_0\,\delta r}\]
+<div class="note"><span class="lbl">补充说明</span>
+<ul>
+<li>\(\delta\dot y\) 只依赖 \(\delta\beta+\delta\Psi=\delta\chi\)：侧向漂移只取决于航迹方位角的变化，与滚转角速度无关。若参考航向向北 (\(\Psi_0=0\))，且 \(\Theta_0\approx\alpha_0\)，则 \(\delta\dot y\approx V_0(\delta\beta+\delta\Psi)\)。</li>
+<li>\(\delta\dot\Phi=\delta p+\tan\Theta_0\,\delta r\) 说明：只有在水平姿态 (\(\Theta_0=0\)) 时滚转角速度 \(p\) 才等于欧拉滚转角的变化率；带俯仰角飞行时偏航角速度也会改变 \(\Phi\)。</li>
+</ul></div>
+</details>
+</article>
+</section>

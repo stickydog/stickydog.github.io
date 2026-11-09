@@ -1,0 +1,97 @@
+<section class="set" id="t10" data-short="Exercise 10">
+<h2 class="set-title"><span class="set-num">Exercise 10</span>纵向与侧向固有运动 Eigenmotion<span class="set-src">Exercise 10 · Tutorial 10 · Notes</span></h2>
+<p class="lead">从极点位置读出阻尼和频率，判断是哪一个纵向模态；用短周期近似 (\(\alpha\)–\(q\) 降阶系统) 反推气动导数，并与 Boeing 777 的完整模型对照。侧向部分用滚转模态近似 \(\dot p=L_pp+L_\xi\xi\) 求副翼阶跃响应 (课程笔记第 12 章)。</p>
+
+<article class="task" id="t10-1">
+<h3><span class="tno">10.1</span>纵向固有运动 Longitudinal Eigenmotion</h3>
+<div class="q">
+<p>Consider the following pole pair of an eigenmode of the longitudinal motion:</p>
+<figure class="fig small"><img src="exercises/e10-poles.png" alt="极点图：一对共轭复极点，实部约 -2，虚部约 ±3.7"></figure>
+<ol class="parts" type="a">
+<li>Which eigenmotion is displayed here?</li>
+<li>Give an approximation for the derivatives, which define the eigenmode. You can neglect the influence of the pitch rate on the forces. Further simplifications have to be justified!</li>
+<li>Does the pole zero plot in 10.a) belong to the following linear state space model of a Boeing 777?</li>
+</ol>
+\[\begin{bmatrix}\dot V^*\\\dot\gamma\\\dot\alpha\\\dot q\end{bmatrix}=\begin{bmatrix}-0.01&-0.49&-0.046&-0.001\\0.11&0.0003&1.14&0.043\\-0.11&-0.0003&-1.14&0.957\\0.1&0&-15.34&-3.00\end{bmatrix}\begin{bmatrix}V^*\\\gamma\\\alpha\\q\end{bmatrix}+\begin{bmatrix}0.0002&0.014\\-0.059&0\\0.059&0\\6.56&0.13\end{bmatrix}\begin{bmatrix}\eta\\\delta_T\end{bmatrix}\]
+</div>
+<details class="sol"><summary>解答</summary>
+<p><b>预备：共轭极点与二阶特征多项式</b>　极点 \(s_{1,2}=\sigma\pm j\omega\)：</p>
+\[(s-s_1)(s-s_2)=s^2-2\sigma s+\sigma^2+\omega^2=s^2+2\zeta\omega_0s+\omega_0^2,\qquad \omega_0^2=\sigma^2+\omega^2,\qquad \zeta=\frac{-\sigma}{\omega_0}\]
+<p>极点到原点的距离是固有频率 \(\omega_0\)，实部 \(\sigma\) 决定衰减快慢。</p>
+<p><b>a)</b> 从图中读出 \(\sigma\approx-2\)，\(\omega\approx3.7\)：</p>
+\[\omega_0=\sqrt{\sigma^2+\omega^2}=\sqrt{4+3.7^2}=4.2059\,\mathrm{rad/s},\qquad T=\frac{2\pi}{\omega_0}=1.49\,\mathrm{s}\]
+<p>周期只有约 1.5 s 且阻尼较好 (\(\zeta\approx0.48\))，是<b>短周期模态</b> (short-period mode)。作为量级参考，DC-8 的长周期模态 \(T_{PH}\approx61\,\mathrm{s}\)，短周期 \(T_{SP}\approx3\,\mathrm{s}\)。</p>
+<p><b>b)</b> 模态由 \(\omega_0\) 和 \(\sigma\) 决定，问题是哪些导数影响它们。短周期近似 (课程笔记第 11–12 章，Tutorial 提示"要会背")，忽略俯仰角速度对力的影响 (\(Z_q\approx0\))：</p>
+\[\begin{bmatrix}\dot\alpha\\\dot q\end{bmatrix}=\begin{bmatrix}Z_\alpha&Z_q+1\\M_\alpha&M_q\end{bmatrix}\begin{bmatrix}\alpha\\q\end{bmatrix}+\begin{bmatrix}Z_\eta\\M_\eta\end{bmatrix}\eta\]
+\[\det(s\mathbf I-\mathbf A)=(s-Z_\alpha)(s-M_q)-M_\alpha(Z_q+1)=s^2-(M_q+Z_\alpha)s+M_qZ_\alpha-M_\alpha(Z_q+1)=0\]
+<p>与 \(s^2-2\sigma s+\omega_0^2=0\) 比较系数：</p>
+\[\omega_{0,SP}^2=M_qZ_\alpha-M_\alpha(Z_q+1),\qquad 2\sigma=M_q+Z_\alpha\]
+<p>两个方程有四个导数，必须进一步简化：</p>
+<ol>
+<li>\(Z_q\approx0\) (题目给定)。</li>
+<li>\(M_qZ_\alpha\) 比 \(M_\alpha\cdot1\) 小，可以忽略 (对比两项的量级可以说明这一点，例如用 c) 的数据：\(M_qZ_\alpha=-3.00\cdot-1.14=3.42\)，而 \(M_\alpha=-15.34\))。于是</li>
+</ol>
+\[\omega_{0,SP}^2\approx-M_\alpha\quad\Rightarrow\quad M_\alpha\approx-\omega_{0,SP}^2=-(4.2059)^2=-17.689\]
+<ol start="3">
+<li>阻尼方面再忽略 \(Z_\alpha\) (较大的简化，误差也较大)：</li>
+</ol>
+\[2\sigma\approx M_q\quad\Rightarrow\quad M_q\approx2\cdot(-2)=-4\]
+<p><b>c)</b> 从完整模型中取出 \(\alpha\)、\(q\) 两行两列 (注意：相关元素的位置取决于状态向量的排列顺序)：</p>
+\[\begin{bmatrix}\dot\alpha\\\dot q\end{bmatrix}=\begin{bmatrix}-1.14&0.957\\-15.34&-3.00\end{bmatrix}\begin{bmatrix}\alpha\\q\end{bmatrix}+\begin{bmatrix}0.059\\6.56\end{bmatrix}\eta\]
+<p>即 \(M_\alpha=-15.34\)，\(M_q=-3.00\)，\(Z_\alpha=-1.14\)，\(Z_q+1=0.957\)。用 b) 的关系 (这次不做简化)：</p>
+\[\sigma_{SP}=\tfrac12(M_q+Z_\alpha)=\tfrac12(-3.00-1.14)=-2.07,\qquad \omega_{0,SP}=\sqrt{M_qZ_\alpha-M_\alpha(Z_q+1)}=\sqrt{3.00\cdot1.14+15.34\cdot0.957}=4.2545\,\mathrm{rad/s}\]
+<p>与 a) 的 \(-2\) 和 \(4.2\) 相符，所以<b>极点图属于这架 B777 的模型</b>。</p>
+<p><b>简化带来的误差</b></p>
+<div class="table-wrap"><table class="tbl cols-4">
+<tr><th>导数</th><th>完整模型</th><th>b) 中的近似值</th><th>误差</th></tr>
+<tr><td>\(M_\alpha\)</td><td>−15.34</td><td>−17.689</td><td>15.3%</td></tr>
+<tr><td>\(M_q\)</td><td>−3.00</td><td>−4</td><td>33.3%</td></tr>
+<tr><td>\(Z_\alpha\)</td><td>−1.14</td><td>0</td><td>100%</td></tr>
+<tr><td>\(Z_q+1\)</td><td>0.957</td><td>1</td><td>4.5%</td></tr>
+</table></div>
+<p>总结：a) 只用极点位置求出 \(\omega_0\) 和 \(\sigma\)；b) 借助短周期近似并假设 \(Z_\alpha=Z_q=0\)，由 \(\omega_0\)、\(\sigma\) 反推 \(M_\alpha\)、\(M_q\)；c) 给出了完整模型，可以算出真实的 \(\omega_0\)、\(\sigma\) 来对照。</p>
+<div class="note"><span class="lbl">补充说明</span>
+<ul>
+<li>用 numpy 求完整 4×4 模型的特征值：\(-2.071\pm3.718j\) (短周期) 和 \(-0.0036\pm0.221j\) (长周期，\(T\approx28\,\mathrm{s}\)，阻尼很弱)。2×2 近似给出 \(-2.07\pm3.717j\)，几乎完全一致，说明短周期近似非常好。</li>
+<li>\(Z_q+1=0.957\) 意味着 \(Z_q=-0.043\)，确实很小，所以"忽略俯仰角速度对力的影响"是合理的 (手写笔记)。</li>
+<li>手写笔记指出：Tutorial 在 c) 中提到了简化，但计算时并没有做简化，用的是完整的 \(\omega_0^2=M_qZ_\alpha-M_\alpha(Z_q+1)\)。</li>
+<li>\(M_\alpha<0\) 是纵向静稳定的条件 (相当于"刚度")，\(M_q<0\) 是俯仰阻尼。\(\omega_{0,SP}\approx\sqrt{-M_\alpha}\) 说明短周期频率主要由静稳定性决定。</li>
+<li>本站 <a href="homework/exercise-10-3.jpg">课后作业 Exercise 10-3 (b)</a> 的手写解答与本题 b) 是同一内容。</li>
+</ul></div>
+</details>
+</article>
+
+<article class="task" id="t10-2">
+<h3><span class="tno">10.2</span>侧向固有运动：滚转模态 Lateral Eigenmotion</h3>
+<div class="q">
+<p>The following linear model of the lateral motion is given:</p>
+\[\begin{bmatrix}\dot r\\\dot\beta\\\dot p\\\dot\Phi\end{bmatrix}=\begin{bmatrix}-0.6&6.0&-0.18&0\\-1&-0.19&0&0.13\\1.35&-15.10&-6.5&0\\0.05&0&1&0\end{bmatrix}\begin{bmatrix}r\\\beta\\p\\\Phi\end{bmatrix}+\begin{bmatrix}0.0075&-2.6\\0&0.037\\-13.09&1.87\\0&0\end{bmatrix}\begin{bmatrix}\xi\\\zeta\end{bmatrix}\]
+<ol class="parts" type="a">
+<li>Calculate the initial roll acceleration and the steady state roll rate for an aileron deflection of 1°.</li>
+<li>Plot the step response of roll rate and bank angle for the given aileron deflection.</li>
+</ol>
+</div>
+<details class="sol"><summary>解答</summary>
+<p><b>a)</b> 滚转模态近似：只保留 \(\dot p\) 方程中的 \(p\) 和 \(\xi\) 项，\(L_p=-6.5\)，\(L_\xi=-13.09\)：</p>
+\[\dot p=L_p\,p+L_\xi\,\xi\]
+<p>初始滚转角加速度 (此时 \(p=0\))：</p>
+\[\dot p_0=L_\xi\bar\xi=-13.09\,\tfrac{1}{\mathrm{s}^2}\cdot1^\circ=-13.09\,^\circ/\mathrm{s}^2\]
+<p>稳态滚转角速度 (此时 \(\dot p=0\))：</p>
+\[0=L_pp_\infty+L_\xi\bar\xi\quad\Rightarrow\quad p_\infty=-\frac{L_\xi}{L_p}\bar\xi=-\frac{-13.09}{-6.5}\cdot1^\circ=-2.0138\,^\circ/\mathrm{s}\]
+<p><b>b)</b> 滚转角速度是一阶系统的阶跃响应，时间常数</p>
+\[T_R=-\frac{1}{L_p}=-\frac{1}{-6.5}=0.1538\,\mathrm{s},\qquad p(T_R)=0.63\,p_\infty=0.63\cdot(-2.0138)=-1.2687\,^\circ/\mathrm{s}\]
+<figure class="fig small"><img src="exercises/e10-step-sketch.png" alt="示意图：滚转角速度一阶趋近 p∞，T_R 时达到 0.63 p∞；滚转角先缓慢增大，之后与 t·p∞ 平行，滞后 T_R"></figure>
+<p>作图要点：起点切线斜率为 \(\dot p_0\)，切线与 \(p_\infty\) 水平线的交点就在 \(t=T_R\)；滚转角是 \(p\) 的积分，初始缓慢增大，之后变成斜率为 \(p_\infty\) 的直线，与直线 \(t\cdot p_\infty\) 平行但滞后 \(T_R\) (相差 \(p_\infty T_R\))。</p>
+<figure class="fig small"><img src="exercises/e10-roll-rate.png" alt="1°副翼阶跃下的滚转角速度响应：0.15 s 时达到 p_0.63，约 0.7 s 后接近 -2 °/s"></figure>
+<figure class="fig small"><img src="exercises/e10-bank.png" alt="1°副翼阶跃下的滚转角响应：渐近线斜率为 p∞，与 t·p∞ 相差 T_R"></figure>
+<p>从图中读出：约 0.7 s 后 \(p\approx p_\infty\)。</p>
+<p class="erratum">Tutorial Slide 36 把 \(p(T_R)\) 写成 \(+1.2687\)，应为 \(-1.2687\,^\circ/\mathrm{s}\) (与 \(p_\infty\) 同号，图中也是负值)。</p>
+<div class="note"><span class="lbl">补充说明</span>
+<ul>
+<li>完整 4×4 模型的特征值：\(-6.571\) (滚转模态，与 \(L_p=-6.5\) 很接近)、\(-0.361\pm2.576j\) (荷兰滚)、\(+0.0033\) (螺旋模态，略不稳定，发散极慢)。</li>
+<li>用完整模型仿真 1° 副翼阶跃：\(t=T_R\) 时 \(p=-1.26\,^\circ/\mathrm{s}\)，0.7 s 时约 \(-1.86\,^\circ/\mathrm{s}\)，之后在 \(-1.85\) 到 \(-1.75\,^\circ/\mathrm{s}\) 之间 (荷兰滚轻微耦合)，比单自由度近似的 \(-2.01\) 略小。所以滚转近似适合估计初始响应和时间常数。</li>
+<li>\(L_\xi<0\)：正副翼偏度产生负滚转力矩，与"正偏度产生负力矩"的约定一致。</li>
+</ul></div>
+</details>
+</article>
+</section>

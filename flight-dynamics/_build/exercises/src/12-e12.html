@@ -1,0 +1,59 @@
+<section class="set" id="t12" data-short="Exercise 12">
+<h2 class="set-title"><span class="set-num">Exercise 12</span>侧向基本控制器 Basic Lateral Controller<span class="set-src">Exercise 12 · Tutorial 12</span></h2>
+<p class="lead">按 MIL-F-8785C 操纵品质规范评价滚转模态和荷兰滚：用滚转角速度反馈 (滚转阻尼器) 把滚转时间常数降到 Level 1，用偏航角速度反馈 (偏航阻尼器) 调节荷兰滚阻尼 (课程笔记第 13 章)。本次没有手写笔记。</p>
+
+<article class="task" id="t12-1">
+<h3><span class="tno">12</span>滚转模态与荷兰滚的操纵品质及控制器</h3>
+<div class="q">
+<p>The following state space model of a generic aircraft (Class II) in horizontal cruise flight with \(V_0=150\,\mathrm{m/s}\), \(h=1000\,\mathrm{m}\) is given:</p>
+\[\begin{bmatrix}\dot r\\\dot\beta\\\dot p\\\dot\Phi\end{bmatrix}=\begin{bmatrix}-0.87&6.47&-0.41&0\\-1&-0.38&0&0.07\\0.91&-18.8&-0.65&0\\0&0&1&0\end{bmatrix}\begin{bmatrix}r\\\beta\\p\\\Phi\end{bmatrix}+\begin{bmatrix}-0.88&-7.78\\0&0.12\\-14.3&3.74\\0&0\end{bmatrix}\begin{bmatrix}\xi\\\zeta\end{bmatrix}\]
+<ol class="parts" type="a">
+<li>Determine the control structure and the corresponding controller gains such that the Roll Mode of the aircraft fulfills level 1 handling qualities according to MIL-F-8785C.</li>
+<li>Determine the handling qualities level according to MIL-F-8785C for the Dutch Roll.</li>
+<li>Propose a controller structure that changes the relative damping of the Dutch Roll.</li>
+<li>Determine the gain which can be used to achieve a general, desired relative damping. You can assume that the eigenfrequency of the Dutch Roll remains unchanged by the feedback control.</li>
+</ol>
+</div>
+<details class="sol"><summary>解答</summary>
+<p><b>a)</b> 滚转模态的状态空间模型 (只保留 \(p\)、\(\Phi\) 和副翼)：</p>
+\[\begin{bmatrix}\dot p\\\dot\Phi\end{bmatrix}=\begin{bmatrix}L_p&0\\1&0\end{bmatrix}\begin{bmatrix}p\\\Phi\end{bmatrix}+\begin{bmatrix}L_\xi\\0\end{bmatrix}\xi,\qquad L_p=-0.65,\quad L_\xi=-14.3\]
+<p><b>查规范</b>　题目条件：Class II (中等重量、中低机动性飞机)，水平巡航属于 B 类飞行阶段 (Category B：机动平缓，不要求精确跟踪)，要求 Level 1：</p>
+<figure class="fig small"><img src="exercises/e12-roll-table.png" alt="MIL-F-8785C 滚转模态最大时间常数表：B 阶段所有类别 Level 1 为 1.4 s，Level 2 为 3.0 s，Level 3 为 10 s"></figure>
+<p>B 阶段、所有类别、Level 1：\(T_R\le1.4\,\mathrm{s}\)。</p>
+<p><b>需要控制器吗？</b>　滚转模态是一阶 (PT1) 系统，\(\dot p=L_pp+L_\xi\xi\)，拉普拉斯变换：</p>
+\[(s-L_p)\,p=L_\xi\,\xi\quad\Rightarrow\quad \frac{p}{\xi}=\frac{L_\xi}{s-L_p}=\frac{L_\xi}{-L_p}\cdot\frac{1}{T_Rs+1},\qquad T_R=-\frac{1}{L_p}=\frac{1}{0.65}=1.54\,\mathrm{s}>1.4\,\mathrm{s}\]
+<p>不满足 Level 1，需要控制器。</p>
+<p><b>控制结构：滚转角速度反馈</b>　控制律 \(\xi_c=\xi_{Pilot}-k_{\xi p}\,p\)，闭环：</p>
+\[\dot p=L_pp+L_\xi(-k_{\xi p}p+\xi_{Pilot})=(L_p-k_{\xi p}L_\xi)\,p+L_\xi\,\xi_{Pilot}=L_p^*\,p+L_\xi\,\xi_{Pilot}\]
+<p>通过"人为的" \(L_p^*\) 确定增益：</p>
+\[T_R^*=-\frac{1}{L_p^*}=-\frac{1}{L_p-k_{\xi p}L_\xi}\overset{!}{=}T_{R,des}^*\quad\Rightarrow\quad k_{\xi p}=\frac{T_{R,des}^*L_p+1}{L_\xi T_{R,des}^*}=\frac{1}{L_\xi}\left(L_p+\frac{1}{T_{R,des}^*}\right)\]
+<p>取边界值 \(T_{R,des}^*=1.4\,\mathrm{s}\)：</p>
+\[k_{\xi p}=\frac{1}{-14.3}\left(-0.65+\frac{1}{1.4}\right)=-4.495\times10^{-3}\]
+<p><b>b)</b> 荷兰滚的 2×2 模型 (纯偏航振荡，\(r\)、\(\beta\) 和方向舵)：</p>
+\[\begin{bmatrix}\dot r\\\dot\beta\end{bmatrix}=\begin{bmatrix}N_r&N_\beta\\-1&Y_\beta\end{bmatrix}\begin{bmatrix}r\\\beta\end{bmatrix}+\begin{bmatrix}N_\zeta\\Y_\zeta\end{bmatrix}\zeta,\qquad N_r=-0.87,\ N_\beta=6.47,\ Y_\beta=-0.38\]
+\[\det(s\mathbf I-\mathbf A)=(s-N_r)(s-Y_\beta)+N_\beta=s^2-(N_r+Y_\beta)s+N_rY_\beta+N_\beta=0\]
+<p>与 \(s^2+2\zeta_d\omega_0s+\omega_0^2=0\) 比较系数：</p>
+\[\omega_{0,DR}^2=N_rY_\beta+N_\beta=-0.87\cdot(-0.38)+6.47\ \Rightarrow\ \omega_{0,DR}=2.61\,\mathrm{rad/s},\qquad \zeta_{d,DR}=-\frac12\frac{N_r+Y_\beta}{\omega_{0,DR}}=-\frac12\frac{-0.87-0.38}{2.61}=0.24\]
+<figure class="fig small"><img src="exercises/e12-dr-table.png" alt="MIL-F-8785C 荷兰滚要求：Level 1 B 阶段所有类别 ζd 至少 0.08，ζd·ωd 至少 0.15，ωd 至少 0.4 rad/s"></figure>
+<p>B 阶段 Level 1 要求 \(\zeta_d\ge0.08\)、\(\zeta_d\omega_{0d}\ge0.15\,\mathrm{rad/s}\)、\(\omega_{0d}\ge0.4\,\mathrm{rad/s}\)：</p>
+\[\omega_{0,DR}=2.61>0.4,\qquad \zeta_{d,DR}=0.24>0.08,\qquad \omega_{0,DR}\zeta_{d,DR}=0.6264>0.15\]
+<p><b>满足 Level 1</b>。</p>
+<p><b>c)</b> 偏航角速度反馈 (偏航阻尼器)：\(\zeta_c=\zeta_{Pilot}-k_{\zeta r}\,r\)，把 \(r\) 通过增益 \(k_{\zeta r}\) 反馈到方向舵。</p>
+<p><b>d)</b> 把控制律代入 2×2 模型 (取 \(Y_\zeta\approx0\))：</p>
+\[\begin{bmatrix}\dot r\\\dot\beta\end{bmatrix}=\begin{bmatrix}N_r-k_{\zeta r}N_\zeta&N_\beta\\-1&Y_\beta\end{bmatrix}\begin{bmatrix}r\\\beta\end{bmatrix}+\begin{bmatrix}N_\zeta\\0\end{bmatrix}\zeta_{Pilot},\qquad N_r^*=N_r-k_{\zeta r}N_\zeta\]
+<p>闭环特征方程的系数与 b) 形式相同：</p>
+\[N_r^*+Y_\beta=-2\zeta_{d,DR}^*\,\omega_{0,DR}^*,\qquad N_r^*Y_\beta+N_\beta=\omega_{0,DR}^{*2}\]
+<p>按题意假设频率不变，\(\omega_{0,DR}^*\approx\omega_{0,DR}=\sqrt{N_rY_\beta+N_\beta}\) (注意这里用的是不带 * 的 \(N_r\))。代入阻尼方程：</p>
+\[\zeta_{d,DR}^*=-\frac12\frac{N_r-k_{\zeta r}N_\zeta+Y_\beta}{\omega_{0,DR}}=-\frac12\frac{N_r+Y_\beta}{\omega_{0,DR}}+\frac12\frac{k_{\zeta r}N_\zeta}{\omega_{0,DR}}=\zeta_{DR}+\frac12\frac{k_{\zeta r}N_\zeta}{\omega_{0,DR}}\]
+\[\boxed{k_{\zeta r}=\frac{2\,\omega_{0,DR}\,(\zeta_{DR}^*-\zeta_{DR})}{N_\zeta}}\]
+<p>例如要 \(\zeta_{DR}^*=1/\sqrt2\)：\(k_{\zeta r}=\dfrac{2\cdot2.608\cdot(0.707-0.240)}{-7.78}=-0.313\)。</p>
+<div class="note"><span class="lbl">补充说明</span>
+<ul>
+<li>MIL-F-8785C 的分类：Class I 小型轻型飞机，Class II 中等重量、中低机动性飞机，Class III 大型重型飞机，Class IV 高机动性飞机；飞行阶段 A (快速机动、精确跟踪)，B (平缓机动，如爬升、巡航、下降)，C (终端阶段，如起飞、进近、着陆)。</li>
+<li>\(k_{\xi p}\) 只有 \(-4.5\times10^{-3}\)：开环 \(T_R=1.54\,\mathrm{s}\) 离要求很近，只需很小的增益。实际设计会留一些余量 (取 \(T_{R,des}^*<1.4\,\mathrm{s}\))。</li>
+<li>d) 的公式说明偏航阻尼器主要改变 \(N_r\) (偏航阻尼导数)，从而直接改变 \(\zeta\)；频率 \(\omega_0^2=N_r^*Y_\beta+N_\beta\) 也会因 \(N_r^*Y_\beta\) 项略有变化，题目假设忽略这一点。</li>
+<li><b>用完整 4×4 模型验算</b> (整理时补充)：开环特征值为 \(-1.716\) (滚转模态，\(T_R=0.58\,\mathrm{s}\))、\(-0.064\pm2.767j\) (荷兰滚，\(\zeta=0.023\)，\(\zeta\omega_0=0.064\))、\(-0.056\) (螺旋模态)。这组导数的滚转–偏航耦合很强 (\(L_\beta=-18.8\))，2×2 / 1×1 近似与完整模型差别很大：按完整模型，滚转模态本身已满足 Level 1，而荷兰滚只达到 Level 2 (\(\zeta\ge0.02\)、\(\zeta\omega_0\ge0.05\))。把 d) 的 \(k_{\zeta r}=-0.313\) 加到完整模型上，荷兰滚变为 \(-1.00\pm2.10j\) (\(\zeta=0.43\)，不是 0.707)。考试按 Tutorial 的近似方法作答即可，但这说明降阶近似的结论需要用完整模型核对 (待确认)。</li>
+</ul></div>
+</details>
+</article>
+</section>

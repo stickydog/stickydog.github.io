@@ -1,0 +1,69 @@
+<section class="set" id="t11" data-short="Exercise 11">
+<h2 class="set-title"><span class="set-num">Exercise 11</span>纵向基本控制器 Basic Longitudinal Controller<span class="set-src">Exercise 11 · Tutorial 11 · Notes</span></h2>
+<p class="lead">为 Boeing 777 设计短周期增稳：用俯仰角速度反馈 \(k_{\eta q}\) 和迎角反馈 \(k_{\eta\alpha}\) 同时配置阻尼和频率；再用超前–滞后滤波器从 \(q\) 估计 \(\alpha\)，得到不需要迎角测量的等效控制器 (课程笔记第 13 章)。</p>
+
+<article class="task" id="t11-1">
+<h3><span class="tno">11</span>短周期增稳控制器设计</h3>
+<div class="q">
+<p>Given the following state-space representation, design a basic controller for the Boeing 777.</p>
+\[\begin{bmatrix}\dot V^*\\\dot\gamma\\\dot\alpha\\\dot q\end{bmatrix}=\begin{bmatrix}-0.01&-0.49&-0.046&-0.001\\0.11&0.0003&1.14&0.043\\-0.11&-0.0003&-1.14&0.957\\0.1&0&-15.34&-3.00\end{bmatrix}\begin{bmatrix}V^*\\\gamma\\\alpha\\q\end{bmatrix}+\begin{bmatrix}0.0002&0.014\\-0.059&0\\0.059&0\\6.56&0.13\end{bmatrix}\begin{bmatrix}\eta\\\delta_T\end{bmatrix}\]
+<p>The controller is supposed to augment the short-period eigenmode such that the ideal damping \(\zeta_{SP}=\frac{1}{\sqrt2}\) and the desired eigenfrequency \(\omega_{0,SP}=4.5\,\mathrm{rad/s}\) are achieved.</p>
+<ol class="parts" type="a">
+<li>Analyze the eigenmode characteristics of the aircraft without a controller.</li>
+<li>Propose a suitable controller structure, for which the measurements of the states in the above state space model suffice.</li>
+<li>Determine the required controller gains such that the above-mentioned requirements for the short-period are fulfilled.</li>
+<li>Propose an alternative control structure that accounts for inaccurate measurements of the angle of attack. Compute its required controller gains.</li>
+</ol>
+</div>
+<details class="sol"><summary>解答</summary>
+<p><b>a)</b> 取出短周期 (\(\alpha\)、\(q\)) 子系统，与 Exercise 10 相同：</p>
+\[\begin{bmatrix}\dot\alpha\\\dot q\end{bmatrix}=\begin{bmatrix}Z_\alpha&Z_q+1\\M_\alpha&M_q\end{bmatrix}\begin{bmatrix}\alpha\\q\end{bmatrix}+\begin{bmatrix}Z_\eta\\M_\eta\end{bmatrix}\eta_C,\qquad Z_\alpha=-1.14,\ Z_q+1=0.957,\ M_\alpha=-15.34,\ M_q=-3.00\]
+\[\det(s\mathbf I-\mathbf A)=s^2-\underbrace{(M_q+Z_\alpha)}_{-2\zeta_{SP}\omega_{0,SP}}s+\underbrace{M_qZ_\alpha-M_\alpha(Z_q+1)}_{\omega_{0,SP}^2}\]
+\[\omega_{0,SP}=\sqrt{Z_\alpha M_q-M_\alpha(Z_q+1)}=\sqrt{-1.14\cdot(-3.00)+15.34\cdot0.957}=4.25\,\mathrm{rad/s},\qquad \zeta_{SP}=-\frac12\frac{Z_\alpha+M_q}{\omega_{0,SP}}=-\frac12\frac{-1.14-3}{4.25}=0.49\]
+<p>要求 \(\zeta=0.7071\)、\(\omega_0=4.5\,\mathrm{rad/s}\)：频率略低，阻尼明显不足。</p>
+<p><b>b)</b> 需要一个能同时影响<b>阻尼和频率</b>、且只用模型中状态的结构，即 \(q\) 反馈与 \(\alpha\) 反馈的组合 (假设 \(q\) 和 \(\alpha\) 都能足够准确地测量)：</p>
+<figure class="fig small"><img src="exercises/e11-q-alpha.png" alt="控制器结构：飞行员指令 η_Pilot 减去 k_ηq·q 和 k_ηα·α 得到 η_c，送入飞机"></figure>
+<div class="table-wrap"><table class="tbl cols-3">
+<tr><th>反馈</th><th>对 \(\omega_0\) 的影响</th><th>对 \(\zeta\) 的影响</th></tr>
+<tr><td>俯仰角速度 \(q\) (俯仰阻尼器)</td><td>略有增大</td><td>明显增大</td></tr>
+<tr><td>迎角 \(\alpha\) (俯仰增稳器)</td><td>增大</td><td>在合理增益范围内基本不变</td></tr>
+</table></div>
+<p>迎角反馈相当于额外产生一个与迎角成正比的力矩，即人为增大 \(|M_\alpha|\)，所以主要提高固有频率 (根轨迹沿等阻尼线外移)。</p>
+<p><b>c)</b> 控制律 \(\eta_C=\eta_{Pilot}-k_{\eta q}q-k_{\eta\alpha}\alpha\)，代入状态方程：</p>
+\[\begin{bmatrix}\dot\alpha\\\dot q\end{bmatrix}=\begin{bmatrix}Z_\alpha&Z_q+1\\M_\alpha&M_q\end{bmatrix}\begin{bmatrix}\alpha\\q\end{bmatrix}-\begin{bmatrix}Z_\eta k_{\eta\alpha}&Z_\eta k_{\eta q}\\M_\eta k_{\eta\alpha}&M_\eta k_{\eta q}\end{bmatrix}\begin{bmatrix}\alpha\\q\end{bmatrix}+\begin{bmatrix}Z_\eta\\M_\eta\end{bmatrix}\eta_{Pilot}\]
+\[\mathbf A_{CL}=\begin{bmatrix}Z_\alpha^*&Z_q^*+1\\M_\alpha^*&M_q^*\end{bmatrix},\qquad Z_\alpha^*=Z_\alpha-Z_\eta k_{\eta\alpha},\ Z_q^*=Z_q-Z_\eta k_{\eta q},\ M_\alpha^*=M_\alpha-M_\eta k_{\eta\alpha},\ M_q^*=M_q-M_\eta k_{\eta q}\]
+<p>闭环矩阵的结构与开环相同，所以 a) 的公式照样适用 (两个方程，两个未知增益)：</p>
+\[\omega_{0,SP,desired}=\sqrt{(Z_\alpha-Z_\eta k_{\eta\alpha})(M_q-M_\eta k_{\eta q})-(M_\alpha-M_\eta k_{\eta\alpha})(Z_q-Z_\eta k_{\eta\alpha}+1)}\]
+\[\zeta_{SP,desired}=-\frac12\frac{(Z_\alpha-Z_\eta k_{\eta\alpha})+(M_q-M_\eta k_{\eta q})}{\omega_{0,SP,desired}}\]
+<p>为减少计算量，假设 \(Z_\eta\approx0\) (升降舵产生的升力很小)。阻尼方程直接给出 \(k_{\eta q}\)：</p>
+\[2\zeta_{SP,desired}\,\omega_{0,SP,desired}=-Z_\alpha-(M_q-M_\eta k_{\eta q})\quad\Rightarrow\quad k_{\eta q}=\frac{2\zeta_{SP,desired}\,\omega_{0,SP,desired}+Z_\alpha+M_q}{M_\eta}=0.3389\]
+<p>频率方程：</p>
+\[\omega_{0,SP,desired}^2=Z_\alpha(M_q-M_\eta k_{\eta q})-M_\alpha(Z_q+1)+M_\eta k_{\eta\alpha}(Z_q+1)\]
+\[k_{\eta\alpha}=\frac{\omega_{0,SP,desired}^2-Z_\alpha(M_q-M_\eta k_{\eta q})+M_\alpha(Z_q+1)}{M_\eta(Z_q+1)}=-0.0614\]
+<p><b>检验 \(Z_\eta\approx0\) 的影响</b>：把 \(Z_\eta=0.059\) 放回完整公式，</p>
+\[\omega_{0,SP,full}=\sqrt{(Z_\alpha-Z_\eta k_{\eta\alpha})(M_q-M_\eta k_{\eta q})-(M_\alpha-M_\eta k_{\eta\alpha})(Z_q-Z_\eta k_{\eta q}+1)}=4.46\,\mathrm{rad/s}\]
+<p>误差 0.04 rad/s (0.89%)。</p>
+<p class="erratum">Tutorial 求真实阻尼比时除以的是期望频率 4.5 rad/s，得到 \(\zeta=0.707\) (误差 0.1%)。按定义应除以真实频率 4.46 rad/s，得 \(\zeta=0.712\) (误差约 0.7%)。用 numpy 求闭环矩阵特征值 \(-3.180\pm3.134j\) 也给出 \(\omega_0=4.465\,\mathrm{rad/s}\)、\(\zeta=0.712\)。两种算法的误差都很小，说明 \(Z_\eta\approx0\) 的假设合理。</p>
+<p><b>d)</b> 迎角测量往往昂贵且不够准确。两种替代方案：</p>
+<ol>
+<li>反馈测得的法向载荷因数 \(n_z\) ("载荷因数是迎角的隐含观测")，其根轨迹与 \(\alpha\) 反馈类似：增益增大时频率升高、阻尼基本不变。但题目 b) 只允许使用状态空间模型中的状态，所以 Tutorial 选第 2 种。</li>
+<li>俯仰角速度反馈加超前–滞后滤波器 (lead-lag filter)，用 \(q\) 估计 \(\alpha\)。</li>
+</ol>
+<p>短周期近似中迎角与俯仰角速度的关系：</p>
+\[\delta\alpha=\frac{T_{\Theta2}}{1+T_{\Theta2}s}\,\delta q,\qquad T_{\Theta2}\approx-\frac{1}{Z_\alpha}\]
+<p>代入 c) 的控制律并整理成"增益 × 滤波器"的形式：</p>
+\[\eta_C=\eta_{Pilot}-\left(k_{\eta q}+k_{\eta\alpha}\frac{T_{\Theta2}}{T_{\Theta2}s+1}\right)\delta q=\eta_{Pilot}-\underbrace{(k_{\eta q}+k_{\eta\alpha}T_{\Theta2})}_{k_q}\,\frac{\overbrace{\dfrac{k_{\eta q}T_{\Theta2}}{k_{\eta q}+k_{\eta\alpha}T_{\Theta2}}}^{T_q}s+1}{T_{\Theta2}s+1}\,\delta q\]
+<figure class="fig small"><img src="exercises/e11-leadlag.png" alt="俯仰控制器：q 经超前–滞后滤波器 (1+T_q s)/(1+T_Θ2 s) 和增益 k_q 反馈到升降舵"></figure>
+<p>用 c) 的增益，\(T_{\Theta2}=-1/Z_\alpha=1/1.14\)：</p>
+\[k_q=k_{\eta q}+k_{\eta\alpha}T_{\Theta2}=0.3389+\left(-0.0613\cdot\frac{1}{1.14}\right)=0.2851,\qquad T_q=\frac{k_{\eta q}T_{\Theta2}}{k_{\eta q}+k_{\eta\alpha}T_{\Theta2}}=1.043\,\mathrm{s}\]
+<div class="note"><span class="lbl">补充说明</span>
+<ul>
+<li>把 c) 的增益放进完整 4×4 模型 (含 \(Z_\eta\))：短周期极点 \(-3.180\pm3.135j\)，长周期 \(-0.0046\pm0.208j\) 基本不受影响。短周期控制器只改变短周期，这也说明了模态分离的合理性。</li>
+<li>d) 的验算：把超前–滞后滤波器作为第三个状态与 2×2 模型组成闭环，特征值为 \(-3.18\pm3.13j\) 和 \(-1.14\)。短周期极点与 c) 几乎相同，多出的实极点 \(-1/T_{\Theta2}\) 来自滤波器本身。</li>
+<li>\(k_{\eta\alpha}<0\)：这个模型中 \(M_\eta=+6.56>0\)，与 Exercise 8 中 \(C_{m\eta}<0\) 的约定符号相反 (题目模型可能采用了相反的舵偏正方向，待确认)。按本模型，\(M_\alpha^*=M_\alpha-M_\eta k_{\eta\alpha}=-14.94\)，比开环的 −15.34 略小，所以这里的 \(\alpha\) 反馈反而<b>略微降低</b>频率。原因是 \(q\) 反馈通过 \(Z_\alpha M_q^*\) 项已经把频率提到约 4.54 rad/s (只用 \(k_{\eta q}\) 时)，\(\alpha\) 反馈只需把它修正回 4.5 rad/s，所以增益很小且为负。</li>
+<li>\(T_{\Theta2}\) 的来历 (手写笔记)：在短周期近似中忽略舵面项并取 \(Z_q+1\approx1\)，\(\dot\alpha=Z_\alpha\alpha+q\)，拉普拉斯变换得 \(G_{\alpha q}(s)=\dfrac{\alpha(s)}{q(s)}=\dfrac{1}{s-Z_\alpha}=\dfrac{T_{\Theta2}}{T_{\Theta2}s+1}\)，\(T_{\Theta2}=-1/Z_\alpha\)。这个估计依赖模型参数 \(Z_\alpha\)，所以是这种控制器的主要不确定性来源。</li>
+<li>Tutorial 留的思考题：增益是在 \(Z_\eta=0\) 假设下算的，应在后续一步用完整模型验证 (即上面的检验)。</li>
+</ul></div>
+</details>
+</article>
+</section>

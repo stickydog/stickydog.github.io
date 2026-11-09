@@ -12,7 +12,7 @@
 <main>
   <p class="crumb"><a href="../">← 首页</a></p>
   <h1>Flight Dynamics 飞行力学</h1>
-  <p class="sub">课程笔记 · 手写笔记 · 课后作业</p>
+  <p class="sub">课程笔记 · 习题与解答 · 习题课 · 手写笔记 · 课后作业</p>
 
   <section>
     <h2>课程笔记 Lecture Notes</h2>
@@ -25,8 +25,166 @@
   </section>
 
   <section>
+    <h2>习题与解答 Exercises</h2>
+    <ul class="items">
+      <li><a href="exercises.html">
+        <span class="t">习题与解答网页</span><span class="tag">Exercise 1–12</span>
+        <span class="d">每次习题课的题目 (英文原文) 与 Tutorial 解答、手写笔记合并为一份：逐步解答 + 补充说明，数值逐一验算，原解答中的笔误单独标注；解答默认收起，可先自己做</span>
+      </a></li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>习题课 Exercise Sessions</h2>
+    <p class="note">每次习题课包括题目 (Exercise)、讲解幻灯片 (Tutorial) 和课上手写笔记 (Notes)，三者内容重叠，已合并到网页版；原 PDF 保留备查</p>
+    <ul class="items">
+      <li><div class="card">
+        <span class="t">Exercise 1 · 基础：操纵面与坐标系</span><span class="tag">Tutorial 1 · 16 页</span>
+        <span class="d">三个主操纵面与机体轴；由两个 GPS 点经 WGS-84 → ECEF → NED 求运动学速度、航迹方位角与航迹倾角 (atan2 象限)</span>
+        <div class="links">
+          <a href="exercises.html#t1">网页版：题目 + 合并解答 + 补充说明</a>
+          <a href="exercises/exercise-1.pdf" class="alt">题目 PDF</a>
+          <a href="tutorials/tutorial-1.pdf" class="alt">Tutorial PDF</a>
+          <a href="handwritten/exercise-1-notes.pdf" class="alt">手写笔记</a>
+        </div>
+      </div></li>
+      <li><div class="card">
+        <span class="t">Exercise 2 · 大气与空速</span><span class="tag">Tutorial 2 · 18 页</span>
+        <span class="d">由密度反推位势高度与几何高度；IAS → CAS → EAS → TAS 逐级修正，可压缩判据与空速公式表</span>
+        <div class="links">
+          <a href="exercises.html#t2">网页版：题目 + 合并解答 + 补充说明</a>
+          <a href="exercises/exercise-2.pdf" class="alt">题目 PDF</a>
+          <a href="tutorials/tutorial-2.pdf" class="alt">Tutorial PDF</a>
+          <a href="handwritten/exercise-2-notes.pdf" class="alt">手写笔记</a>
+        </div>
+      </div></li>
+      <li><div class="card">
+        <span class="t">Exercise 3 · 中性点与压力中心</span><span class="tag">Tutorial 3 · 35 页</span>
+        <span class="d">压力中心随迎角前移、中性点力矩不变；部件叠加法求全机中性点与中性点处俯仰力矩</span>
+        <div class="links">
+          <a href="exercises.html#t3">网页版：题目 + 合并解答 + 补充说明</a>
+          <a href="exercises/exercise-3.pdf" class="alt">题目 PDF</a>
+          <a href="tutorials/tutorial-3.pdf" class="alt">Tutorial PDF</a>
+          <a href="handwritten/exercise-3-notes.pdf" class="alt">手写笔记</a>
+        </div>
+      </div></li>
+      <li><div class="card">
+        <span class="t">Exercise 4 · 质点运动方程与力</span><span class="tag">Tutorial 4 · 61 页</span>
+        <span class="d">力变换到运动学坐标系；z 向平衡求速度；活塞发动机推力模型；V̇、χ̇、γ̇ 及倾侧 30° 的影响</span>
+        <div class="links">
+          <a href="exercises.html#t4">网页版：题目 + 合并解答 + 补充说明</a>
+          <a href="exercises/exercise-4.pdf" class="alt">题目 PDF</a>
+          <a href="tutorials/tutorial-4.pdf" class="alt">Tutorial PDF</a>
+          <a href="handwritten/exercise-4-notes.pdf" class="alt">手写笔记</a>
+        </div>
+      </div></li>
+      <li><div class="card">
+        <span class="t">Exercise 5 · 定常飞行：滑翔、爬升与转弯</span><span class="tag">Tutorial 5 · 30 页</span>
+        <span class="d">最大滑翔距离 ε*；质点模型的控制输入；最大爬升角速度 V*；定常转弯的倾侧角与速度 (二次方程)</span>
+        <div class="links">
+          <a href="exercises.html#t5">网页版：题目 + 合并解答 + 补充说明</a>
+          <a href="exercises/exercise-5.pdf" class="alt">题目 PDF</a>
+          <a href="tutorials/tutorial-5.pdf" class="alt">Tutorial PDF</a>
+          <a href="handwritten/exercise-5-notes.pdf" class="alt">手写笔记</a>
+        </div>
+      </div></li>
+      <li><div class="card">
+        <span class="t">Exercise 6 · 转弯飞行 II：最小转弯半径</span><span class="tag">Tutorial 6 · 22 页</span>
+        <span class="d">结构与 C<sub>L,max</sub> 两条限制的交点；所需推力与高度无关；推力开始限制转弯的临界高度</span>
+        <div class="links">
+          <a href="exercises.html#t6">网页版：题目 + 合并解答 + 补充说明</a>
+          <a href="exercises/exercise-6.pdf" class="alt">题目 PDF</a>
+          <a href="tutorials/tutorial-6.pdf" class="alt">Tutorial PDF</a>
+          <a href="handwritten/exercise-6-notes.pdf" class="alt">手写笔记</a>
+        </div>
+      </div></li>
+      <li><div class="card">
+        <span class="t">Exercise 7 · 巡航与刚体运动方程</span><span class="tag">Tutorial 7 · 24 页</span>
+        <span class="d">I 型巡航 (V、C<sub>L</sub> 不变) 的最优 C<sub>L</sub>、起止高度与航时；用刚体方程求定常爬升迎角</span>
+        <div class="links">
+          <a href="exercises.html#t7">网页版：题目 + 合并解答 + 补充说明</a>
+          <a href="exercises/exercise-7.pdf" class="alt">题目 PDF</a>
+          <a href="tutorials/tutorial-7.pdf" class="alt">Tutorial PDF</a>
+          <a href="handwritten/exercise-7-notes.pdf" class="alt">手写笔记</a>
+        </div>
+      </div></li>
+      <li><div class="card">
+        <span class="t">Exercise 8 · 配平</span><span class="tag">Tutorial 8 · 21 页</span>
+        <span class="d">C<sub>mη</sub> 的符号；推/拉杆使 C<sub>m</sub>–C<sub>L</sub> 直线平移；配平后升力线截距增大、斜率减小；巡航配平舵偏</span>
+        <div class="links">
+          <a href="exercises.html#t8">网页版：题目 + 合并解答 + 补充说明</a>
+          <a href="exercises/exercise-8.pdf" class="alt">题目 PDF</a>
+          <a href="tutorials/tutorial-8.pdf" class="alt">Tutorial PDF</a>
+          <a href="handwritten/exercise-8-notes.pdf" class="alt">手写笔记</a>
+        </div>
+      </div></li>
+      <li><div class="card">
+        <span class="t">Exercise 9 · 配平与线性化</span><span class="tag">Tutorial 9 · 36 页</span>
+        <span class="d">12 个刚体状态的纵向/侧向分类；主操纵输入；摆系统线性化四步法；侧向位置与滚转角方程线性化</span>
+        <div class="links">
+          <a href="exercises.html#t9">网页版：题目 + 合并解答 + 补充说明</a>
+          <a href="exercises/exercise-9.pdf" class="alt">题目 PDF</a>
+          <a href="tutorials/tutorial-9.pdf" class="alt">Tutorial PDF</a>
+          <a href="handwritten/exercise-9-notes.pdf" class="alt">手写笔记</a>
+        </div>
+      </div></li>
+      <li><div class="card">
+        <span class="t">Exercise 10 · 纵向与侧向固有运动</span><span class="tag">Tutorial 10 · 35 页</span>
+        <span class="d">由极点识别短周期模态并反推 M<sub>α</sub>、M<sub>q</sub>；B777 模型验证；滚转模态的初始加速度、稳态滚转角速度与阶跃响应</span>
+        <div class="links">
+          <a href="exercises.html#t10">网页版：题目 + 合并解答 + 补充说明</a>
+          <a href="exercises/exercise-10.pdf" class="alt">题目 PDF</a>
+          <a href="tutorials/tutorial-10.pdf" class="alt">Tutorial PDF</a>
+          <a href="handwritten/exercise-10-notes.pdf" class="alt">手写笔记</a>
+        </div>
+      </div></li>
+      <li><div class="card">
+        <span class="t">Exercise 11 · 纵向基本控制器</span><span class="tag">Tutorial 11 · 37 页</span>
+        <span class="d">B777 短周期增稳：q 与 α 反馈增益配置 ζ=0.707、ω₀=4.5 rad/s；用超前–滞后滤波器代替迎角测量</span>
+        <div class="links">
+          <a href="exercises.html#t11">网页版：题目 + 合并解答 + 补充说明</a>
+          <a href="exercises/exercise-11.pdf" class="alt">题目 PDF</a>
+          <a href="tutorials/tutorial-11.pdf" class="alt">Tutorial PDF</a>
+          <a href="handwritten/exercise-11-notes.pdf" class="alt">手写笔记</a>
+        </div>
+      </div></li>
+      <li><div class="card">
+        <span class="t">Exercise 12 · 侧向基本控制器</span><span class="tag">Tutorial 12 · 29 页</span>
+        <span class="d">MIL-F-8785C 操纵品质：滚转阻尼器使 T<sub>R</sub> ≤ 1.4 s；荷兰滚等级评价；偏航阻尼器增益公式</span>
+        <div class="links">
+          <a href="exercises.html#t12">网页版：题目 + 合并解答 + 补充说明</a>
+          <a href="exercises/exercise-12.pdf" class="alt">题目 PDF</a>
+          <a href="tutorials/tutorial-12.pdf" class="alt">Tutorial PDF</a>
+        </div>
+      </div></li>
+      <li><a href="tutorials/tutorial-recap.pdf">
+        <span class="t">Tutorial 总复习 Recap</span><span class="tag">133 页 · 4 MB</span>
+        <span class="d">全部习题课用到的理论要点汇总：单位、坐标系与角度、大气、力与力矩、定常飞行、固有运动与基本控制器</span>
+      </a></li>
+    </ul>
+  </section>
+
+  <section>
     <h2>手写笔记 Handwritten</h2>
-    <p class="empty">(待添加，放在 handwritten/ 文件夹)</p>
+    <ul class="items">
+      <li><div class="card">
+        <span class="t">习题课手写笔记</span><span class="tag">Exercise 1–11 · 32 页</span>
+        <span class="d">课上在题目旁的手写推导与补充 (Exercise 12 无笔记)，内容已合并进习题与解答网页</span>
+        <div class="links">
+          <a href="handwritten/exercise-1-notes.pdf">Exercise 1</a>
+          <a href="handwritten/exercise-2-notes.pdf">Exercise 2</a>
+          <a href="handwritten/exercise-3-notes.pdf">Exercise 3</a>
+          <a href="handwritten/exercise-4-notes.pdf">Exercise 4</a>
+          <a href="handwritten/exercise-5-notes.pdf">Exercise 5</a>
+          <a href="handwritten/exercise-6-notes.pdf">Exercise 6</a>
+          <a href="handwritten/exercise-7-notes.pdf">Exercise 7</a>
+          <a href="handwritten/exercise-8-notes.pdf">Exercise 8</a>
+          <a href="handwritten/exercise-9-notes.pdf">Exercise 9</a>
+          <a href="handwritten/exercise-10-notes.pdf">Exercise 10</a>
+          <a href="handwritten/exercise-11-notes.pdf">Exercise 11</a>
+        </div>
+      </div></li>
+    </ul>
   </section>
 
   <section>
@@ -38,7 +196,7 @@
       </a></li>
     </ul>
   </section>
-  <footer>最后更新：2026-11-07 · <a href="https://github.com/stickydog/stickydog.github.io">源文件</a></footer>
+  <footer>最后更新：2026-11-09 · <a href="https://github.com/stickydog/stickydog.github.io">源文件</a></footer>
 </main>
 </body>
 </html>

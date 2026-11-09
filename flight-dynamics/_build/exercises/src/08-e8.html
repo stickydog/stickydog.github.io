@@ -1,0 +1,72 @@
+<section class="set" id="t8" data-short="Exercise 8">
+<h2 class="set-title"><span class="set-num">Exercise 8</span>配平：升降舵偏度与迎角 Trim<span class="set-src">Exercise 8 · Tutorial 8 · Notes</span></h2>
+<p class="lead">把升降舵偏度 \(\eta\) 线性加进升力和俯仰力矩系数，看它如何平移 \(C_m\)–\(C_L\) 曲线、如何改变配平后的升力线，最后求定常水平巡航所需的配平舵偏 (课程笔记第 10–11 章)。</p>
+
+<article class="task" id="t8-1">
+<h3><span class="tno">8</span>配平 Trim</h3>
+<div class="q">
+<p>A stable aircraft configuration shows the following characteristics:</p>
+<div class="table-wrap"><table class="tbl cols-3">
+<tr><th>Quantity</th><th>Symbol</th><th>Value</th></tr>
+<tr><td>Lift coefficient at zero AoA</td><td>\(C_{L0}\)</td><td>0.3</td></tr>
+<tr><td>Pitch moment coefficient at zero AoA</td><td>\(C_{m0}\)</td><td>0.02</td></tr>
+<tr><td>Elevator pitch moment derivative</td><td>\(C_{m\eta}\)</td><td>±2.5</td></tr>
+<tr><td>Elevator lift derivative</td><td>\(C_{L\eta}\)</td><td>±0.5</td></tr>
+<tr><td>Aircraft mass</td><td>\(m\)</td><td>2000 kg</td></tr>
+<tr><td>Altitude</td><td>\(h\)</td><td>3000 m</td></tr>
+<tr><td>Airspeed in Mach</td><td>\(M\)</td><td>0.2</td></tr>
+<tr><td>Reference area</td><td>\(S_{ref}\)</td><td>20 m²</td></tr>
+</table></div>
+<p>Note: at this point we don't know the sign of the derivatives. That's why their sign is denoted by "+-". The following relation between the lift- and the moment-coefficient (for one particular elevator deflection!) is known:</p>
+<figure class="fig small"><img src="exercises/e8-given.png" alt="η=0 时俯仰力矩系数 C_m 随升力系数 C_L 线性下降：C_L=0 时 0.12，C_L=0.36 时为 0"></figure>
+<ol class="parts" type="a">
+<li>What is the correct sign of \(C_{m\eta}\)?</li>
+<li>How does the relation/picture (qualitatively) change when the pilot pulls/pushes the stick?</li>
+<li>What difference does the curve "Lift coefficient over angle of attack" show, if instead of keeping the elevator constant, the elevator is always moved to the trim condition? Derive this effect from the equations in the lecture slides and give signs of the involved derivatives.</li>
+<li>Calculate the required elevator deflection for a steady-state horizontal cruise flight. Hint: You can assume the standard atmosphere.</li>
+</ol>
+</div>
+<details class="sol"><summary>解答</summary>
+<p><b>a)</b> 到目前为止只用了 \(C_L=C_{L0}+C_{L\alpha}\alpha\) (假设升降舵偏度不变)。现在把舵偏的影响线性加进去：</p>
+\[C_L=C_{L0}+C_{L\alpha}\alpha+C_{L\eta}\eta,\qquad C_m=C_{m0}+C_{m\alpha}\alpha+C_{m\eta}\eta\]
+<p>记号 \(C_{XY}\) 表示"\(Y\) 变化引起的 \(C_X\) 变化"。符号约定：升降舵后缘<b>向上</b>偏为负偏度 \(\eta<0\)，在尾部产生向下的 (负) 升力，飞机抬头，即正俯仰力矩 \(M>0\)。所以</p>
+\[C_{m\eta}<0\]
+<p><b>b)</b> 从 \(C_L\) 方程解出 \(\alpha=\dfrac{C_L-C_{L0}-C_{L\eta}\eta}{C_{L\alpha}}\)，代入 \(C_m\) 方程并整理：</p>
+\[C_m=C_{m0}-C_{L0}\frac{C_{m\alpha}}{C_{L\alpha}}+C_L\underbrace{\frac{C_{m\alpha}}{C_{L\alpha}}}_{\text{斜率}}+\eta\left(C_{m\eta}-C_{L\eta}\frac{C_{m\alpha}}{C_{L\alpha}}\right)\]
+<ol>
+<li>斜率 \(C_{m\alpha}/C_{L\alpha}\) 与 \(\eta\) 无关，所以改变舵偏只是把直线<b>平行移动</b>。</li>
+<li>移动方向由 \(\left(C_{m\eta}-C_{L\eta}\frac{C_{m\alpha}}{C_{L\alpha}}\right)\) 的符号决定。其中 \(C_{m\eta}<0\) (见 a)；由气动常识 \(C_{L\eta}>0\) (舵面向下偏增加升力)；斜率从图中读出：</li>
+</ol>
+\[\frac{C_{m\alpha}}{C_{L\alpha}}=\frac{\partial C_m/\partial\alpha}{\partial C_L/\partial\alpha}=\frac{\partial C_m}{\partial C_L}=-\frac{0.12}{0.36}\approx-0.33\]
+\[C_{m\eta}-C_{L\eta}\frac{C_{m\alpha}}{C_{L\alpha}}=-2.5-\big(0.5\cdot(-0.33)\big)=-2.5+0.165=-2.335<0\]
+<figure class="fig small"><img src="exercises/e8-cm-cl.png" alt="不同升降舵偏度下的 C_m–C_L 直线：拉杆 Δη小于0 使直线上移，推杆 Δη大于0 使直线下移"></figure>
+<p>拉杆 (\(\Delta\eta<0\)) 使直线向上平移，推杆 (\(\Delta\eta>0\)) 使直线向下平移。</p>
+<p><b>c)</b> 配平条件：用升降舵把俯仰力矩调为零：</p>
+\[C_{L,Trim}=C_{L0}+C_{L\alpha}\alpha_{Trim}+C_{L\eta}\eta_{Trim},\qquad 0=C_{m0}+C_{m\alpha}\alpha_{Trim}+C_{m\eta}\eta_{Trim}\]
+<p>由第二式得 \(\eta_{Trim}=\dfrac{-C_{m0}-C_{m\alpha}\alpha_{Trim}}{C_{m\eta}}\)，代入第一式：</p>
+\[C_{L,Trim}=\underbrace{C_{L0}-\frac{C_{m0}C_{L\eta}}{C_{m\eta}}}_{C_{L0,Trim}}+\alpha_{Trim}\underbrace{\left(C_{L\alpha}-\frac{C_{L\eta}C_{m\alpha}}{C_{m\eta}}\right)}_{C_{L\alpha,Trim}}\]
+<p>与未配平的 \(C_L=C_{L0}+C_{L\alpha}\alpha\) 比较：</p>
+<ul>
+<li>截距：\(C_{L\eta}>0\)、\(C_{m\eta}<0\)、\(C_{m0}>0\) (给定)，所以 \(C_{L0,Trim}>C_{L0}\)，<b>截距变大</b>。</li>
+<li>斜率：静稳定构型 \(C_{m\alpha}<0\)，所以 \(\frac{C_{L\eta}C_{m\alpha}}{C_{m\eta}}>0\)，\(C_{L\alpha,Trim}<C_{L\alpha}\)，<b>斜率变小</b>。</li>
+</ul>
+<figure class="fig small"><img src="exercises/e8-cl-alpha.png" alt="配平与未配平 (η=0) 的升力系数随迎角曲线：配平曲线截距略大、斜率略小"></figure>
+<p>物理原因：迎角增大时，稳定飞机产生低头力矩，要配平就得把升降舵向上偏 (\(\eta\) 更负)，这在尾翼上产生向下的升力，抵消了一部分机翼升力的增加。</p>
+<p><b>d)</b> 把 c) 中两个配平方程消去 \(\alpha_{Trim}\)，解出 \(\eta_{Trim}\) (Tutorial 提示：这个公式要会自己推导)：</p>
+\[\eta_{Trim}=\frac{C_{L,Trim}-C_{L0}+C_{m0}\dfrac{C_{L\alpha}}{C_{m\alpha}}}{C_{L\eta}-C_{L\alpha}\dfrac{C_{m\eta}}{C_{m\alpha}}}\]
+<p>\(C_{m\alpha}/C_{L\alpha}\) 已由 b) 得到，只缺 \(C_{L,Trim}\)，由水平飞行 \(L=mg\) 求出。先求 3000 m 处的大气状态：</p>
+\[H_G=\frac{h_{geod}r_{earth}}{h_{geod}+r_{earth}}=2998.6\,\mathrm{m},\qquad \rho=\rho_{s,MSL}\left(1+\frac{\gamma_{TR}}{T_{S,MSL}}H_G\right)^{\frac{1}{n-1}},\qquad T=T_{S,MSL}+\gamma_{TR}H_G=268.66\,\mathrm{K}\]
+\[V_{TAS}=Ma\cdot a=Ma\sqrt{\kappa RT},\qquad C_{L,Trim}=\frac{mg}{\tfrac12\rho V^2S_{ref}}\]
+<p>Tutorial 的数值：\(\rho=0.903\,\mathrm{kg/m^3}\)，\(a=328.15\,\mathrm{m/s}\)，\(V_{TAS}=65.73\,\mathrm{m/s}\)，\(C_{L,Trim}=0.5\)，</p>
+\[\eta_{Trim}=\frac{0.5-0.3-\dfrac{0.02}{0.33}}{0.5-\dfrac{2.5}{0.33}}\,\mathrm{rad}=-0.019\,\mathrm{rad}=-1.14^\circ\]
+<p class="erratum">验算时发现 Tutorial 中两个小的数值偏差：按给出的公式 \(\rho=0.909\,\mathrm{kg/m^3}\) (不是 0.903)；声速代入时写成了 \(R=287.15\)，按 \(R=287.05\) 应为 \(a=328.58\,\mathrm{m/s}\)，\(V_{TAS}=65.72\,\mathrm{m/s}\)。两处修正后 \(C_{L,Trim}=0.4995\)，\(\eta_{Trim}=-0.0196\,\mathrm{rad}=-1.13^\circ\)，结论不变。另外，手写笔记最后一步得 \(-0.0027\,\mathrm{rad}\)，是代入出错，应以 \(\approx-0.019\,\mathrm{rad}\) 为准。</p>
+<div class="note"><span class="lbl">补充说明</span>
+<ul>
+<li>\(\eta_{Trim}<0\)：升降舵后缘略向上偏。这与 b) 一致：给定的 \(\eta=0\) 直线在 \(C_L=0.36\) 处力矩为零，而巡航需要 \(C_L=0.5\)，必须把直线上移 (拉杆方向) 才能在 \(C_L=0.5\) 处配平。</li>
+<li>\(\partial C_m/\partial C_L=C_{m\alpha}/C_{L\alpha}=-0.33\) 就是以参考弦长为单位的静稳定裕度的负值 (重心在中性点之前 0.33 倍弦长)，见课程笔记第 10 章。</li>
+<li>手写笔记补充了常见导数的读法：\(C_{l p}\) 滚转阻尼 (滚转角速度引起的滚转力矩)，\(C_{n r}\) 偏航阻尼，\(C_{l\beta}\) 侧滑引起的滚转力矩 (上反效应)。</li>
+<li>Tutorial 提示要清楚各舵面的正方向，并留了问题"副翼和方向舵呢？"。按本课程使用的符号约定，三个舵面的正偏度都产生负力矩：\(C_{m\eta}<0\)，\(C_{l\xi}<0\)，\(C_{n\zeta}<0\) (副翼、方向舵两项 Tutorial 未给出答案，待确认)。</li>
+</ul></div>
+</details>
+</article>
+</section>

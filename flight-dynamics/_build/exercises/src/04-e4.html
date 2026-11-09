@@ -1,0 +1,76 @@
+<section class="set" id="t4" data-short="Exercise 4">
+<h2 class="set-title"><span class="set-num">Exercise 4</span>质点运动方程与力 Point-Mass Equations and Forces<span class="set-src">Exercise 4 · Tutorial 4 · Notes</span></h2>
+<p class="lead">一架活塞螺旋桨飞机在 5000 m 高度以 0.5° 航迹倾角直线爬升。先把气动力、推力和重力都变换到运动学坐标系 K，求出满足 \(z_K\) 方向力平衡的速度，再用质点运动方程 (课程笔记第 5 章) 求 \(\dot V\)、\(\dot\chi\)、\(\dot\gamma\)，最后看倾侧 30° 会发生什么。</p>
+
+<article class="task" id="t4-1">
+<h3><span class="tno">4</span>运动学坐标系中的合力与状态导数</h3>
+<div class="q">
+<p>A 1-engine propeller aircraft (piston engine) is flying in a windfree standard ISA-atmosphere without a bank angle in a straight flight with a climb angle \(\gamma_K\) of 0.5°. You are given the following data.</p>
+<div class="table-wrap"><table class="tbl cols-3">
+<tr><th>Quantity</th><th>Symbol</th><th>Value</th></tr>
+<tr><td>Geodetic longitude / latitude</td><td>\(\lambda\) / \(\mu\)</td><td>11.669284 deg / 48.265906 deg</td></tr>
+<tr><td>GPS-height</td><td>\(h\)</td><td>5000 m</td></tr>
+<tr><td>Climb angle</td><td>\(\gamma_K\)</td><td>0.5°</td></tr>
+<tr><td>Reference thrust at MSL</td><td>\(T_i\)</td><td>5000 N</td></tr>
+<tr><td>Reference density at MSL</td><td>\(\rho_i\)</td><td>\(\rho_{s,MSL}\)</td></tr>
+<tr><td>Reference velocity</td><td>\(V_{ref}\)</td><td>80 kts</td></tr>
+<tr><td>Density coefficient</td><td>\(n_\rho\)</td><td>0.75</td></tr>
+<tr><td>Lift coefficient</td><td>\(C_L\)</td><td>1</td></tr>
+<tr><td>Zero-lift drag coefficient</td><td>\(C_{D,0}\)</td><td>0.012</td></tr>
+<tr><td>K-factor</td><td>\(k\)</td><td>0.016</td></tr>
+<tr><td>Reference area</td><td>\(S_{ref}\)</td><td>20 m²</td></tr>
+<tr><td>Aircraft mass</td><td>\(m\)</td><td>2000 kg</td></tr>
+</table></div>
+<p>In the following you can assume that no aerodynamic side-forces act on the aircraft and that the kinematic bank angle \(\mu_K\) equals the euler bank angle \(\phi\). (ISA constants as in Exercise 2, \(r_{earth}=6356766\,\mathrm{m}\).)</p>
+<ol class="parts" type="a">
+<li>What is the required GPS velocity such that the z-component of the total force in the kinematic frame is zero?</li>
+<li>Calculate the total force acting on the aircraft. State the result in a suitable coordinate frame.</li>
+<li>Calculate the current time derivative of the aircraft states.</li>
+<li>What happens to the time derivatives if the aircraft flies with a kinematic bank angle \(\mu_K=30^\circ\) if all other states remain the same?</li>
+</ol>
+</div>
+<details class="sol"><summary>解答</summary>
+<p><b>a)</b> 手写笔记把求解分成四步：先在各自"最自然"的坐标系里写出各个力，再统一变换到 K 系，求和，最后解出速度。</p>
+<p><b>① 在各自坐标系中写出力</b></p>
+\[(\vec F_A^G)_A=\begin{bmatrix}-D\\Q\\-L\end{bmatrix}_A=\bar qS_{ref}\begin{bmatrix}-C_D\\C_Q\\-C_L\end{bmatrix}_A,\qquad (\vec F_P^G)_K=\begin{bmatrix}T\\0\\0\end{bmatrix}_K,\qquad (\vec F_G^G)_O=\begin{bmatrix}0\\0\\mg\end{bmatrix}_O\]
+<p>推力沿速度方向 (质点模型的常用假设)，题目给定侧力 \(Q=0\)。</p>
+<p><b>② 变换到 K 系</b>　重力从 NED 转到 K 系，用 \(\mathbf{M}_{KO}\) (先绕 \(z\) 转 \(\chi_K\)，再绕 \(y\) 转 \(\gamma_K\))：</p>
+\[(\vec F_G^G)_K=\mathbf{M}_{KO}(\vec F_G^G)_O=\begin{bmatrix}\cos\chi_K\cos\gamma_K&\sin\chi_K\cos\gamma_K&-\sin\gamma_K\\-\sin\chi_K&\cos\chi_K&0\\\cos\chi_K\sin\gamma_K&\sin\chi_K\sin\gamma_K&\cos\gamma_K\end{bmatrix}\begin{bmatrix}0\\0\\mg\end{bmatrix}=\begin{bmatrix}-mg\sin\gamma_K\\0\\mg\cos\gamma_K\end{bmatrix}_K\]
+<p>无风时气流坐标系 A 与"转动的运动学坐标系" \(\bar K\) 重合，A 与 K 之间只差一个绕 \(x\) 轴的转角 \(\mu_K\) (运动学倾侧角)：</p>
+\[(\vec F_A^G)_K=\mathbf{M}_{K\bar K}(\vec F_A^G)_{\bar K}=\begin{bmatrix}1&0&0\\0&\cos\mu_K&-\sin\mu_K\\0&\sin\mu_K&\cos\mu_K\end{bmatrix}\begin{bmatrix}-D\\0\\-L\end{bmatrix}=\begin{bmatrix}-D\\L\sin\mu_K\\-L\cos\mu_K\end{bmatrix}_K\ \xrightarrow{\ \mu_K=0\ }\ \begin{bmatrix}-D\\0\\-L\end{bmatrix}_K\]
+<p><b>③ 求和</b></p>
+\[(\vec F_T^G)_K=\begin{bmatrix}X_T^G\\Y_T^G\\Z_T^G\end{bmatrix}_K=\begin{bmatrix}T\\0\\0\end{bmatrix}_K+\begin{bmatrix}-D\\0\\-L\end{bmatrix}_K+\begin{bmatrix}-mg\sin\gamma_K\\0\\mg\cos\gamma_K\end{bmatrix}_K\]
+<p><b>④ 解速度</b>　\(z_K\) 分量为零：</p>
+\[0=-L+mg\cos\gamma_K,\qquad L=\tfrac12\rho V_{TAS}^2S_{ref}C_L=mg\cos\gamma_K\quad\Rightarrow\quad V_{TAS}^2=\frac{2mg}{S_{ref}C_L\rho}\cos\gamma_K\]
+<p>还需要 5000 m 处的密度。先把几何高度换成位势高度，再用对流层公式：</p>
+\[H_G=\frac{r_E h}{r_E+h}=4996\,\mathrm{m},\qquad \rho(H_G)=\rho_{S,MSL}\left[1+\frac{\gamma}{T_{S,MSL}}H_G\right]^{\frac{1}{n-1}}=0.736\,\mathrm{kg/m^3}\]
+\[V_{TAS}=\sqrt{\frac{2\cdot2000\cdot9.80665\cdot\cos0.5^\circ}{0.736\cdot20\cdot1}}=51.62\,\mathrm{m/s}\]
+<p>无风时 \(V_{TAS}=V_K=V_{GPS}\)，所以所需 GPS 速度为 51.62 m/s (约 100 kts)。</p>
+<p><b>b)</b> 运动学坐标系 K 最适合质点运动方程。逐项计算：</p>
+\[C_D=C_{D,0}+kC_L^2=0.012+0.016\cdot1^2=0.028,\qquad D=\tfrac12\rho V^2S_{ref}C_D=\tfrac12\cdot0.736\cdot51.62^2\cdot20\cdot0.028=549.15\,\mathrm{N}\]
+<p>推力模型 \(\dfrac{T}{T_i}=\left(\dfrac{V}{V_i}\right)^{n_V}\left(\dfrac{\rho}{\rho_i}\right)^{n_\rho}\)，活塞螺旋桨发动机 \(n_V=-1\) (推力与速度成反比，即功率近似恒定)：</p>
+\[T=5000\left(\frac{51.62}{80\cdot0.5144}\right)^{-1}\left(\frac{0.736}{1.225}\right)^{0.75}=2720.19\,\mathrm{N},\qquad mg\sin\gamma_K=171.16\,\mathrm{N}\]
+\[(\vec F_T^G)_K=\begin{bmatrix}T-D-mg\sin\gamma_K\\0\\0\end{bmatrix}_K=\begin{bmatrix}1999.88\,\mathrm{N}\\0\\0\end{bmatrix}_K\]
+<p><b>c)</b> 质点运动方程 (状态为 \(V\)、\(\chi\)、\(\gamma\))：</p>
+\[\dot V=\frac{T-D}{m}-g\sin\gamma,\qquad \dot\chi=\frac{L\sin\mu}{mV\cos\gamma},\qquad \dot\gamma=\frac{L\cos\mu}{mV}-\frac{g}{V}\cos\gamma\]
+<figure class="fig"><img src="exercises/e4-forces.png" alt="带机动的动态力平衡：侧视图与 A-A、B-B 视图中的升力分量、离心力 mV·γ̇ 与 mV cosγ·χ̇"></figure>
+<p>代入 \(\mu_K=0\)，\(L=mg\cos\gamma_K\) (由 a)：</p>
+\[\dot V=\frac{1999.88}{2000}=0.9999\,\mathrm{m/s^2},\qquad \dot\chi=0,\qquad \dot\gamma=\frac{mg\cos\gamma_K}{mV}-\frac{g}{V}\cos\gamma_K=0\]
+<p>这一瞬间是<b>加速爬升</b>：航迹方向不变，速度在增加。</p>
+<p class="erratum">注意 (Tutorial 原文提醒)：这只是当前时刻的"快照"，不代表飞机会一直这样直线爬升。爬升改变高度和密度，速度也在变，下一瞬间升力随之改变，整个力平衡也会变。真正的定常飞行状态在课程笔记第 6 章讨论。</p>
+<p><b>d)</b> 其他状态不变，只把 \(\mu_K\) 改成 30°：</p>
+\[\dot V=\frac{T-D}{m}-g\sin(0.5^\circ)=0.9999\,\mathrm{m/s^2}\quad(\text{不变})\]
+\[\dot\chi=\frac{L\sin30^\circ}{mV\cos0.5^\circ}=0.095\,\mathrm{rad/s}\quad(\text{开始转弯})\]
+\[\dot\gamma=\frac{L\cos30^\circ}{mV}-\frac{g}{V}\cos0.5^\circ=-0.0255\,\mathrm{rad/s}\quad(\text{保持不住爬升角})\]
+<figure class="fig small"><img src="exercises/e4-turn.png" alt="倾侧后升力矢量倾斜：L sinμ 指向转弯中心，L cosμ 小于重力分量"></figure>
+<p>迎角不变，升力大小不变，但升力方向倾斜了：水平分量 \(L\sin\mu\) 让航迹转弯，竖直分量 \(L\cos\mu\) 已不足以平衡重力分量 \(mg\cos\gamma\)，所以航迹倾角开始减小。</p>
+<div class="note"><span class="lbl">补充说明</span>
+<ul>
+<li>为什么用 K 系：K 系的 \(x_K\) 轴沿速度方向，速度矢量在 K 系中只有一个分量 \(V\)，加速度 \((\dot{\vec V})_K=[\dot V,\ V\cos\gamma\,\dot\chi,\ -V\dot\gamma]^T\) 的三个分量正好分别对应速度大小、航迹方位角和航迹倾角的变化，方程最简洁。</li>
+<li>Tutorial 强调：变换矩阵不必背，但要知道转动顺序，并会写单轴转动矩阵 (\(\mathbf{M}_{K\bar K}\) 绕 \(x\) 轴这类单轴变换"可能出现在考试中")。注意从 \(\bar K\) 到 K 方向用的是 \(\mathbf{M}_{\bar KK}\) 的转置，所以 \(\sin\mu_K\) 的符号位置与"从 K 到 \(\bar K\)"相反 (手写笔记中特别标出)。</li>
+<li>推力指数 \(n_V\)：活塞螺旋桨 −1，涡桨 −0.75，涡扇 −0.25，涡喷 (亚声速) 0；高度指数 \(n_\rho\)：0–11 km 取 0.7–0.8，11–20 km 取 1.0。Tutorial 提示要知道哪类发动机用哪个 \(n_V\)。</li>
+<li>验算 d)：要在 30° 倾侧下保持 \(\dot\gamma=0\)，需要 \(L=mg\cos\gamma/\cos30^\circ\)，即载荷因数 \(n_z=1/\cos30^\circ=1.155\)，这就是协调转弯需要拉杆增加迎角的原因。</li>
+</ul></div>
+</details>
+</article>
+</section>

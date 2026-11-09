@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="飞行力学习题集：Exercise 1–12 题目与 Tutorial 解答、手写笔记合并整理，含补充说明。">
+<title>Flight Dynamics 习题与解答 · 学习笔记</title>
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<style>/*KATEX_CSS*/</style>
+<style>
+:root{
+  --bg:#faf9f6;--fg:#1e1c19;--muted:#6a655c;--line:#e4e0d7;--card:#fff;--side:#f3f1ec;
+  --accent:#1d4f7c;--accent-soft:#e7eef5;--q:#f6f4ef;--ok:#2f7d4f;--warn:#9a5b13;--warn-bg:#fbf3e6;
+  --note:#eef3f8;--sw:290px;--bar:56px;
+  --sans:"Noto Sans SC","PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+  --serif:Georgia,"Noto Serif SC","Songti SC","SimSun",serif;
+}
+@media (prefers-color-scheme:dark){
+  :root{--bg:#1a1917;--fg:#ebe7df;--muted:#9b968c;--line:#33312d;--card:#22211e;--side:#1f1e1b;
+  --accent:#7fb0e0;--accent-soft:#25303b;--q:#23221f;--ok:#7cc79a;--warn:#e0aa62;--warn-bg:#2b241a;--note:#1f2730}
+  .fig img{filter:invert(.9) hue-rotate(180deg) contrast(.95)}
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:calc(var(--bar) + 14px)}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--sans);line-height:1.7;font-size:16px}
+a{color:var(--accent)}
+.topbar{position:fixed;top:0;left:var(--sw);right:0;height:var(--bar);display:flex;align-items:center;gap:12px;padding:0 20px;background:var(--bg);border-bottom:1px solid var(--line);z-index:30}
+.topbar a.home{color:var(--muted);text-decoration:none;font-size:14px;white-space:nowrap}
+.topbar a.home:hover{color:var(--accent)}
+.topbar .where{flex:1;min-width:0;font-size:14px;font-weight:600;color:var(--accent);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.btn{font:13px var(--sans);border:1px solid var(--line);background:var(--card);color:var(--fg);border-radius:7px;padding:6px 10px;cursor:pointer;white-space:nowrap}
+.btn:hover{border-color:var(--accent);background:var(--accent-soft)}
+#menuBtn{display:none}
+.sidebar{position:fixed;top:0;bottom:0;left:0;width:var(--sw);overflow-y:auto;background:var(--side);border-right:1px solid var(--line);padding:18px 14px 40px;z-index:40;font-size:14px}
+.sidebar .brand{display:block;text-decoration:none;color:var(--fg);margin:0 4px 14px}
+.brand small{display:block;color:var(--muted);font-size:12px;letter-spacing:.04em}
+.brand b{font-family:var(--serif);font-size:20px}
+.nav{list-style:none;margin:0;padding:0}
+.nav .grp{margin:14px 6px 4px;font-size:11px;letter-spacing:.08em;color:var(--muted)}
+.nav>li>a{display:block;padding:5px 8px;border-radius:6px;color:var(--fg);text-decoration:none;font-weight:600}
+.nav ul{list-style:none;margin:0 0 4px;padding:0 0 0 10px;display:none}
+.nav li.open ul,.nav li.cur ul{display:block}
+.nav ul a{display:block;padding:2px 8px;border-radius:5px;color:var(--muted);text-decoration:none;font-size:13px}
+.nav a:hover{background:var(--accent-soft);color:var(--accent)}
+.nav li.cur>a{color:var(--accent);background:var(--accent-soft)}
+.nav ul a.cur{color:var(--accent)}
+main{margin-left:var(--sw);padding:calc(var(--bar) + 28px) 32px 80px;max-width:calc(var(--sw) + 900px)}
+.hero h1{font-family:var(--serif);font-size:2rem;line-height:1.3;margin:0 0 6px}
+.hero .kicker{color:var(--muted);font-size:13px;letter-spacing:.06em;margin:0}
+.hero p.lead{color:var(--muted)}
+.legend{display:flex;flex-wrap:wrap;gap:8px 16px;font-size:13px;color:var(--muted);margin:10px 0 0}
+.legend span::before{content:"";display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px;vertical-align:-1px}
+.legend .l1::before{background:var(--q);border:1px solid var(--line)}
+.legend .l2::before{background:var(--card);border:1px solid var(--accent)}
+.legend .l3::before{background:var(--note)}
+.legend .l4::before{background:var(--warn-bg);border:1px solid var(--warn)}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px;margin:18px 0 0}
+.cards a{display:block;padding:12px 14px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--fg);text-decoration:none}
+.cards a:hover{border-color:var(--accent)}
+.cards b{display:block;font-size:13px;color:var(--accent)}
+.cards span{font-size:13px;color:var(--muted)}
+.set{margin-top:56px}
+.set-title{font-family:var(--serif);font-size:1.55rem;line-height:1.35;margin:0 0 8px;padding-bottom:8px;border-bottom:2px solid var(--line)}
+.set-num{display:block;font-family:var(--sans);font-size:13px;letter-spacing:.06em;color:var(--accent);font-weight:600}
+.set-src{float:right;font-family:var(--sans);font-size:12px;font-weight:400;color:var(--muted);border:1px solid var(--line);border-radius:4px;padding:0 6px;margin-top:8px}
+.lead{color:var(--muted)}
+.note-inline{font-size:14px;color:var(--warn)}
+.task{margin:28px 0 0;padding:18px 20px;border:1px solid var(--line);border-radius:10px;background:var(--card)}
+.task h3{margin:0 0 12px;font-size:1.12rem;line-height:1.45}
+.tno{display:inline-block;font-size:12px;font-weight:600;color:var(--accent);border:1px solid var(--accent);border-radius:4px;padding:0 6px;margin-right:8px;vertical-align:2px}
+.q{background:var(--q);border-left:3px solid var(--line);padding:10px 16px;border-radius:0 6px 6px 0}
+.q p{margin:.4em 0}
+.q::before{content:"题目 Problem";display:block;font-size:11px;letter-spacing:.06em;color:var(--muted);margin-bottom:2px}
+.parts{list-style:upper-alpha;padding-left:1.6em;margin:.4em 0}
+.parts li{margin:.2em 0}
+.mc{list-style:none;padding:0;margin:.3em 0 .8em}
+.mc li{padding:1px 0 1px 26px;position:relative}
+.mc li::before{content:"☐";position:absolute;left:4px;color:var(--muted)}
+.show-ans .mc li.ok::before{content:"☒";color:var(--ok)}
+.show-ans .mc li.ok{color:var(--ok);font-weight:600}
+details.sol{margin-top:12px;border:1px solid var(--line);border-radius:8px;padding:0 16px}
+details.sol>summary{cursor:pointer;padding:9px 0;font-weight:600;color:var(--accent);list-style:none}
+details.sol>summary::-webkit-details-marker{display:none}
+details.sol>summary::before{content:"▸";display:inline-block;width:1.1em;transition:transform .15s}
+details.sol[open]>summary::before{transform:rotate(90deg)}
+details.sol[open]{padding-bottom:12px}
+.note{background:var(--note);border-radius:8px;padding:10px 16px;margin-top:14px;font-size:15px}
+.note ul{margin:.3em 0;padding-left:1.3em}
+.note li{margin:.3em 0}
+.lbl{display:block;font-size:12px;font-weight:600;letter-spacing:.06em;color:var(--accent);margin-bottom:2px}
+.erratum{background:var(--warn-bg);border-left:3px solid var(--warn);padding:8px 12px;border-radius:0 6px 6px 0;font-size:14.5px}
+.review p{margin:.6em 0;font-size:15px}
+.fig{margin:12px 0;text-align:center}
+.fig img{max-width:100%;max-height:340px;background:#fff;border-radius:6px;padding:4px}
+.fig.small img{max-height:260px}
+.fig.wide img{max-height:none}
+.fig figcaption{font-size:13px;color:var(--muted);margin-top:4px}
+.katex-display{overflow-x:auto;overflow-y:hidden;padding:4px 0}
+.katex{font-size:1.06em}
+.tbl{border-collapse:collapse;margin:10px 0;font-size:14.5px;width:100%;display:block;overflow-x:auto}
+.tbl th,.tbl td{border:1px solid var(--line);padding:5px 10px;text-align:left;vertical-align:top}
+.tbl th{background:var(--q);font-weight:600}
+pre.code{background:var(--q);border:1px solid var(--line);border-radius:6px;padding:10px 14px;overflow-x:auto;font-size:13.5px;line-height:1.5}
+code{font-size:.92em}
+footer{margin-top:60px;padding-top:14px;border-top:1px solid var(--line);color:var(--muted);font-size:13px}
+.scrim{display:none}
+@media (max-width:960px){
+  .sidebar{transform:translateX(-100%);transition:transform .2s;box-shadow:0 0 30px #0003}
+  body.nav-open .sidebar{transform:none}
+  body.nav-open .scrim{display:block;position:fixed;inset:0;background:#0004;z-index:35}
+  .topbar{left:0;padding:0 12px;gap:8px}
+  #menuBtn{display:inline-block}
+  main{margin-left:0;padding:calc(var(--bar) + 18px) 14px 60px}
+  .task{padding:14px 12px}
+  .q{padding:8px 10px}
+  details.sol{padding:0 10px}
+  .set-src{float:none;display:inline-block}
+}
+@media print{.topbar,.sidebar,.scrim{display:none!important}main{margin:0;padding:0}details.sol{border:none}}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <button class="btn" id="menuBtn" type="button" aria-controls="sidebar">☰ 目录</button>
+  <a class="home" href="../">← 首页</a>
+  <span class="where" id="where">习题与解答</span>
+  <button class="btn" id="toggleAll" type="button">展开全部解答</button>
+</header>
+<div class="scrim" id="scrim"></div>
+<aside class="sidebar" id="sidebar">
+  <a class="brand" href="#top"><small>Flight Dynamics</small><b>习题与解答</b></a>
+  <ul class="nav" id="nav"><!--NAV--></ul>
+  <p style="margin:18px 6px 0;font-size:12px"><a href="index.html">← 返回课程目录</a></p>
+</aside>
+<main id="top">
+<header class="hero">
+  <p class="kicker">Flight Dynamics · Exercises</p>
+  <h1>飞行力学 · 习题与解答</h1>
+  <p class="lead">把 12 次习题课的三份材料合并成一份：Exercise 题目、Tutorial 讲解幻灯片和课上手写笔记 (Notes) 内容大量重叠，这里按题目逐题整理为一套解答。题目保留英文原文，解答按 Tutorial 的步骤重排，并吸收手写笔记中的推导与说明；每题后的<b>补充说明</b>讲清楚每一步的原因、常见陷阱和与课程笔记的联系。所有数值都重新验算过，原解答中的笔误、Tutorial 与题目不一致之处用橙色框单独标出。解答默认收起，可以先自己做再展开对照。</p>
+  <div class="legend"><span class="l1">题目 (英文原文) </span><span class="l2">解答 (点击展开) </span><span class="l3">补充说明</span><span class="l4">勘误 / 说明</span></div>
+  <div class="cards"><!--CARDS--></div>
+</header>
+<!--CONTENT-->
+<footer>题目来自 Exercise 1–12，解答整理自 Tutorial 1–12 幻灯片与课上手写笔记 (Prof. Dr.-Ing. F. Holzapfel，TUM 飞行系统动力学研究所)，示意图截取自原课件。补充说明、验算与勘误为整理时新增。 · <a href="index.html">课程目录</a> · <a href="course-notes.html">课程笔记</a></footer>
+</main>
+<script>
+(function(){
+  var body=document.body, nav=document.getElementById('nav'), where=document.getElementById('where');
+  document.getElementById('menuBtn').onclick=function(){body.classList.toggle('nav-open')};
+  document.getElementById('scrim').onclick=function(){body.classList.remove('nav-open')};
+  nav.addEventListener('click',function(e){if(e.target.closest('a'))body.classList.remove('nav-open')});
+  // expand / collapse all solutions
+  var all=document.getElementById('toggleAll'), dets=[].slice.call(document.querySelectorAll('details.sol'));
+  function sync(){var open=dets.every(function(d){return d.open});all.textContent=open?'收起全部解答':'展开全部解答';}
+  all.onclick=function(){var open=!dets.every(function(d){return d.open});dets.forEach(function(d){d.open=open});sync();};
+  dets.forEach(function(d){d.addEventListener('toggle',function(){
+    var t=d.closest('.task'); if(t) t.classList.toggle('show-ans', !!t.querySelector('details.sol[open]')); sync();});});
+  // scroll spy
+  var sets=[].slice.call(document.querySelectorAll('section.set')), tasks=[].slice.call(document.querySelectorAll('article.task'));
+  var links={}; [].forEach.call(nav.querySelectorAll('a[href^="#"]'),function(a){links[a.getAttribute('href').slice(1)]=a});
+  var ticking=false;
+  function spy(){ticking=false; var y=window.scrollY+90, cs=null, ct=null;
+    sets.forEach(function(s){if(s.offsetTop<=y)cs=s}); tasks.forEach(function(t){if(t.offsetTop<=y)ct=t});
+    [].forEach.call(nav.querySelectorAll('.cur'),function(x){x.classList.remove('cur')});
+    if(cs){var a=links[cs.id]; if(a)a.parentNode.classList.add('cur');
+      var label=cs.getAttribute('data-short'); if(ct&&cs.contains(ct)){var h=ct.querySelector('h3'), tn=h.querySelector('.tno'); label+=' · '+(tn?tn.textContent+' · ':'')+h.textContent.slice(tn?tn.textContent.length:0).replace(/\s+/g,' ').trim(); var ta=links[ct.id]; if(ta)ta.classList.add('cur');}
+      where.textContent=label;} else where.textContent='习题与解答';}
+  window.addEventListener('scroll',function(){if(!ticking){ticking=true;requestAnimationFrame(spy)}},{passive:true});
+  spy(); sync();
+  // 字体 (KaTeX，内嵌) 加载完成后页面高度会变化：重新定位到地址栏中的锚点
+  function rehash(){var id=decodeURIComponent(location.hash.slice(1)), el=id&&document.getElementById(id); if(el) el.scrollIntoView();}
+  if(document.fonts&&document.fonts.ready) document.fonts.ready.then(function(){rehash(); spy();});
+})();
+</script>
+</body>
+</html>

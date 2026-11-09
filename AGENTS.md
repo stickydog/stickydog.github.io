@@ -24,7 +24,7 @@
 |---|---|---|
 | `index.html`、各课程 `index.html`、`404.html` (导航页) | 手写，共用 `assets/site.css` | 全部规则 |
 | `*/course-notes.html` (课程笔记) | 单文件：内嵌 CSS/JS、KaTeX 预渲染、图片 base64 内嵌 | 全部规则 |
-| `structure-material/exercises.html` (习题页) | **构建产物**，源文件在 `structure-material/_build/exercises/` | 全部规则，但只改源文件 (见第八节) |
+| `structure-material/exercises.html`、`flight-dynamics/exercises.html` (习题页) | **构建产物**，源文件在各自的 `_build/exercises/` | 全部规则，但只改源文件 (见第八节) |
 | `structure-material/truss-stiffness-animation.html` (交互演示) | 手写单文件，自有样式，公式用 MathJax | 术语、文字排版、`<head>` 要求、返回首页链接；样式与公式引擎例外 |
 | `aerodynamics/notebooks/*.html` | Jupyter 导出，正文为英文 | **不改正文**，只允许改 `<head>` 元信息 |
 | PDF、`.m`、`.mat`、`.txt`、`.zip`、`.pptx`、`.ipynb`、图片 | 原始资料 | 原样保存，不改内容 |
@@ -158,7 +158,7 @@
 ### 图
 - 结构：`<figure>` → `<span class="image-viewport" …><img alt="…" loading="lazy" decoding="async" src="data:…"></span>` → `<figcaption><span class="fig-no">图 X.Y</span>说明</figcaption>`。`alt` 写图意 (可与图注相同，去掉引号和标签)。
 - 编号按章连续：正文 `图 3.1, 3.2, …`；附录 `图 C.1`；以图片形式出现的表格用 `表 X.Y`。新增 / 删除图后，同章后续编号和正文里的引用 (`图 3.4`、`.xref`) 要一起更新。
-- 笔记里的图片以 base64 内嵌 (单文件可离线打开)；习题页的图放在 `structure-material/exercises/*.png`，用相对路径引用。
+- 笔记里的图片以 base64 内嵌 (单文件可离线打开)；习题页的图放在 `structure-material/exercises/*.png` (Flight Dynamics 为 `flight-dynamics/exercises/*.png`)，用相对路径引用。
 - 图片来源：课件原图截取 / 裁剪；补画部分在 hero 简介或图注里说明。
 
 ### 表
@@ -234,7 +234,7 @@ main
 ### 6. 习题页 `exercises.html`
 - 源文件 `_build/exercises/src/NN-xxx.html`，按文件名顺序拼接；`template.html` 提供顶栏、侧栏、hero 和脚本。
 - 每组题：`section.set#id[data-short]` → `h2.set-title` (`span.set-num` + 中英标题 + `span.set-src`)→ `p.lead` → 若干 `article.task#id` (`h3 > span.tno` + 标题；`div.q` 英文原题；`details.sol` 解答，默认收起；`div.note` 补充说明)。
-- id 前缀决定分组：`l` 课堂例题、`t` Tutorial、`h` Home Exercise、`e` (`ex`) Trial Exam。课程目录页用 `exercises.html#t1` 这类锚点链接，改 id 时同步改链接。
+- id 前缀决定分组：`l` 课堂例题、`t` Tutorial (Flight Dynamics 中为合并后的习题课 Exercise Session)、`h` Home Exercise、`e` (`ex`) Trial Exam。课程目录页用 `exercises.html#t1` 这类锚点链接，改 id 时同步改链接。
 
 ### 7. 404 页
 - 用根路径 (`/assets/site.css`、`/favicon.svg`、`/`)，因为它会在任意路径下显示；这是"一律相对路径"的唯一例外。
@@ -271,7 +271,7 @@ main
 
 ### 习题页构建
 ```bash
-cd structure-material/_build/exercises
+cd structure-material/_build/exercises    # 或 flight-dynamics/_build/exercises
 npm install          # 首次；node_modules/ 已在 .gitignore 中
 npm run build        # 生成 ../../exercises.html
 ```
