@@ -858,9 +858,11 @@ ol.deriv li.enter{animation:rowIn .5s ease}
           <p>自由振动方程 $\mathbf M\ddot{\mathbf u}+\mathbf K\mathbf u=\mathbf 0$。设 $\mathbf u=\boldsymbol\varphi\sin\omega t$，得到 $(\mathbf K-\omega^2\mathbf M)\,\boldsymbol\varphi=\mathbf 0$，固有频率由 $\det(\mathbf K-\omega^2\mathbf M)=0$ 求出。自由度仍是 $u_3$、$v_3$、$v_4$，$\mathbf K$ 沿用前面的结果。</p>
           <p>一致质量矩阵 (课件写法：轴向形函数转到整体坐标)，和刚度矩阵对比：</p>
           <div class="calc">$$\mathbf m_e=\frac{\rho AL_e}{6}\begin{bmatrix}2${EE}&${EE}\\${EE}&2${EE}\end{bmatrix},\qquad \mathbf k_e=\frac{EA}{L_e}\begin{bmatrix}${EE}&-${EE}\\-${EE}&${EE}\end{bmatrix}$$</div>
+          <p>其中 $\mathbf e=(c,s)$ 是杆的单位方向向量 (第 2 章)，$${EE}$ 是投影矩阵：任意向量乘上它只留下沿杆轴的分量，垂直于杆轴的分量变成 0。</p>
+          <div class="calc">$$${EE}=\begin{bmatrix}c\\ s\end{bmatrix}\begin{bmatrix}c&s\end{bmatrix}=\begin{bmatrix}c^2&cs\\ cs&s^2\end{bmatrix},\qquad (${EE})\,\mathbf u=(\mathbf e^{\mathsf T}\mathbf u)\,\mathbf e$$</div>
           <p>块结构完全一样，所以照样"看图填块"：对角块加 $\tfrac{\rho AL_e}{3}${EE}$，耦合块加 $+\tfrac{\rho AL_e}{6}${EE}$ (注意是正号)。</p>
-          <div class="calc">$$\rho=2.7\times10^{-9}\ \text{t/mm}^3,\qquad \mu=\rho AL=2.7\times10^{-9}\times50\times1000=1.35\times10^{-4}\ \text t$$</div>
-          <p class="note">$\mu$ 是一根长 $L$ 的杆的质量。单位用 N–mm–t，这样 $\mathbf K$ (N/mm) 除以 $\mathbf M$ (t) 得到 s⁻²。</p>`);
+          <div class="calc">$$\rho=2.7\ \text{t/m}^3=2.7\times10^{-9}\ \text{t/mm}^3$$$$\mu=\rho AL=2.7\times10^{-9}\times50\times1000=1.35\times10^{-4}\ \text t$$</div>
+          <p class="note">$\mu$ 是一根长 $L$ 的杆的质量。单位用 $\text{N–mm–t}$，这样 $\mathbf K$ ($\text{N/mm}$) 除以 $\mathbf M$ ($\text t$) 得到 $\text s^{-2}$。水平杆的 $${EE}$ 只有左上角一项，在这种写法里没有竖向质量。</p>`);
         return;
       }
       if(step===1){
