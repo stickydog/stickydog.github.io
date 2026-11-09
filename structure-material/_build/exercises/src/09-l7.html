@@ -123,16 +123,33 @@
 <p>集中质量 (Task 4)：</p>
 \[[M]=10^{-5}\begin{bmatrix}3.375+2\cdot3.375\sqrt2&0&0\\0&3.375+2\cdot3.375\sqrt2&0\\0&0&6.75+3.375\sqrt2\end{bmatrix},\qquad f_1=219.5,\ f_2=770.4,\ f_3=1106.9\,\mathrm{Hz}\]
 <p>特征多项式为三次 → 3 个特征值、3 个固有频率。</p>
-<p class="erratum">这两页的数值有问题，复习时以方法为准：
+<p class="erratum">这两页的数值有问题：
 ① 一致质量矩阵：斜杆旋转后的质量矩阵应为 \(\rho AL_3\left[\tfrac13c^2,\ \tfrac13sc,\ \tfrac16c^2,\ldots\right]=\sqrt2\cdot2.25\cdot10^{-5}\left[1,\ 1,\ \tfrac12,\ldots\right]\)，幻灯片中的 \(\tfrac16,\ \tfrac1{12}\) 少乘了 6；另外单元 4 的 \(sc\) 为负，对应耦合项应带负号。用幻灯片自己的矩阵也只能复现 \(f_2,f_3\)，\(f_1\) 得 944 Hz 而非 303.4 Hz。
 ② 集中质量：每个节点应分到 \(\rho AL/2\) (单元 1 为 \(6.75\cdot10^{-5}\))，幻灯片取的是一半 (3.375)。
-按 Lecture 7 Slide 3 的公式重新计算 (补充)：一致质量 (只计轴向，与幻灯片做法相同) \(f\approx337,\ 1112,\ 1874\,\mathrm{Hz}\)；集中质量 \(\rho AL/2\)：\(f\approx171,\ 559,\ 789\,\mathrm{Hz}\)。</p>
+③ 更根本的问题：Slide 3 的一致质量矩阵 \([\tau]^T\frac{\rho AL}{6}\begin{bmatrix}2&1\\1&2\end{bmatrix}[\tau]\) 只计入沿杆轴的惯性，杆横向平动时没有质量，物理上不完整。下面给出完整写法的解答。</p>
+<p><b>正确解答 (补充)</b>：二维杆单元的一致质量矩阵对 \(u\)、\(v\) 两个方向都用线性形函数插值，与杆的方向无关，不需要旋转 (笔记 <a href="course-notes.html#ch16-2">§16.2</a>)：</p>
+\[[m]_G=\frac{\rho AL_e}{6}\begin{bmatrix}2&0&1&0\\0&2&0&1\\1&0&2&0\\0&1&0&2\end{bmatrix}\]
+<p>组装到 \(D_2,D_3,D_7\)：节点自身的对角元取 \(\tfrac26\rho AL_e\)，同一单元两端同方向的耦合元取 \(\tfrac16\rho AL_e\)：</p>
+\[M_{22}=M_{33}=\tfrac13\left(\rho AL_1+\rho AL_3+\rho AL_4\right),\quad M_{77}=\tfrac13\left(\rho AL_2+\rho AL_4\right),\quad M_{37}=\tfrac16\rho AL_4,\quad M_{23}=M_{27}=0\]
+\[[M]=\sqrt2\cdot2.25\cdot10^{-5}\begin{bmatrix}\sqrt2+4&0&0\\0&\sqrt2+4&1\\0&1&2\sqrt2+2\end{bmatrix}=10^{-5}\begin{bmatrix}17.228&0&0\\0&17.228&3.182\\0&3.182&15.364\end{bmatrix}\,\mathrm t\]
+<p>\(\det([K]-\lambda[M])=0\)，\([K]\) 用例 3 的结果，\(\lambda=\omega^2\) 以 \(10^6\,\mathrm{s^{-2}}\) 为单位：</p>
+\[\lambda^3-61.086\lambda^2+915.76\lambda-1222.0=0\ \Rightarrow\ \lambda=1.476,\ 22.021,\ 37.588\ \Rightarrow\ f=\frac{\sqrt\lambda}{2\pi}=193.4,\ 746.9,\ 975.8\,\mathrm{Hz}\]
+<p>集中质量 (Task 4)，每个节点分到 \(\rho AL_e/2\)：</p>
+\[[M]=10^{-5}\begin{bmatrix}6.75+2\cdot6.75\sqrt2&0&0\\0&6.75+2\cdot6.75\sqrt2&0\\0&0&13.5+6.75\sqrt2\end{bmatrix}=10^{-5}\begin{bmatrix}25.84&0&0\\0&25.84&0\\0&0&23.05\end{bmatrix}\,\mathrm t\]
+\[\lambda^3-38.067\lambda^2+345.58\lambda-348.23=0\ \Rightarrow\ \lambda=1.149,\ 12.329,\ 24.590\ \Rightarrow\ f=170.6,\ 558.8,\ 789.2\,\mathrm{Hz}\]
+<div class="table-wrap"><table class="cols-4"><thead><tr><th>质量矩阵</th><th>\(f_1\) (Hz)</th><th>\(f_2\) (Hz)</th><th>\(f_3\) (Hz)</th></tr></thead><tbody>
+<tr><td>一致质量 (完整写法)</td><td>193.4</td><td>746.9</td><td>975.8</td></tr>
+<tr><td>集中质量 (\(\rho AL/2\))</td><td>170.6</td><td>558.8</td><td>789.2</td></tr>
+<tr><td>一致质量 (只计轴向，按 Slide 3 公式修正数值)</td><td>337.1</td><td>1112.4</td><td>1873.6</td></tr>
+<tr><td>课件原数值：一致 / 集中</td><td>303.4 / 219.5</td><td>1551.3 / 770.4</td><td>4283.3 / 1106.9</td></tr>
+</tbody></table></div>
 <div class="note"><span class="lbl">补充说明</span>
 <ul>
-<li>一致质量矩阵 \([m]=\rho A\int\Phi\Phi^Tdx\) 与刚度矩阵用同一套形函数，给出的频率是精确值的上界 (偏高)；集中质量矩阵是对角阵，计算简单，频率通常偏低。两者随网格加密都收敛到精确解。</li>
+<li>一致质量矩阵 \([m]=\rho A\int\Phi\Phi^Tdx\) 与刚度矩阵用同一套形函数，给出的频率是精确值的上界 (偏高)；集中质量矩阵是对角阵，计算简单，频率通常偏低。本题第 1 阶的精确值通常落在集中质量的 171 Hz 和完整一致质量的 193 Hz 之间，两者随网格加密都收敛到精确解。</li>
+<li>只计轴向的写法漏掉了横向惯性，质量偏小，所以频率偏高得多 (第 1 阶 337 Hz)。考试若要求按课件 Slide 3 的公式作答，用那一行的数值。</li>
 <li>只有 3 个自由自由度，所以只能求出 3 阶频率；真实杆件还有无数阶局部振动，需要把每根杆分成多个单元才能捕捉。</li>
-<li>做法与 <a href="#t6-10">Tutorial 6 Task 10</a> 完全相同，那里的数值是自洽的，可以用来练习。</li>
-<li>按课件步骤逐个单元写出 \([m]_G\)、组装一致 / 集中质量矩阵、求 \(\det([K]-\lambda[M])=0\) 和三阶振型动画：<a href="truss-stiffness-animation.html">桁架刚度法动画演示</a> 第 8、9 章。</li>
+<li>做法与 <a href="#t6-10">Tutorial 6 Task 10</a> 相同，那里的补充说明也提到了完整写法。</li>
+<li>逐个单元组装一致 / 集中质量矩阵、求 \(\det([K]-\lambda[M])=0\) 和三阶振型动画：<a href="truss-stiffness-animation.html">桁架刚度法动画演示</a> 第 8、9 章。</li>
 </ul></div>
 </details>
 </article>
