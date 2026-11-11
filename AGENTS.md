@@ -13,11 +13,12 @@
 
 - **性质**：航空航天工程课程学习笔记，个人使用；GitHub Pages 从 `main` 分支根目录直接发布 (`.nojekyll`，无 Jekyll 处理)。推送后约 1 分钟生效。
 - **禁止搜索引擎收录**：`robots.txt` 保持 `Disallow: /`；每个 HTML 页面的 `<head>` 都要有 `<meta name="robots" content="noindex, nofollow">`。
-- **四门课** (目录名 · 显示名)：
+- **五门课** (目录名 · 显示名)：
   - `aerodynamics/` · Aerodynamics 空气动力学
   - `structure-material/` · Structure and Material 结构与材料
   - `flight-dynamics/` · Flight Dynamics 飞行力学
   - `mechanics/` · Engineering Mechanics I 工程力学
+  - `introduction-to-aeronautics/` · Introduction to Aeronautics 航空概论
 - **页面类型与适用规则**：
 
 | 页面 | 来源 | 适用规则 |
@@ -250,7 +251,7 @@ main
 
 - 导航页 (首页、课程目录页、404) 只用 `assets/site.css`，不写 `<style>`，不写 `style=""` 行内样式；要新样式就加到 `site.css`。
 - `.links a` 必须是 `display: inline-block` (已在 `site.css` 中定义，不要在页面里覆盖)。
-- 课程笔记：内嵌 CSS 分两层——所有笔记共用的**基础层** (`:root` 变量、版式、侧栏、图片放大、深色模式，四门课逐字相同)+ 课程专用的**扩展层** (如 Structure and Material 的 `flow-*`、Flight Dynamics 的 `key-eq`/`slide-*`)。改基础层要四个文件一起改；不要在单章里写行内样式覆盖。内嵌脚本 (目录、搜索、阅读位置、图片放大) 四门课相同，只有顶栏默认标题不同。
+- 课程笔记：内嵌 CSS 分两层——所有笔记共用的**基础层** (`:root` 变量、版式、侧栏、图片放大、深色模式，五门课逐字相同)+ 课程专用的**扩展层** (如 Structure and Material 的 `flow-*`、Flight Dynamics 的 `key-eq`/`slide-*`)。改基础层要五个文件一起改；不要在单章里写行内样式覆盖。内嵌脚本 (目录、搜索、阅读位置、图片放大) 五门课相同，只有顶栏默认标题不同。
 - 设计变量统一：`--bg #faf9f6`、`--fg #1e1c19`、`--muted #6a655c`、`--line #e4e0d7`、`--accent #1d4f7c`；正文字体 serif (Noto Serif SC)，界面 sans (Noto Sans SC)；深色模式用 `prefers-color-scheme: dark`。习题页 `template.html` 使用同一组变量。
 - 交互演示页可以有自己的配色和字体，但要保留 `.crumb` 返回首页和课程笔记的链接。
 - 不引入新的外部依赖 (CDN 脚本、框架)；现有的 Google Fonts 和 MathJax CDN 保持不变。
@@ -322,7 +323,7 @@ npm run build        # 生成 ../../exercises.html
 
 1. **术语**：先查第二节，禁止引入新译名；不确定时保持原术语并标注待确认。
 2. **结构**：新增课程 / 页面复制现有骨架，不另起炉灶。
-3. **样式**：改样式改 CSS (导航页改 `site.css`，笔记改基础层且四门课同步)，不写页面级覆盖。
+3. **样式**：改样式改 CSS (导航页改 `site.css`，笔记改基础层且五门课同步)，不写页面级覆盖。
 4. **公式**：一律 KaTeX 预渲染，不手写乱码、不用图片公式、不留 `$`。
 5. **构建**：`exercises.html` 只能由 `_build/exercises/` 构建生成。
 6. **只改形式不改含义**：不改变核心含义、事实、数据、结论；不破坏代码、链接、锚点、公式语法。

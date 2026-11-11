@@ -49,6 +49,10 @@ mechanics/               Engineering Mechanics I (工程力学 / 静力学)
   lectures/              课件 Lecture 1–17 (缺 9、12–14)
   exercises/             Central Exercise 幻灯片 (W5 起带手写解答)
   exam/                  Test Exam (无解答)
+introduction-to-aeronautics/  Introduction to Aeronautics (航空概论)
+  index.html
+  course-notes.html
+  lectures/              课件 Lecture 1–7 (PDF)
 ```
 
 ## 添加资料
